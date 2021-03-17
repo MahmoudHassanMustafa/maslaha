@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 
-class AppDrawerHeader extends StatelessWidget {
-  const AppDrawerHeader({
-    Key? key,
-    String? profile,
-    String? username,
-    String? location,
-  })  : _profile = profile,
-        _username = username,
-        _location = location,
-        super(key: key);
+class AppDrawerHeader extends StatefulWidget {
+  @override
+  _AppDrawerHeaderState createState() => _AppDrawerHeaderState();
+}
 
-  final String? _profile;
-  final String? _username;
-  final String? _location;
+class _AppDrawerHeaderState extends State<AppDrawerHeader> {
+  final String _profile = '';
+
+  final String _username = 'Mahmoud Hassan';
+
+  final String _location = 'Egpyt, Port-Said';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +37,7 @@ class AppDrawerHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _username!,
+                _username,
                 maxLines: 1,
                 overflow: TextOverflow.clip,
                 style: TextStyle(
@@ -53,7 +50,7 @@ class AppDrawerHeader extends StatelessWidget {
                 height: 4.0,
               ),
               Text(
-                _location!,
+                _location,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 10.0,

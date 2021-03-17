@@ -17,33 +17,30 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with TickerProviderStateMixin {
-  late AnimationController _signUpNGuestAnimationController;
-  late AnimationController _signInAnimationController;
+  late final AnimationController _signUpNGuestAnimationController =
+      AnimationController(vsync: this, duration: kAnimationDuration);
 
-  late Animation<Offset> _signUpOffset;
-  late Animation<Offset> _signInOffset;
-  late Animation<Offset> _guestOffset;
+  late final AnimationController _signInAnimationController =
+      AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+
+  late final Animation<Offset> _signUpOffset =
+      Tween(begin: Offset(0.0, 3.0), end: Offset(0.0, 0.0))
+          .animate(_signUpNGuestAnimationController);
+
+  late final Animation<Offset> _signInOffset =
+      Tween(begin: Offset(0.0, 2.0), end: Offset(0.0, 0.0))
+          .animate(_signInAnimationController);
+
+  late final Animation<Offset> _guestOffset =
+      Tween(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0))
+          .animate(_signUpNGuestAnimationController);
 
   @override
   void initState() {
     super.initState();
-    _signUpNGuestAnimationController =
-        AnimationController(vsync: this, duration: kAnimationDuration);
-
-    _signInAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-
-    _signUpOffset = Tween(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
-        .animate(_signUpNGuestAnimationController);
-
-    _guestOffset = Tween(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0))
-        .animate(_signUpNGuestAnimationController);
-
-    _signInOffset = Tween(begin: Offset(0.0, 2.0), end: Offset(0.0, 0.0))
-        .animate(_signInAnimationController);
 
     //  wait the page transition for the buttons animations
-    Timer(Duration(milliseconds: 500), () {
+    Timer(Duration(milliseconds: 250), () {
       _signUpNGuestAnimationController
           .forward()
           .whenComplete(() => _signInAnimationController.forward());

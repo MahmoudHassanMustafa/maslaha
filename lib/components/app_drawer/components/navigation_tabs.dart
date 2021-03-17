@@ -2,12 +2,12 @@ import 'package:maslaha/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MenuTabs extends StatefulWidget {
+class NavigationTabs extends StatefulWidget {
   @override
-  _MenuTabsState createState() => _MenuTabsState();
+  _NavigationTabsState createState() => _NavigationTabsState();
 }
 
-class _MenuTabsState extends State<MenuTabs> {
+class _NavigationTabsState extends State<NavigationTabs> {
   int _activeTab = 0;
   List<Map<String, dynamic>> tabs = [
     {
@@ -51,7 +51,7 @@ class _MenuTabsState extends State<MenuTabs> {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemExtent: 50,
+      itemExtent: 55,
       itemCount: tabs.length,
       itemBuilder: (context, index) {
         return GestureDetector(

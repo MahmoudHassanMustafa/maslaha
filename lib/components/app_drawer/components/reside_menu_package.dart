@@ -28,7 +28,7 @@ class ResideMenu extends StatefulWidget {
 
   final OnClose? onClose;
 
-  final bool enableScale, enableFade, enable3dRotate;
+  final bool enableScale, enableFade;
 
   final OnOffsetChange? onOffsetChange;
 
@@ -44,7 +44,6 @@ class ResideMenu extends StatefulWidget {
       this.onOpen,
       this.enableScale: true,
       this.enableFade: true,
-      this.enable3dRotate: false,
       this.onClose,
       this.onOffsetChange,
       this.controller,
@@ -63,7 +62,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   ValueNotifier<ScrollState> _scrollState =
       ValueNotifier<ScrollState>(ScrollState.NONE);
 
-  AnimationController? _appBarLeadingButtonController;
+  AnimationController? _menuButtonController;
 
   //  Curve the content screen borders
   double borderRadius = 0.0;
@@ -87,10 +86,10 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   void _onScrollEnd(DragEndDetails details) {
     if (_controller!.value > 0.5) {
       _controller!.openMenu();
-      _appBarLeadingButtonController!.forward();
+      _menuButtonController!.forward();
     } else {
       _controller!.closeMenu();
-      _appBarLeadingButtonController!.reverse();
+      _menuButtonController!.reverse();
     }
   }
 
@@ -115,7 +114,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
           widget.onOpen!();
         }
       } else {
-        _appBarLeadingButtonController!.reverse();
+        _menuButtonController!.reverse();
         if (widget.onClose != null) {
           widget.onClose!();
         }
@@ -154,7 +153,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
       setState(() {});
     });
     super.initState();
-    _appBarLeadingButtonController =
+    _menuButtonController =
         AnimationController(vsync: this, duration: kAnimationDuration);
   }
 
@@ -203,7 +202,6 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                   ),
                 ContentTransition(
                     enableScale: widget.enableScale,
-                    enable3D: widget.enable3dRotate,
                     child: new Stack(
                       children: <Widget>[
                         Container(
@@ -236,28 +234,18 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                                   automaticallyImplyLeading: false,
                                   backgroundColor: Colors.white,
                                   flexibleSpace: CustomAppBar(
-                                    leadingIconButton: GestureDetector(
-                                      child: AnimatedIcon(
-                                        icon: AnimatedIcons.menu_arrow,
-                                        progress:
-                                            _appBarLeadingButtonController!,
-                                        color: Colors.black,
-                                        size: 35.0,
-                                      ),
-                                      onTap: () {
-                                        if (_controller!.isClose) {
-                                          _controller!.openMenu(
-                                              controller:
-                                                  _appBarLeadingButtonController!);
-                                        } else {
-                                          _controller!.closeMenu(
-                                              controller:
-                                                  _appBarLeadingButtonController!);
-                                        }
-                                      },
-                                    ),
-                                    username: 'Mahmoud Hassan',
-                                    location: 'Egypt, Port-Said',
+                                    menuButtonAnimationController:
+                                        _menuButtonController,
+                                    onMenuButtonPressed: () async =>
+                                        _controller!.isClose
+                                            ? await _controller!.openMenu(
+                                                controller:
+                                                    _menuButtonController,
+                                              )
+                                            : await _controller!.closeMenu(
+                                                controller:
+                                                    _menuButtonController,
+                                              ),
                                   ),
                                 ),
                               ),
@@ -374,13 +362,11 @@ class ContentTransition extends AnimatedWidget {
   final Widget child;
 
   final bool? enableScale;
-  final bool? enable3D;
 
   ContentTransition(
       {required this.child,
       required Animation<double> menuOffset,
       Key? key,
-      this.enable3D,
       this.enableScale})
       : super(key: key, listenable: menuOffset);
 
@@ -392,11 +378,6 @@ class ContentTransition extends AnimatedWidget {
       double width = cons.biggest.width;
       double val = menuOffset.value;
       final Matrix4 transform = new Matrix4.identity();
-      if (enable3D!) {
-        transform.setEntry(3, 2, 0.0008);
-        transform.rotateY(val * 0.8);
-        transform.transposeRotation();
-      }
       if (enableScale!) {
         transform.scale(1.0 - 0.25 * val.abs(), 1 - 0.25 * val.abs(), 1.0);
       }
