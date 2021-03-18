@@ -1,5 +1,6 @@
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../shared/size_config.dart';
 
 class SplashSkipButton extends StatefulWidget {
   const SplashSkipButton({
@@ -8,7 +9,7 @@ class SplashSkipButton extends StatefulWidget {
     required this.index,
   });
 
-  final AnimationController? animationController;
+  final AnimationController animationController;
   final PageController pageController;
   final int index;
 
@@ -17,15 +18,9 @@ class SplashSkipButton extends StatefulWidget {
 }
 
 class _SplashSkipButtonState extends State<SplashSkipButton> {
-  late Animation<Offset> _offset;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _offset = Tween<Offset>(begin: Offset(0.0, 0.0), end: Offset(1.5, 0.0))
-        .animate(widget.animationController!);
-  }
+  late final Animation<Offset> _offset =
+      Tween<Offset>(begin: Offset(0.0, 0.0), end: Offset(1.5, 0.0))
+          .animate(widget.animationController);
 
   @override
   Widget build(BuildContext context) {

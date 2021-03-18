@@ -1,9 +1,10 @@
-import 'package:maslaha/components/app_drawer/app_drawer.dart';
-import 'package:maslaha/screens/home/components/category_cards.dart';
-import 'package:maslaha/components/search_bar.dart';
-import 'package:maslaha/screens/home/components/special_offer_cards.dart';
-import 'package:maslaha/screens/home/components/top_worker_cards.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/app_drawer/app_drawer.dart';
+import '../../components/search_bar.dart';
+import '../home/components/category_cards.dart';
+import '../home/components/top_worker_cards.dart';
+import '../home/components/special_offer_cards.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = '/home';

@@ -1,6 +1,7 @@
-import 'package:maslaha/components/custom_appbar.dart';
-import 'package:maslaha/shared/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../custom_appbar.dart';
+import '../../../shared/constants.dart';
 
 typedef void OnOpen();
 typedef void OnClose();
@@ -62,7 +63,8 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   ValueNotifier<ScrollState> _scrollState =
       ValueNotifier<ScrollState>(ScrollState.NONE);
 
-  AnimationController? _menuButtonController;
+  late final AnimationController _menuButtonController =
+      AnimationController(vsync: this, duration: kAnimationDuration);
 
   //  Curve the content screen borders
   double borderRadius = 0.0;
@@ -86,10 +88,10 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   void _onScrollEnd(DragEndDetails details) {
     if (_controller!.value > 0.5) {
       _controller!.openMenu();
-      _menuButtonController!.forward();
+      _menuButtonController.forward();
     } else {
       _controller!.closeMenu();
-      _menuButtonController!.reverse();
+      _menuButtonController.reverse();
     }
   }
 
@@ -114,7 +116,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
           widget.onOpen!();
         }
       } else {
-        _menuButtonController!.reverse();
+        _menuButtonController.reverse();
         if (widget.onClose != null) {
           widget.onClose!();
         }
@@ -153,8 +155,6 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
       setState(() {});
     });
     super.initState();
-    _menuButtonController =
-        AnimationController(vsync: this, duration: kAnimationDuration);
   }
 
   @override
@@ -166,6 +166,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
     if (widget.controller == null) {
       _controller!.dispose();
     }
+    _menuButtonController.dispose();
     super.dispose();
   }
 

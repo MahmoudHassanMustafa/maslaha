@@ -1,7 +1,8 @@
-import 'package:maslaha/screens/landing_screen.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/routes.dart';
 import 'package:flutter/material.dart';
+
+import './shared/constants.dart';
+import './shared/routes.dart';
+import './screens/landing_screen.dart';
 
 void main() => runApp(MyApp());
 

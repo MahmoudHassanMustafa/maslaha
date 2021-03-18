@@ -1,11 +1,11 @@
-import 'package:maslaha/screens/splash/components/buttons/splash_back_button.dart';
-import 'package:maslaha/screens/splash/components/buttons/splash_next_button.dart';
-import 'package:maslaha/screens/splash/components/buttons/splash_skip_button.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
 
-import 'splash_content.dart';
+import '../../../shared/size_config.dart';
+import '../../../shared/constants.dart';
+import '../components/splash_content.dart';
+import '../components/buttons/splash_skip_button.dart';
+import '../components/buttons/splash_back_button.dart';
+import '../components/buttons/splash_next_button.dart';
 
 class SplashBody extends StatefulWidget {
   @override
@@ -13,16 +13,18 @@ class SplashBody extends StatefulWidget {
 }
 
 class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
-  final PageController _pageController = PageController(initialPage: 0);
+  late final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
-  AnimationController? _skipButtonAnimationController;
-  AnimationController? _backButtonAnimationController;
+  late final AnimationController _skipButtonAnimationController =
+      AnimationController(vsync: this, duration: kAnimationDuration);
+  late final AnimationController _backButtonAnimationController =
+      AnimationController(vsync: this, duration: kAnimationDuration);
 
   List<Map<String, String>> _splashData = [
     {
       "image": "assets/images/splash_images/find_your_service.svg",
-      "title": "Find YourService",
+      "title": "Find Your Desired Service",
       "description":
           "Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor et."
     },
@@ -47,20 +49,9 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
   ];
 
   @override
-  void initState() {
-    super.initState();
-
-    _backButtonAnimationController =
-        AnimationController(vsync: this, duration: kAnimationDuration);
-
-    _skipButtonAnimationController =
-        AnimationController(vsync: this, duration: kAnimationDuration);
-  }
-
-  @override
   void dispose() {
-    _skipButtonAnimationController!.dispose();
-    _backButtonAnimationController!.dispose();
+    _skipButtonAnimationController.dispose();
+    _backButtonAnimationController.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -112,18 +103,18 @@ class _SplashBodyState extends State<SplashBody> with TickerProviderStateMixin {
                           //  Start buttons animation according to slide change
                           switch (_currentPage) {
                             case 0:
-                              _backButtonAnimationController!.reverse();
+                              _backButtonAnimationController.reverse();
                               break;
                             case 1:
-                              _backButtonAnimationController!.forward();
+                              _backButtonAnimationController.forward();
                               break;
                             case 2:
-                              _backButtonAnimationController!.forward();
-                              _skipButtonAnimationController!.reverse();
+                              _backButtonAnimationController.forward();
+                              _skipButtonAnimationController.reverse();
                               break;
                             case 3:
-                              _backButtonAnimationController!.reverse();
-                              _skipButtonAnimationController!.forward();
+                              _backButtonAnimationController.reverse();
+                              _skipButtonAnimationController.forward();
                               break;
                             default:
                               break;

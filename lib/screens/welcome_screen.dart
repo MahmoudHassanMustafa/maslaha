@@ -1,12 +1,13 @@
-import 'package:maslaha/screens/authenticaton/login_screen.dart';
-import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
-import 'package:maslaha/screens/home/home_screen.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'splash/components/splash_content.dart';
+import 'package:flutter/material.dart';
+
+import '../shared/size_config.dart';
+import '../shared/constants.dart';
+import '../screens/splash/components/splash_content.dart';
+import '../screens/home/home_screen.dart';
+import '../screens/authenticaton/register_screen_1.dart';
+import '../screens/authenticaton/login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String routeName = "/welcome_screen";
@@ -40,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     super.initState();
 
     //  wait the page transition for the buttons animations
-    Timer(Duration(milliseconds: 250), () {
+    Timer(kAnimationDuration, () {
       _signUpNGuestAnimationController
           .forward()
           .whenComplete(() => _signInAnimationController.forward());
@@ -49,9 +50,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _signUpNGuestAnimationController.dispose();
     _signInAnimationController.dispose();
+    super.dispose();
   }
 
   @override

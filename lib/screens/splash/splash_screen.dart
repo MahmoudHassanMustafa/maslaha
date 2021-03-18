@@ -1,6 +1,7 @@
-import 'package:maslaha/screens/splash/components/slpash_body.dart';
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
+
+import '../../shared/size_config.dart';
+import '../splash/components/slpash_body.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";

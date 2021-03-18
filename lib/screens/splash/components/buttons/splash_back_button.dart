@@ -1,6 +1,7 @@
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../shared/size_config.dart';
+import '../../../../shared/constants.dart';
 
 class SplashBackButton extends StatefulWidget {
   const SplashBackButton({
@@ -16,19 +17,14 @@ class SplashBackButton extends StatefulWidget {
 }
 
 class _SplashBackButtonState extends State<SplashBackButton> {
-  late Animation<Offset> _offset;
-
-  @override
-  void initState() {
-    super.initState();
-    _offset = Tween<Offset>(begin: Offset(-1.5, 0.0), end: Offset(0.0, 0.0))
-        .animate(widget.animationController!);
-  }
+  late final Animation<Offset> _offset =
+      Tween<Offset>(begin: Offset(-1.5, 0.0), end: Offset(0.0, 0.0))
+          .animate(widget.animationController!);
 
   void _perviousSlide(controller) {
     setState(() {
       controller.previousPage(
-        duration: Duration(seconds: 1),
+        duration: kAnimationDuration,
         curve: Curves.easeInOutSine,
       );
     });

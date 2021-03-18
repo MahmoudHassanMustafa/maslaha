@@ -1,8 +1,10 @@
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
-import 'package:maslaha/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../shared/size_config.dart';
+import '../../../../shared/constants.dart';
+import '../../../welcome_screen.dart';
 
 class SplashNextButton extends StatefulWidget {
   const SplashNextButton({
@@ -23,7 +25,7 @@ class _SplashNextButtonState extends State<SplashNextButton> {
   void _nextSlide(PageController controller) {
     setState(() {
       controller.nextPage(
-        duration: Duration(seconds: 1),
+        duration: kAnimationDuration,
         curve: Curves.easeInOutSine,
       );
     });
@@ -40,7 +42,7 @@ class _SplashNextButtonState extends State<SplashNextButton> {
     return Align(
       alignment: Alignment.bottomRight,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 400),
+        duration: Duration(milliseconds: 300),
         width: widget.index < 3
             ? getProportionateScreenWidth(90)
             : MediaQuery.of(context).size.width,

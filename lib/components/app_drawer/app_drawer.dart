@@ -1,10 +1,10 @@
-import 'package:maslaha/components/app_drawer/components/app_drawer_footer.dart';
-import 'package:maslaha/components/app_drawer/components/app_drawer_header.dart';
-import 'package:maslaha/components/app_drawer/components/navigation_tabs.dart';
-import 'package:maslaha/shared/constants.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'components/reside_menu_package.dart';
+
+import '../../shared/constants.dart';
+import '../app_drawer/components/reside_menu_package.dart';
+import '../app_drawer/components/app_drawer_header.dart';
+import '../app_drawer/components/navigation_tabs.dart';
+import '../app_drawer/components/app_drawer_footer.dart';
 
 class AppDrawer extends StatefulWidget {
   final Widget? child;
@@ -16,13 +16,13 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> with TickerProviderStateMixin {
-  MenuController? _menuController;
+  late final MenuController _menuController =
+      MenuController(vsync: this, openDuration: kAnimationDuration);
 
   @override
-  void initState() {
-    super.initState();
-    _menuController =
-        MenuController(vsync: this, openDuration: kAnimationDuration);
+  void dispose() {
+    _menuController.dispose();
+    super.dispose();
   }
 
   @override
