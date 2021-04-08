@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './shared/constants.dart';
-import './shared/routes.dart';
-import './screens/landing_screen.dart';
+import 'screens/landing_screen.dart';
+import 'shared/constants.dart';
+import 'shared/routes.dart';
 
 void main() => runApp(MyApp());
 

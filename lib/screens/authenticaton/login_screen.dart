@@ -1,14 +1,15 @@
-import 'package:maslaha/screens/authenticaton/auth_components/arrow_back_button.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/auth_button.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/social_Button.dart';
-import 'package:maslaha/screens/authenticaton/auth_page_transition/slid_right_transition.dart';
-import 'package:maslaha/screens/authenticaton/forget_password_screen.dart';
-import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../shared/constants.dart';
+import '../../shared/size_config.dart';
+import 'auth_components/arrow_back_button.dart';
+import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
+import 'auth_components/social_Button.dart';
+import 'auth_page_transition/slid_right_transition.dart';
+import 'forget_password_screen.dart';
+import 'register_screen_1.dart';
 
 class LoginScreen extends StatelessWidget {
   static String routeName = "/login";

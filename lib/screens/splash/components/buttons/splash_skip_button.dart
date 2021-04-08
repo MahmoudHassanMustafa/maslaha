@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../shared/size_config.dart';
 
 class SplashSkipButton extends StatefulWidget {

@@ -6,11 +6,9 @@ class AppDrawerHeader extends StatefulWidget {
 }
 
 class _AppDrawerHeaderState extends State<AppDrawerHeader> {
-  final String _profile = '';
-
   final String _username = 'Mahmoud Hassan';
-
   final String _location = 'Egpyt, Port-Said';
+  final String _profileImagePath = '';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,7 @@ class _AppDrawerHeaderState extends State<AppDrawerHeader> {
             radius: 35.0,
             child: ClipOval(
                 child: Image.asset(
-              'assets/images/user_male.png',
+              'assets/icons/user_male.png',
               width: 50.0,
               height: 50.0,
               fit: BoxFit.scaleDown,

@@ -1,6 +1,7 @@
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
+
+import '../../shared/constants.dart';
+import '../../shared/size_config.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';

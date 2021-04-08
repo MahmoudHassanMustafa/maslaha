@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../custom_appbar.dart';
 import '../../../shared/constants.dart';
+import '../../custom_appbar.dart';
 
 typedef void OnOpen();
 typedef void OnClose();

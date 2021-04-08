@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../shared/size_config.dart';
 import '../../../../shared/constants.dart';
+import '../../../../shared/size_config.dart';
 import '../../../welcome_screen.dart';
 
 class SplashNextButton extends StatefulWidget {

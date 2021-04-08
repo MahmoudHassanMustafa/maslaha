@@ -77,7 +77,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 backgroundColor: Colors.grey[200],
                 child: ClipOval(
                     child: Image.asset(
-                  'assets/images/user_male.png',
+                  'assets/icons/user_male.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.scaleDown,

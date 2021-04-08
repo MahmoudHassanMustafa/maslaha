@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/dialog_box.dart';
+
 class SpecialOfferCards extends StatelessWidget {
   final List<Map<String, dynamic>> offers = [
     {
@@ -50,8 +52,18 @@ class SpecialOfferCards extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  print('special offer card pressed!');
-                  print('Offer description: ${offers[index]['description']}');
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DialogBox(
+                          tag: 'assets/icons/price-tag.svg',
+                          title: offers[index]['title'],
+                          description: offers[index]['description'],
+                          actionButtonTitle: 'Vist profile',
+                          actionButtonFunction: () =>
+                              print('Navigate to profile'),
+                        );
+                      });
                 },
                 child: Card(
                   shape: RoundedRectangleBorder(

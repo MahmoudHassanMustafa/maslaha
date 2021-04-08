@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../shared/size_config.dart';
-import '../shared/constants.dart';
-import '../screens/splash/components/splash_content.dart';
-import '../screens/home/home_screen.dart';
-import '../screens/authenticaton/register_screen_1.dart';
 import '../screens/authenticaton/login_screen.dart';
+import '../screens/authenticaton/register_screen_1.dart';
+import '../screens/home/home_screen.dart';
+import '../screens/splash/components/splash_content.dart';
+import '../shared/constants.dart';
+import '../shared/size_config.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String routeName = "/welcome_screen";

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/size_config.dart';
 import '../../../shared/constants.dart';
-import '../components/splash_content.dart';
-import '../components/buttons/splash_skip_button.dart';
+import '../../../shared/size_config.dart';
 import '../components/buttons/splash_back_button.dart';
 import '../components/buttons/splash_next_button.dart';
+import '../components/buttons/splash_skip_button.dart';
+import '../components/splash_content.dart';
 
 class SplashBody extends StatefulWidget {
   @override

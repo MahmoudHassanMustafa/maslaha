@@ -1,6 +1,7 @@
-import 'package:maslaha/shared/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../shared/size_config.dart';
 
 Widget socialButton(IconData icon, Function onTap, Color color) {
   return GestureDetector(

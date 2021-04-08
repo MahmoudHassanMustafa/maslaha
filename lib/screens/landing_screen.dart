@@ -74,7 +74,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //  App logo should be here
-                  Image.asset('assets/images/logo.png'),
+                  Image.asset('assets/icons/logo.png'),
                   SizedBox(height: 30.0),
                   //  App name
                   Text(
