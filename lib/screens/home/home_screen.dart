@@ -1,47 +1,65 @@
 import 'package:flutter/material.dart';
 
-import '../../components/app_drawer/app_drawer.dart';
-import '../../components/search_bar.dart';
-import '../home/components/category_cards.dart';
-import '../home/components/special_offer_cards.dart';
+import '../../utils/size_config.dart';
+import '../drawer/app_drawer.dart';
+import '../../widgets/search_bar.dart';
+import './components/category_card.dart';
 import '../home/components/top_worker_cards.dart';
+import '../home/components/special_offer_cards.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   static String routeName = '/home';
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
 
-class _HomeScreenState extends State<HomeScreen> {
+  // TODO: get user-name here
+  final username = 'Mahmoud';
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return AppDrawer(
-      child: Container(
+      home: Container(
         height: double.infinity,
         width: double.infinity,
-        padding: EdgeInsets.only(top: 8.0),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: Colors.grey.shade100,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
         ),
-        child: Stack(
+        child: Column(
           children: [
-            SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.only(top: 70.0),
+            SearchBar(),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CategoryCards(),
+                    buildSectionTitle('How can we serve you, $username?'),
+                    CategoryCard(),
+                    buildSectionTitle('Top Workers'),
                     TopWorkerCards(),
+                    buildSectionTitle('Special Offers'),
                     SpecialOfferCards(),
                   ],
                 ),
               ),
             ),
-            SearchBar(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSectionTitle(String sectionTitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      child: Text(
+        sectionTitle,
+        style: const TextStyle(
+          color: Colors.black,
+          fontFamily: 'OpenSans',
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/size_config.dart';
+import '../../../utils/size_config.dart';
 
 Widget arrowBackButton(BuildContext context) {
   return Positioned(

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../shared/constants.dart';
-import '../../shared/size_config.dart';
-import 'auth_components/arrow_back_button.dart';
-import 'auth_components/auth_button.dart';
-import 'auth_components/auth_title.dart';
-import 'auth_components/social_Button.dart';
-import 'auth_page_transition/slid_right_transition.dart';
-import 'login_screen.dart';
-import 'register_screen_2.dart';
+import '../../utils/size_config.dart';
+import './auth_components/arrow_back_button.dart';
+import './auth_components/auth_button.dart';
+import './auth_components/auth_title.dart';
+import './auth_components/social_Button.dart';
+import './auth_page_transition/slid_right_transition.dart';
+import './login_screen.dart';
+import './register_screen_2.dart';
 
 class RegisterScreen1 extends StatelessWidget {
   static String routeName = "/RegisterScreen1";

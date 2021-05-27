@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/dialog_box.dart';
+import '../../../utils/size_config.dart';
+import '../../../widgets/dialog_box.dart';
 
 class SpecialOfferCards extends StatelessWidget {
   final List<Map<String, dynamic>> offers = [
@@ -28,127 +29,117 @@ class SpecialOfferCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-          child: Text(
-            'Special offers',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          margin: EdgeInsets.only(bottom: 10.0),
-          height: MediaQuery.of(context).size.height * 0.2,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: offers.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DialogBox(
-                          tag: 'assets/icons/price-tag.svg',
-                          title: offers[index]['title'],
-                          description: offers[index]['description'],
-                          actionButtonTitle: 'Vist profile',
-                          actionButtonFunction: () =>
-                              print('Navigate to profile'),
-                        );
-                      });
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      margin: const EdgeInsets.only(bottom: 10.0),
+      height: getProportionateScreenHeight(165),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: offers.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return DialogBox(
+                    tag: 'assets/icons/price-tag.svg',
+                    title: offers[index]['title'],
+                    description: offers[index]['description'],
+                    actionButtonTitle: 'Vist profile',
+                    // TODO: go to servicer provider profile
+                    actionButtonFunction: () => print('Navigate to profile'),
+                  );
                 },
-                child: Card(
-                  shape: RoundedRectangleBorder(
+              );
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              color: Colors.white,
+              child: Stack(children: [
+                Container(
+                  width: getProportionateScreenWidth(210),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(offers[index]['offer_cover']),
+                      fit: BoxFit.fill,
+                    ),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  color: Colors.white,
-                  child: Stack(children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.55,
-                      padding: EdgeInsets.zero,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(offers[index]['offer_cover']),
-                          fit: BoxFit.fill,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.55,
-                      decoration: BoxDecoration(
-                        color: Colors.black38.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  print('navigate to profile');
-                                },
-                                child: CircleAvatar(
-                                  radius: 27.0,
-                                  backgroundColor: Colors.grey[200],
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      offers[index]['profile'],
-                                      width: 50.0,
-                                      height: 50.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                ),
+                Container(
+                  width: getProportionateScreenWidth(210),
+                  decoration: BoxDecoration(
+                    color: Colors.black38.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              // TODO: go to offer provider on click
+                              print('navigate to profile');
+                            },
+                            child: CircleAvatar(
+                              radius: 27.0,
+                              backgroundColor: Colors.grey[200],
+                              child: ClipOval(
+                                child: Image.network(
+                                  offers[index]['profile'],
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  offers[index]['service'],
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                                Text(
-                                  offers[index]['title'],
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ]),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          children: [
+                            Text(
+                              offers[index]['service'],
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                            Container(
+                              width: getProportionateScreenWidth(200),
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Text(
+                                offers[index]['title'],
+                                softWrap: false,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+              ]),
+            ),
+          );
+        },
+      ),
     );
   }
 }

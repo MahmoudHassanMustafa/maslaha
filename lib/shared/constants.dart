@@ -12,5 +12,6 @@ const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 
 const kAnimationDuration = Duration(milliseconds: 250);
+
 const kAuthMainColor = Color(0xff3669CB);
 const kAuthSecondaryColor = Color(0xff4378E3);

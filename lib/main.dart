@@ -1,27 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import 'screens/landing_screen.dart';
-import 'shared/constants.dart';
-import 'shared/routes.dart';
+import './routes.dart';
+import './providers/conversations.dart';
+import './providers/messages.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(MaslahaApp());
+}
 
-class MyApp extends StatelessWidget {
+class MaslahaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Material App',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme(
-          bodyText1: TextStyle(color: kTextColor),
-          bodyText2: TextStyle(color: kTextColor),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Conversations(),
         ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        ChangeNotifierProvider(
+          create: (ctx) => Messages(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Masla7a',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: 'Quicksand',
+        ),
+        routes: routes,
       ),
-      initialRoute: LandingScreen.routeName,
-      routes: routes,
     );
   }
 }

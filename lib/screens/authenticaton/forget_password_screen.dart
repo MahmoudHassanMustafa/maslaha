@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../shared/constants.dart';
-import '../../shared/size_config.dart';
-import 'auth_components/arrow_back_button.dart';
-import 'auth_components/auth_button.dart';
-import 'auth_components/auth_title.dart';
-import 'auth_page_transition/slid_right_transition.dart';
-import 'verify_your_email_screen.dart';
+import '../../utils/size_config.dart';
+import './auth_components/arrow_back_button.dart';
+import './auth_components/auth_button.dart';
+import './auth_components/auth_title.dart';
+import './auth_page_transition/slid_right_transition.dart';
+import './verify_your_email_screen.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   static String routeName = "/ForgetPasswordScreen";

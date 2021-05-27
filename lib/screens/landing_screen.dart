@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../shared/constants.dart';
-import '../screens/splash/splash_screen.dart';
+import '../screens/splash_screen/splash_screen.dart';
 import '../screens/welcome_screen.dart';
 
 //  Landing screen of the App logo and name to be shown,
@@ -19,41 +19,31 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  late bool _isSplash;
+  late bool _showSplashScreen;
 
-  List<Future<dynamic>> _svgs = [
-    precachePicture(
-      ExactAssetPicture(SvgPicture.svgStringDecoder,
-          'assets/images/splash_images/find_your_service.svg'),
-      null,
-    ),
-    precachePicture(
-      ExactAssetPicture(SvgPicture.svgStringDecoder,
-          'assets/images/splash_images/full_time_support.svg'),
-      null,
-    ),
-    precachePicture(
-      ExactAssetPicture(SvgPicture.svgStringDecoder,
-          'assets/images/splash_images/virtual_workshops.svg'),
-      null,
-    ),
-    precachePicture(
-      ExactAssetPicture(SvgPicture.svgStringDecoder,
-          'assets/images/splash_images/online_payment.svg'),
-      null,
-    ),
-    precachePicture(
-        ExactAssetPicture(SvgPicture.svgStringDecoder,
-            'assets/images/splash_images/welcome.svg'),
-        null),
+  final List<String> _nextScreenSvgsPath = const [
+    'assets/images/splash_images/find_your_service.svg',
+    'assets/images/splash_images/full_time_support.svg',
+    'assets/images/splash_images/virtual_workshops.svg',
+    'assets/images/splash_images/online_payment.svg',
+    'assets/images/splash_images/welcome.svg',
   ];
+
+  List<Future> _cacheNextScreenSvgs(List<String> svgPath) {
+    return List.generate(_nextScreenSvgsPath.length, (index) async {
+      await precachePicture(
+          ExactAssetPicture(SvgPicture.svgStringDecoder, svgPath[index]), null);
+    });
+  }
 
   Future _prepareNextScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isSplash = (prefs.getBool('isSplashSeen') ?? false);
+      _showSplashScreen = prefs.getBool('show_splash_screens') ?? true;
     });
-    return _isSplash ? Future.wait(_svgs) : Future.wait([_svgs.last]);
+    return _showSplashScreen
+        ? Future.wait(_cacheNextScreenSvgs(_nextScreenSvgsPath))
+        : Future.wait([_cacheNextScreenSvgs(_nextScreenSvgsPath).last]);
   }
 
   @override
@@ -62,23 +52,20 @@ class _LandingScreenState extends State<LandingScreen> {
       future: _prepareNextScreen(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (_isSplash)
-            return WelcomeScreen();
-          else
-            return SplashScreen();
+          return _showSplashScreen ? SplashScreen() : WelcomeScreen();
         } else {
           return Scaffold(
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //  App logo should be here
-                  Image.asset('assets/icons/logo.png'),
-                  SizedBox(height: 30.0),
+                  SvgPicture.asset(
+                    'assets/icons/partnership_app_logo.svg',
+                    color: kPrimaryColor,
+                  ),
                   //  App name
-                  Text(
-                    "Msl7a.com",
+                  const Text(
+                    "Masla7a",
                     style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: 24.0,

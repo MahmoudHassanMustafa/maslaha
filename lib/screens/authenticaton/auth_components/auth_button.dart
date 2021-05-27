@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/constants.dart';
-import '../../../shared/size_config.dart';
+import '../../../utils/size_config.dart';
 
 Widget authButton(String title, Function onTap, double top, double left) {
   return Positioned(
