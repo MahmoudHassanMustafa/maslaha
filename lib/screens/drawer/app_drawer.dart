@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reside_menu/reside_menu.dart';
 
-import './components/drawer_header.dart' as header;
-import '../../widgets/rounded_profile_image_container.dart';
-import './components/navigation_tabs.dart';
-import './components/drawer_footer.dart';
+import '../../utils/size_config.dart';
+import '../../widgets/profile_image_container.dart';
+import 'components/drawer_footer.dart';
+import 'components/drawer_header.dart' as header;
+import 'components/navigation_tabs.dart';
 
 class AppDrawer extends StatelessWidget {
   final Widget home;
@@ -56,9 +57,10 @@ class AppDrawer extends StatelessWidget {
       ),
       appBarTrailing:
           // TODO: show the user profile image in here and navigate to profile on click
-          RoundedProfileImageContainer(
-        // profileImg: AssetImage('assets/icons/user_female.png'),
-        // width: getProportionateScreenWidth(65),
+          ProfileImageContainer(
+        width: getProportionateScreenWidth(55),
+        profileImg: NetworkImage(
+            'https://scontent.fcai19-3.fna.fbcdn.net/v/t1.6435-9/30594925_2043671465890477_2859440508139208704_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=84a396&_nc_ohc=557dyAc3XgsAX_EZLAJ&_nc_ht=scontent.fcai19-3.fna&oh=446ffd3f39155560df5a1de238000254&oe=60C8F3AF'),
         onTap: () => print('Navigate to profie!'),
       ),
       decoration: const BoxDecoration(

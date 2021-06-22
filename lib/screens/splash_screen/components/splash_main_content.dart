@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:maslaha/shared/constants.dart';
 
+import '../../../shared/constants.dart';
 import '../../../utils/size_config.dart';
 
 //  The default structure for the splash screen

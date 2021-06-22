@@ -3,13 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
-import './auth_components/arrow_back_button.dart';
-import './auth_components/auth_button.dart';
-import './auth_components/auth_title.dart';
-import './auth_components/social_Button.dart';
-import './auth_page_transition/slid_right_transition.dart';
-import './forget_password_screen.dart';
-import './register_screen_1.dart';
+import 'auth_components/arrow_back_button.dart';
+import 'auth_components/auth_button.dart';
+import 'auth_components/auth_title.dart';
+import 'auth_components/social_Button.dart';
+import 'auth_page_transition/slid_right_transition.dart';
+import 'forget_password_screen.dart';
+import 'register_screen_1.dart';
 
 class LoginScreen extends StatelessWidget {
   static String routeName = "/login";

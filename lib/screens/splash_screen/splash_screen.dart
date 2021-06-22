@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/size_config.dart';
-import './components/slpash_body.dart';
+import 'components/slpash_body.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";

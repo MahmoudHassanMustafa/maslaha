@@ -93,13 +93,13 @@ class Conversations with ChangeNotifier {
     late Map<String, Object> userStatus;
     switch (status) {
       case Status.Online:
-        userStatus = {'status': 'Online', 'color': Colors.green};
+        userStatus = {'text': 'Online', 'color': Colors.green};
         break;
       case Status.Away:
-        userStatus = {'status': 'Away', 'color': Colors.yellow};
+        userStatus = {'text': 'Away', 'color': Colors.yellow};
         break;
       case Status.Offline:
-        userStatus = {'status': 'Offline', 'color': Colors.red};
+        userStatus = {'text': 'Offline', 'color': Colors.red};
         break;
       default:
         break;

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
-import './auth_components/arrow_back_button.dart';
-import './auth_components/auth_button.dart';
-import './auth_components/auth_title.dart';
+import 'auth_components/arrow_back_button.dart';
+import 'auth_components/auth_button.dart';
+import 'auth_components/auth_title.dart';
 
 class RegisterScreen2 extends StatefulWidget {
   static String routeName = "/RegisterScreen2";

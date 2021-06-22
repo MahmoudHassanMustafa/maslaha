@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/size_config.dart';
-import '../drawer/app_drawer.dart';
 import '../../widgets/search_bar.dart';
-import './components/category_card.dart';
-import '../home/components/top_worker_cards.dart';
+import '../drawer/app_drawer.dart';
 import '../home/components/special_offer_cards.dart';
+import '../home/components/top_worker_cards.dart';
+import 'components/category_card.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = '/home';

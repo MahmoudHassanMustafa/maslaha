@@ -34,17 +34,13 @@ class SplashNextButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Next',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: getProportionateScreenWidth(16),
-                    letterSpacing: 0.75,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+            Text(
+              'Next',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: getProportionateScreenWidth(16),
+                letterSpacing: 0.75,
+                fontWeight: FontWeight.w600,
               ),
             ),
             const Icon(

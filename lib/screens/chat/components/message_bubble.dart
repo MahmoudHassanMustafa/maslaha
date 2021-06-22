@@ -1,11 +1,14 @@
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:video_player/video_player.dart';
 
+import '../../../providers/messages.dart';
+import '../../../shared/constants.dart';
+
 class MessageBubble extends StatefulWidget {
   MessageBubble(
     this.isMe,
-    this.msgType,
     this.content,
     this.sentAt, {
     this.key,
@@ -13,7 +16,6 @@ class MessageBubble extends StatefulWidget {
 
   final Key? key;
   final bool isMe;
-  final String msgType;
   final dynamic content;
   final DateTime sentAt;
 
@@ -44,51 +46,43 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return Bubble(
       alignment: widget.isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        decoration: BoxDecoration(
-          color: widget.isMe ? Colors.blueGrey[300] : Colors.blue,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-            bottomLeft: !widget.isMe ? Radius.circular(0) : Radius.circular(15),
-            bottomRight: widget.isMe ? Radius.circular(0) : Radius.circular(15),
-          ),
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 14,
-        ),
-        margin: EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 8,
-        ),
-        child: Wrap(
-          alignment: WrapAlignment.end,
-          clipBehavior: Clip.none,
-          spacing: 10,
-          runSpacing: 10,
-          crossAxisAlignment: WrapCrossAlignment.end,
-          children: [
-            buildMessageBubbleContent(widget.msgType),
-            Text(
-              intl.DateFormat.jm().format(widget.sentAt),
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 12,
-              ),
+      margin: BubbleEdges.symmetric(horizontal: 8, vertical: 3),
+      color: widget.isMe ? Colors.blueGrey[400] : kPrimaryColor,
+      nip: widget.isMe ? BubbleNip.rightTop : BubbleNip.leftTop,
+      child: Wrap(
+        alignment: WrapAlignment.end,
+        clipBehavior: Clip.none,
+        spacing: 10,
+        runSpacing: 10,
+        crossAxisAlignment: WrapCrossAlignment.end,
+        children: [
+          Text(
+            widget.content,
+            style: TextStyle(
+              color: Colors.white,
             ),
-          ],
-        ),
+            textAlign: TextAlign.start,
+            softWrap: true,
+            overflow: TextOverflow.visible,
+          ),
+          Text(
+            intl.DateFormat.jm().format(widget.sentAt),
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget buildMessageBubbleContent(String type) {
+  Widget buildMessageBubbleContent(ContentType type) {
     late Widget resultedWidget;
     switch (type) {
-      case 'text':
+      case ContentType.Text:
         resultedWidget = Text(
           widget.content,
           style: TextStyle(
@@ -99,13 +93,13 @@ class _MessageBubbleState extends State<MessageBubble> {
           overflow: TextOverflow.visible,
         );
         break;
-      case 'image':
+      case ContentType.Image:
         resultedWidget = Image.file(
           widget.content,
           fit: BoxFit.cover,
         );
         break;
-      case 'video':
+      case ContentType.Video:
         initializeVideoController();
         resultedWidget = VideoPlayer(_playerController!);
     }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:maslaha/screens/home/home_screen.dart';
 
-import '../../../utils/size_config.dart';
-import '../../../shared/constants.dart';
 import '../../../screens/chat/chat_screen.dart';
+import '../../../shared/constants.dart';
+import '../../favourites/favourites_screen.dart';
 
 class NavigationTabs extends StatefulWidget {
   @override
@@ -12,45 +13,50 @@ class NavigationTabs extends StatefulWidget {
 
 class _NavigationTabsState extends State<NavigationTabs> {
   int _activeTab = 0;
-  final List<Map<String, String>> tabs = const [
-    {
-      "label": "Home",
-      "icon": 'assets/icons/drawer_tabs/home.svg',
-      "routeName": '',
-    },
-    {
-      "label": "Chat",
-      "icon": 'assets/icons/drawer_tabs/chat.svg',
-      "routeName": ChatScreen.routeName,
-    },
-    {
-      "label": "Provide a service",
-      "icon": 'assets/icons/drawer_tabs/service.svg',
-      "routeName": '',
-    },
-    {
-      "label": "Favourites",
-      "icon": 'assets/icons/drawer_tabs/heart.svg',
-      "routeName": '',
-    },
-    {
-      "label": "Orders",
-      "icon": 'assets/icons/drawer_tabs/service_pack.svg',
-      "routeName": '',
-    },
-    {
-      "label": "Make complains",
-      "icon": 'assets/icons/drawer_tabs/dislike.svg',
-      "routeName": '',
-    },
-    {
-      "label": "About",
-      "icon": 'assets/icons/drawer_tabs/about.svg',
-      "routeName": '',
-    },
-  ];
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> tabs = [
+      {
+        "label": "Home",
+        "icon": 'assets/icons/drawer_icons/home.svg',
+        "routeName": HomeScreen.routeName,
+      },
+      {
+        "label": "Profile",
+        "icon": 'assets/icons/drawer_icons/user.svg',
+        'routeName': '',
+      },
+      {
+        "label": "Chat",
+        "icon": 'assets/icons/drawer_icons/chat-bubble.svg',
+        "routeName": ChatScreen.routeName,
+      },
+      {
+        "label": "Provide a service",
+        "icon": 'assets/icons/drawer_icons/edit.svg',
+        "routeName": '',
+      },
+      {
+        "label": "Favourites",
+        "icon": 'assets/icons/drawer_icons/heart.svg',
+        "routeName": FavouritesScreen.routeName,
+      },
+      {
+        "label": "Orders",
+        "icon": 'assets/icons/drawer_icons/credit-card.svg',
+        "routeName": '',
+      },
+      {
+        "label": "Make complains",
+        "icon": 'assets/icons/drawer_icons/thumbs-down.svg',
+        "routeName": '',
+      },
+      {
+        "label": "About",
+        "icon": 'assets/icons/drawer_icons/information-circle.svg',
+        "routeName": '',
+      },
+    ];
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -62,8 +68,16 @@ class _NavigationTabsState extends State<NavigationTabs> {
             setState(() {
               _activeTab = index;
             });
-            var route = tabs[index]['routeName'] as String;
-            if (route.isNotEmpty) Navigator.pushNamed(context, route);
+            var route = tabs[_activeTab]['routeName'] as String;
+            if (route.isNotEmpty)
+              Navigator.pushNamed(context, route);
+            else {
+              setState(() {
+                _activeTab = 0;
+              });
+              Navigator.pushReplacementNamed(
+                  context, tabs[_activeTab]['routeName'] as String);
+            }
           },
           child: AnimatedContainer(
             duration: kAnimationDuration,
@@ -103,9 +117,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
                 ),
                 SvgPicture.asset(
                   tabs[index]['icon'] as String,
-                  color: _activeTab == index ? Colors.white : Colors.white54,
-                  height: getProportionateScreenHeight(52),
-                  width: getProportionateScreenWidth(52),
+                  color: _activeTab == index ? Colors.white : null,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),

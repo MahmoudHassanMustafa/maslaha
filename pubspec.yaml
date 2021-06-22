@@ -1,5 +1,7 @@
 name: maslaha
-description: A project meant for both craft-owners & customer that enables craft-owners to widen their customer base and reach out more profits, and for customers to easily & safely find a service they want and get the job done.
+description: A project meant for both craft-owners & customer that enables
+  craft-owners to widen their customer base and reach out more profits, and for
+  customers to easily & safely find a service they want and get the job done.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -13,11 +15,14 @@ dependencies:
     sdk: flutter
   reside_menu:
     path: ./packages/reside_menu
+  bubble: ^1.2.1
   cupertino_icons: ^1.0.2
+  flutter_rating_bar: ^4.0.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^9.0.0
   image_picker: ^0.7.5+3
   intl: ^0.17.0
+  photo_view: ^0.11.1
   pinput: ^1.2.0
   provider: ^5.0.0
   shared_preferences: ^2.0.5
@@ -26,7 +31,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 flutter:
 
@@ -39,7 +43,8 @@ flutter:
     - assets/images/splash_images/
     - assets/images/auth_images/
     - assets/icons/
-    - assets/icons/drawer_tabs/
+    - assets/icons/chat_icons/
+    - assets/icons/drawer_icons/
 
   fonts:
     - family: OpenSans

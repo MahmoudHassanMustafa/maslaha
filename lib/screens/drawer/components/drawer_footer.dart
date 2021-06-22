@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maslaha/utils/size_config.dart';
+
+import '../../../screens/welcome_screen.dart';
+import '../../../utils/size_config.dart';
 
 class DrawerFooter extends StatelessWidget {
   @override
@@ -38,7 +40,11 @@ class DrawerFooter extends StatelessWidget {
           ),
           GestureDetector(
             // TODO: log out on click
-            onTap: () => print('Log out'),
+            onTap: () {
+              print('Log out');
+              Navigator.of(context)
+                  .pushReplacementNamed(WelcomeScreen.routeName);
+            },
             child: Row(
               children: [
                 const Icon(

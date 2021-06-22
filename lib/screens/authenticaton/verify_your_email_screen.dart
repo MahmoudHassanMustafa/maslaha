@@ -3,11 +3,11 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
-import './auth_components/arrow_back_button.dart';
-import './auth_components/auth_button.dart';
-import './auth_components/auth_title.dart';
-import './auth_page_transition/slid_right_transition.dart';
-import './create_new_password_screen.dart';
+import 'auth_components/arrow_back_button.dart';
+import 'auth_components/auth_button.dart';
+import 'auth_components/auth_title.dart';
+import 'auth_page_transition/slid_right_transition.dart';
+import 'create_new_password_screen.dart';
 
 class VerifyYourEmailScreen extends StatelessWidget {
   static String routeName = "/VerifyYourEmailScreen";

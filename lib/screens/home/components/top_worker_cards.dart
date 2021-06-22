@@ -1,53 +1,59 @@
 import 'package:flutter/material.dart';
+import '../../../widgets/status_badge.dart';
 
 import '../../../utils/size_config.dart';
 
-class TopWorkerCards extends StatelessWidget {
-  final List<Map<String, dynamic>> workers = const [
+class TopWorkerCards extends StatefulWidget {
+  @override
+  _TopWorkerCardsState createState() => _TopWorkerCardsState();
+}
+
+class _TopWorkerCardsState extends State<TopWorkerCards> {
+  List<Map<String, dynamic>> workers = [
     {
-      "status": Colors.green,
+      "status": {'text': 'Online', 'color': Colors.green},
       "name": "Sergio de Paula",
       "image":
           "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
       "rating": 3.0,
       "service": "Mechanic",
-      "jobs_done": 144,
+      "isFav": true,
     },
     {
-      "status": Colors.amber,
+      "status": {'text': 'Away', 'color': Colors.amber},
       "name": "Dan",
       "image":
           "https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
       "rating": 4.5,
       "service": "Barber",
-      "jobs_done": 124,
+      "isFav": true,
     },
     {
-      "status": Colors.amber,
+      "status": {'text': 'Away', 'color': Colors.amber},
       "name": "Christina Campbell",
       "image":
           "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80",
       "rating": 5.0,
       "service": "Engineer",
-      "jobs_done": 92,
+      "isFav": false,
     },
     {
-      "status": Colors.red,
+      "status": {'text': 'Offline', 'color': Colors.red},
       "name": "Abbe Nolan",
       "image":
           "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=736&q=80",
       "rating": 4.0,
       "service": "Interior designer",
-      "jobs_done": 84,
+      "isFav": false,
     },
     {
-      "status": Colors.green,
+      "status": {'text': 'Online', 'color': Colors.green},
       "name": "Nicolas Green",
       "image":
           "https://images.unsplash.com/photo-1494708001911-679f5d15a946?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
       "rating": 3.0,
       "service": "Mechanic",
-      "jobs_done": 78,
+      "isFav": true,
     },
   ];
 
@@ -135,10 +141,8 @@ class TopWorkerCards extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    CircleAvatar(
-                                      radius: 5,
-                                      backgroundColor: workers[index]['status'],
-                                    ),
+                                    StatusBadge(
+                                        status: workers[index]['status']),
                                     const SizedBox(width: 4),
                                     Container(
                                       constraints: BoxConstraints(
@@ -166,27 +170,21 @@ class TopWorkerCards extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              direction: Axis.vertical,
-                              children: [
-                                const Text(
-                                  'Jobs done',
-                                  style: const TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  workers[index]['jobs_done'].toString(),
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                              ],
+                            IconButton(
+                              // TODO: add to favs
+                              onPressed: () {
+                                setState(() {
+                                  workers[index]['isFav'] =
+                                      !workers[index]['isFav'];
+                                });
+                              },
+                              icon: Icon(workers[index]['isFav']
+                                  ? Icons.favorite_rounded
+                                  : Icons.favorite_border),
+                              color: workers[index]['isFav']
+                                  ? Colors.red
+                                  : Colors.black54,
+                              iconSize: 30,
                             )
                           ],
                         ),

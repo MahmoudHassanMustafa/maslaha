@@ -221,7 +221,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                             resizeToAvoidBottomInset: true,
                             backgroundColor: Colors.white,
                             appBar: AppBar(
-                              toolbarHeight: 80,
+                              toolbarHeight: 70,
                               elevation: 0,
                               automaticallyImplyLeading: false,
                               backgroundColor: Colors.white,
@@ -395,7 +395,7 @@ class MenuScaffold extends StatelessWidget {
   MenuScaffold(
       {Key? key,
       required this.children,
-      this.topMargin: 15.0,
+      this.topMargin: 50.0,
       Widget? header,
       Widget? footer})
       : header = header ?? new Container(height: 20.0),

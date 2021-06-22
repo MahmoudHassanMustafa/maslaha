@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../shared/constants.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import '../screens/welcome_screen.dart';
+import '../shared/constants.dart';
 
 //  Landing screen of the App logo and name to be shown,
 //  while the necessary processes are being loaded in the background

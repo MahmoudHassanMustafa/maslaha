@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import './routes.dart';
-import './providers/conversations.dart';
-import './providers/messages.dart';
+import 'providers/conversations.dart';
+import 'providers/messages.dart';
+import 'routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

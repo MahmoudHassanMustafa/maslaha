@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../providers/messages.dart';
-
-enum MediaSource { Image, Vedio }
+import '../../../shared/constants.dart';
+import 'service_submit_form.dart';
 
 class NewMessage extends StatefulWidget {
   final String chatId;
@@ -20,14 +21,15 @@ class NewMessage extends StatefulWidget {
 
 class _NewMessageState extends State<NewMessage> {
   File? _selectedMediaFile;
+  final _pageController = PageController();
 
   final _controller = TextEditingController();
   final _picker = ImagePicker();
 
-  Future getMedia(MediaSource mediaSource) async {
-    final pickedFile = mediaSource == MediaSource.Image
-        ? await _picker.getImage(source: ImageSource.gallery)
-        : await _picker.getVideo(source: ImageSource.gallery);
+  var showSendButton = false;
+
+  Future getMedia() async {
+    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _selectedMediaFile = File(pickedFile.path);
@@ -38,8 +40,8 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     final messages = Provider.of<Messages>(context, listen: false);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      margin: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           Expanded(
@@ -47,97 +49,107 @@ class _NewMessageState extends State<NewMessage> {
               children: [
                 TextField(
                   controller: _controller,
-                  onSubmitted: (_) {
-                    messages.sendMessage(
-                        widget.chatId, widget.userId, 'text', _controller.text);
-                    _controller.clear();
+                  onChanged: (msg) {
+                    if (msg.isNotEmpty)
+                      setState(() {
+                        showSendButton = true;
+                      });
+                    else
+                      setState(() {
+                        showSendButton = false;
+                      });
+                  },
+                  onSubmitted: (msg) {
+                    if (msg.isNotEmpty) {
+                      messages.sendMessage(
+                          widget.chatId, widget.userId, ContentType.Text, msg);
+                      _controller.clear();
+                    }
                   },
                   decoration: InputDecoration(
-                    prefixIcon: SizedBox(),
+                    prefixIcon: SizedBox.shrink(),
                     hintText: 'Send a message...',
+                    filled: true,
+                    fillColor: Colors.grey.withOpacity(0.3),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 15,
                     ),
-                    filled: true,
-                    fillColor: Colors.grey.shade300,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
                     ),
                   ),
                 ),
                 IconButton(
                   icon: Icon(
-                    Icons.attach_file,
-                    color: Colors.blue,
+                    Icons.photo,
+                    size: 28,
+                    color: kPrimaryColor,
                   ),
                   splashRadius: 1,
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      barrierColor: Colors.transparent,
-                      builder: (_) {
-                        return Container(
-                          color: Colors.transparent,
-                          height: 130,
-                          margin: const EdgeInsets.only(left: 10, bottom: 55),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              buildMediaPicker(
-                                icon: Icons.photo,
-                                tapHandler: () async {
-                                  await getMedia(MediaSource.Image);
-                                  print(
-                                      'FFFFFFFFFFFFIIIIIIIIILLLLLLLLLLLLLLEEEEEEEEEE $_selectedMediaFile');
-                                  if (_selectedMediaFile != null)
-                                    messages.sendMessage(
-                                        widget.chatId,
-                                        widget.userId,
-                                        'image',
-                                        _selectedMediaFile);
-
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              buildMediaPicker(
-                                icon: Icons.videocam_rounded,
-                                tapHandler: () async {
-                                  await getMedia(MediaSource.Vedio);
-                                  print(
-                                      'FFFFFFFFFFFFIIIIIIIIILLLLLLLLLLLLLLEEEEEEEEEE $_selectedMediaFile');
-                                  if (_selectedMediaFile != null)
-                                    messages.sendMessage(
-                                        widget.chatId,
-                                        widget.userId,
-                                        'video',
-                                        _selectedMediaFile);
-
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                  onPressed: () async {
+                    await getMedia();
+                    if (_selectedMediaFile != null)
+                      messages.sendMessage(widget.chatId, widget.userId,
+                          ContentType.Image, _selectedMediaFile);
                   },
                 ),
               ],
             ),
           ),
-          SizedBox(width: 6),
-          CircleAvatar(
-            radius: 22,
+          const SizedBox(width: 6),
+          Container(
+            decoration: BoxDecoration(
+              color: kPrimaryColor,
+              shape: BoxShape.circle,
+            ),
             child: IconButton(
-              icon: Icon(Icons.send_rounded),
+              icon: SvgPicture.asset(
+                showSendButton
+                    ? 'assets/icons/chat_icons/send.svg'
+                    : 'assets/icons/chat_icons/contract.svg',
+                color: Colors.white,
+              ),
               onPressed: () {
-                messages.sendMessage(
-                    widget.chatId, widget.userId, 'text', _controller.text);
-                _controller.clear();
+                if (_controller.text.isNotEmpty) {
+                  messages.sendMessage(widget.chatId, widget.userId,
+                      ContentType.Text, _controller.text);
+                  _controller.clear();
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        title: Text(
+                          'Pose a service',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        content: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: 170,
+                          ),
+                          child: ServiceSubmitForm(_pageController),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              _pageController.nextPage(
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.bounceInOut);
+                            },
+                            child: Text('Next'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
