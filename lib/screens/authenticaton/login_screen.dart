@@ -1,18 +1,32 @@
+import 'dart:convert';
+
+import 'package:maslaha/screens/authenticaton/auth_components/alertToast.dart';
+import 'package:maslaha/screens/authenticaton/auth_components/arrow_back_button.dart';
+import 'package:maslaha/screens/authenticaton/auth_components/auth_button.dart';
+import 'package:maslaha/screens/authenticaton/auth_components/social_Button.dart';
+import 'package:maslaha/screens/authenticaton/auth_page_transition/slid_right_transition.dart';
+import 'package:maslaha/screens/authenticaton/create_new_password_screen.dart';
+import 'package:maslaha/screens/authenticaton/forget_password_screen.dart';
+import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
+import 'package:maslaha/screens/home/home_screen.dart';
+import 'package:maslaha/shared/constants.dart';
+import 'package:maslaha/utils/size_config.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../shared/constants.dart';
-import '../../utils/size_config.dart';
-import 'auth_components/arrow_back_button.dart';
-import 'auth_components/auth_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_components/auth_title.dart';
-import 'auth_components/social_Button.dart';
-import 'auth_page_transition/slid_right_transition.dart';
-import 'forget_password_screen.dart';
-import 'register_screen_1.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static String routeName = "/login";
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String email='';
+  String password='';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,16 +66,24 @@ class LoginScreen extends StatelessWidget {
                             fit: BoxFit.contain),
                       ),
                     )),
-                authTitle("Welcome", 368, 140),
+                authTitle("Welcome", 350, 140),
                 //Email text form field
                 Positioned(
-                  top: getProportionateScreenHeight(423),
+                  top: getProportionateScreenHeight(410),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+//                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
+                      onChanged: (val){
+                        setState(() {
+                          email=val;
+                        });
+                      },
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your Email",
                         prefixIcon: Icon(Icons.email_outlined,
                             color: Color(0xffA0BBF0)),
@@ -71,13 +93,22 @@ class LoginScreen extends StatelessWidget {
                 ),
                 //password text form field
                 Positioned(
-                  top: getProportionateScreenHeight(490),
+                  top: getProportionateScreenHeight(500),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(37),
+//                    height: getProportionateScreenHeight(37),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     child: TextFormField(
+                      obscureText: true,
+                      onChanged: (val){
+                        setState(() {
+                          password=val;
+                        });
+                      },
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your Password",
                         prefixIcon: Icon(
                           Icons.lock_open,
@@ -87,9 +118,34 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                authButton("Log in", () {}, 567, 71),
+                authButton("Log in", () async{
+                  if(email!='' && password!=''){
+                    if(email.contains("@")){
+                     try{
+                       var url = Uri.parse('https://masla7a.herokuapp.com/accounts/login');
+                       var response = await http.post(url, body: {'email': email, 'password': password});
+                       print('Response status: ${response.statusCode}');
+                       print('Response body: ${response.body}');
+                       var result =json.decode(response.body);
+                       if(response.statusCode==200){
+                         SharedPreferences pref=await SharedPreferences.getInstance();
+                         pref.setString("token", result["token"]);
+                         pref.setBool("isAuth", true);
+                         Navigator.push(context, SlidRight(page: HomeScreen()));
+                       }
+                     }catch(ex){
+                       alertToast("${ex}", Colors.red, Colors.white);
+                       print("error with login ${ex}");
+                     }
+                    }else{
+                      alertToast("Please Provide Valid Email", Colors.red,Colors.white);
+                    }
+                  }else{
+                    alertToast("Please Provide All Data",Colors.red, Colors.white);
+                  }
+                }, 630, 71),
                 Positioned(
-                  top: getProportionateScreenHeight(637),
+                  top: getProportionateScreenHeight(700),
                   left: getProportionateScreenWidth(82),
                   child: Center(
                     child: Row(
@@ -121,7 +177,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 //Forget password Screen
                 Positioned(
-                  top: getProportionateScreenHeight(664),
+                  top: getProportionateScreenHeight(740),
                   left: getProportionateScreenWidth(133),
                   child: GestureDetector(
                     onTap: () {
@@ -129,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                       //Navigator.pushNamed(context, ForgetPasswordScreen.routeName);
                       //Slid right Navigate
                       Navigator.of(context)
-                          .push(SlidRight(page: ForgetPasswordScreen()));
+                          .push(SlidRight(page: CreateNewPasswordScreen()));
                     },
                     child: Text(
                       "Forget Password?",
@@ -140,52 +196,52 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 //OR Row
-                Positioned(
-                  top: getProportionateScreenHeight(698),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(37),
-                      right: getProportionateScreenWidth(37),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(140),
-                          child: Divider(
-                            //color:kFieldBorder,
-                            thickness: 2,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Text(
-                            "Or",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Container(
-                          width: getProportionateScreenWidth(140),
-                          child: Divider(
-                            thickness: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(698),
+//                  child: Padding(
+//                    padding: EdgeInsets.only(
+//                      left: getProportionateScreenWidth(37),
+//                      right: getProportionateScreenWidth(37),
+//                    ),
+//                    child: Row(
+//                      children: [
+//                        Container(
+//                          width: getProportionateScreenWidth(140),
+//                          child: Divider(
+//                            //color:kFieldBorder,
+//                            thickness: 2,
+//                          ),
+//                        ),
+//                        Padding(
+//                          padding: const EdgeInsets.only(left: 5, right: 5),
+//                          child: Text(
+//                            "Or",
+//                            style: TextStyle(fontSize: 16),
+//                          ),
+//                        ),
+//                        Container(
+//                          width: getProportionateScreenWidth(140),
+//                          child: Divider(
+//                            thickness: 2,
+//                          ),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                ),
                 //social buttons
-                Positioned(
-                  top: getProportionateScreenHeight(720),
-                  left: getProportionateScreenWidth(116),
-                  child: socialButton(
-                      FontAwesomeIcons.google, () {}, Color(0xffB90B0B)),
-                ),
-                Positioned(
-                  top: getProportionateScreenHeight(720.0),
-                  left: getProportionateScreenWidth(213.0),
-                  child: socialButton(
-                      FontAwesomeIcons.facebookF, () {}, Color(0xff064FAE)),
-                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(740),
+//                  left: getProportionateScreenWidth(116),
+//                  child: socialButton(
+//                      FontAwesomeIcons.google, () {}, Color(0xffB90B0B)),
+//                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(740.0),
+//                  left: getProportionateScreenWidth(213.0),
+//                  child: socialButton(
+//                      FontAwesomeIcons.facebookF, () {}, Color(0xff064FAE)),
+//                ),
               ],
             ),
           ),

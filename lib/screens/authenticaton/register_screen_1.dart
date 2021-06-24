@@ -1,18 +1,32 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:maslaha/screens/authenticaton/auth_components/alertToast.dart';
+import 'package:maslaha/screens/authenticaton/login_screen.dart';
+import 'package:maslaha/screens/authenticaton/register_screen_2.dart';
+import 'package:maslaha/screens/authenticaton/sign_up_as_client.dart';
+import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
+import 'package:maslaha/shared/constants.dart';
+import 'package:maslaha/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../shared/constants.dart';
-import '../../utils/size_config.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_components/social_Button.dart';
 import 'auth_page_transition/slid_right_transition.dart';
-import 'login_screen.dart';
-import 'register_screen_2.dart';
 
-class RegisterScreen1 extends StatelessWidget {
+class RegisterScreen1 extends StatefulWidget {
   static String routeName = "/RegisterScreen1";
+  @override
+  _RegisterScreen1State createState() => _RegisterScreen1State();
+}
+
+class _RegisterScreen1State extends State<RegisterScreen1> {
+  bool _clientValue =true;
+  bool _serviceProviderValue=false;
+  String email='';
+  String password='';
+  String rePassword='';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +54,7 @@ class RegisterScreen1 extends StatelessWidget {
                 ),
                 //image
                 Positioned(
-                    top: getProportionateScreenHeight(58),
+                    top: getProportionateScreenHeight(50),
                     left: getProportionateScreenWidth(71),
                     child: Container(
                       width: getProportionateScreenWidth(204),
@@ -52,54 +66,193 @@ class RegisterScreen1 extends StatelessWidget {
                             fit: BoxFit.contain),
                       ),
                     )),
-                authTitle("Create Account", 369, 109),
-                //Name Field
-                Positioned(
-                  top: getProportionateScreenHeight(423),
-                  left: getProportionateScreenWidth(37),
-                  child: Container(
-                    width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
-                    child: TextFormField(
-                      textAlignVertical: TextAlignVertical.top,
-                      decoration: InputDecoration(
-                        hintText: "Enter your Name",
-                        prefixIcon: Icon(
-                          Icons.person_outline,
-                          color: Color(0xffA0BBF0),
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                authTitle("Create Account", 330, 109),
                 //Email Field
                 Positioned(
-                  top: getProportionateScreenHeight(490),
+                  top: getProportionateScreenHeight(370),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
+//                    height: getProportionateScreenHeight(),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      textAlignVertical: TextAlignVertical.top,
+                      onChanged: (val){
+                        setState(() {
+                          email=val;
+                        });
+                      },
                       decoration: InputDecoration(
                         hintText: "Enter your Email",
                         prefixIcon: Icon(
                           Icons.email_outlined,
                           color: Color(0xffA0BBF0),
+                          size: 30,
+                        ),
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                      ),
+                    ),
+                  ),
+                ),
+                //password Field
+                Positioned(
+                  top: getProportionateScreenHeight(440),
+                  left: getProportionateScreenWidth(37),
+                  child: Container(
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    width: getProportionateScreenWidth(302),
+//                    height: getProportionateScreenHeight(36),
+                    child: TextFormField(
+                      onChanged: (val){
+                        setState(() {
+                          password=val;
+                        });
+                      },
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                        hintText: "Enter your Password",
+                        prefixIcon: Icon(
+                          Icons.lock_outline,
+                          color: Color(0xffA0BBF0),
                         ),
                       ),
                     ),
                   ),
                 ),
-                authButton("Next", () {
-                  //normal navigate
-                  // Navigator.pushNamed(context, RegisterScreen2.routeName);
-                  //Slid right navigate
-                  Navigator.of(context)
-                      .push(SlidRight(page: RegisterScreen2()));
-                }, 577, 71),
+                //re-enter the password
                 Positioned(
-                  top: getProportionateScreenHeight(660),
+                  top: getProportionateScreenHeight(520),
+                  left: getProportionateScreenWidth(37),
+                  child: Container(
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    width: getProportionateScreenWidth(302),
+//                    height: getProportionateScreenHeight(36),
+                    child: TextFormField(
+                      obscureText: true,
+                      onChanged: (val){
+                        setState(() {
+                          rePassword=val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                        hintText: "Re-Enter Your Password",
+                        prefixIcon: Icon(
+                          Icons.lock_open,
+                          color: Color(0xffA0BBF0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                //client or service provider check buttons
+                Positioned(
+                    top: getProportionateScreenHeight(610),
+                    left:getProportionateScreenWidth(37),
+                    child: Row(
+                  children: [
+                    Container(
+                      height: getProportionateScreenHeight(45),
+                      width: getProportionateScreenWidth(119),
+                      decoration: BoxDecoration(
+                        border: Border.all(color:_clientValue?Colors.blueAccent:Colors.grey),
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _clientValue = true;
+                                  _serviceProviderValue=false;
+                                });
+                              },
+                              child: Container(
+                                width: getProportionateScreenHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: Color(0xFF979797)),
+                                    color: _clientValue==true?Colors.blueAccent:Colors.white
+                                ),
+                              ),
+                            ),
+                            Text("Client",style: TextStyle(
+                                color: _clientValue==true?Colors.blueAccent:Colors.grey
+                            ),)
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: getProportionateScreenWidth(10)),
+                      height: getProportionateScreenHeight(45),
+                      width: getProportionateScreenWidth(173),
+                      decoration: BoxDecoration(
+                          border: Border.all(color:_serviceProviderValue?Colors.blueAccent:Colors.grey),
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _serviceProviderValue = true;
+                                  _clientValue=false;
+                                });
+                              },
+                              child: Container(
+                                width: getProportionateScreenHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: Color(0xFF979797)),
+                                  color: _serviceProviderValue==true?Colors.blueAccent:Colors.white
+                                ),
+                              ),
+                            ),
+                            Text("Service Provider",style: TextStyle(
+                                color: _serviceProviderValue==true?Colors.blueAccent:Colors.grey
+                            ),)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+                authButton("Next", () {
+                  if(email!=''&& password!=''&& rePassword!=''){
+                    if(password == rePassword){
+                      if(email.contains("@")){
+                        if(_clientValue){
+                          Navigator.of(context).push(SlidRight(page: SignUpAsClient(password: password,email:email)));
+                        }else if(_serviceProviderValue){
+                          Navigator.of(context).push(SlidRight(page: SignUpAsWorker(password: password,email:email)));
+                        }
+                      }else{
+                        alertToast("Please Provide Valid Email", Colors.red, Colors.white);
+                      }
+                    }else{
+                      alertToast("Password Not Match ...!", Colors.red, Colors.white);
+                    }
+                  }else{
+                   alertToast("Please provide all data", Colors.red, Colors.white);
+                  }
+
+//                  Navigator.of(context)
+//                      .push(SlidRight(page:_clientValue?SignUpAsClient():SignUpAsWorker()));
+                }, 680, 71),
+                //already have an account line
+                Positioned(
+                  top: getProportionateScreenHeight(740),
                   left: getProportionateScreenWidth(89),
                   child: Center(
                     child: Row(
@@ -130,53 +283,53 @@ class RegisterScreen1 extends StatelessWidget {
                   ),
                 ),
                 //OR row
-                Positioned(
-                  top: getProportionateScreenHeight(698),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(39),
-                      right: getProportionateScreenWidth(39),
-                    ),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(140),
-                          child: Divider(
-                            //color:kFieldBorder,
-                            thickness: 2,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Text(
-                            "Or",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Container(
-                          width: getProportionateScreenWidth(140),
-                          child: Divider(
-                            thickness: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(740),
+//                  child: Padding(
+//                    padding: EdgeInsets.only(
+//                      left: getProportionateScreenWidth(39),
+//                      right: getProportionateScreenWidth(39),
+//                    ),
+//                    child: Row(
+//                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                      children: [
+//                        Container(
+//                          width: getProportionateScreenWidth(140),
+//                          child: Divider(
+//                            //color:kFieldBorder,
+//                            thickness: 2,
+//                          ),
+//                        ),
+//                        Padding(
+//                          padding: const EdgeInsets.only(left: 5, right: 5),
+//                          child: Text(
+//                            "Or",
+//                            style: TextStyle(fontSize: 16),
+//                          ),
+//                        ),
+//                        Container(
+//                          width: getProportionateScreenWidth(140),
+//                          child: Divider(
+//                            thickness: 2,
+//                          ),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                ),
                 //social buttons
-                Positioned(
-                  top: getProportionateScreenHeight(720),
-                  left: getProportionateScreenWidth(116),
-                  child: socialButton(
-                      FontAwesomeIcons.google, () {}, Color(0xffB90B0B)),
-                ),
-                Positioned(
-                  top: getProportionateScreenHeight(720),
-                  left: getProportionateScreenWidth(213),
-                  child: socialButton(
-                      FontAwesomeIcons.facebookF, () {}, Color(0xff064FAE)),
-                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(760),
+//                  left: getProportionateScreenWidth(116),
+//                  child: socialButton(
+//                      FontAwesomeIcons.google, () {}, Color(0xffB90B0B)),
+//                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(760),
+//                  left: getProportionateScreenWidth(213),
+//                  child: socialButton(
+//                      FontAwesomeIcons.facebookF, () {}, Color(0xff064FAE)),
+//                ),
               ],
             ),
           ),

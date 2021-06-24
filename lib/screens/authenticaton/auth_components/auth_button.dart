@@ -1,7 +1,6 @@
+import 'package:maslaha/shared/constants.dart';
+import 'package:maslaha/utils/size_config.dart';
 import 'package:flutter/material.dart';
-
-import '../../../shared/constants.dart';
-import '../../../utils/size_config.dart';
 
 Widget authButton(String title, Function onTap, double top, double left) {
   return Positioned(
@@ -18,11 +17,11 @@ Widget authButton(String title, Function onTap, double top, double left) {
               style: TextStyle(
                   color: Colors.white,
                   fontSize: getProportionateScreenWidth(22),
-                  fontWeight: FontWeight.w500),
+                  ),
             ),
           ),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20), color: kAuthMainColor),
+              borderRadius: BorderRadius.circular(15), color: kAuthMainColor),
         ),
       ));
 }

@@ -1,12 +1,11 @@
+import 'package:maslaha/screens/authenticaton/verify_your_email_screen.dart';
+import 'package:maslaha/shared/constants.dart';
+import 'package:maslaha/utils/size_config.dart';
 import 'package:flutter/material.dart';
-
-import '../../shared/constants.dart';
-import '../../utils/size_config.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_page_transition/slid_right_transition.dart';
-import 'verify_your_email_screen.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   static String routeName = "/ForgetPasswordScreen";
@@ -52,13 +51,16 @@ class ForgetPasswordScreen extends StatelessWidget {
                 authTitle("Forget password", 368, 102),
                 //Email Field
                 Positioned(
-                  top: getProportionateScreenHeight(497),
+                  top: getProportionateScreenHeight(480),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
+//                    height: getProportionateScreenHeight(36),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     child: TextFormField(
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your E-mail",
                         prefixIcon: Icon(Icons.email_outlined,
                             color: Color(0xffA0BBF0)),
@@ -70,8 +72,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                   //Normal Navigate
                   //Navigator.pushNamed(context, VerifyYourEmailScreen.routeName);
                   //Slid Right Navigate
-                  Navigator.of(context)
-                      .push(SlidRight(page: VerifyYourEmailScreen()));
+//                  Navigator.of(context)
+//                      .push(SlidRight(page: VerifyYourEmailScreen()));
                 }, 650, 71),
                 // try another way button
                 Positioned(

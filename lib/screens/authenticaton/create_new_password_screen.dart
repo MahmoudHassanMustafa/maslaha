@@ -1,13 +1,28 @@
+import 'dart:convert';
+import 'package:http/http.dart'as http;
+import 'package:maslaha/screens/authenticaton/login_screen.dart';
+import 'package:maslaha/screens/home/home_screen.dart';
+import 'package:maslaha/shared/constants.dart';
+import 'package:maslaha/utils/size_config.dart';
 import 'package:flutter/material.dart';
-
-import '../../shared/constants.dart';
-import '../../utils/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
+import 'auth_page_transition/slid_right_transition.dart';
 
-class CreateNewPasswordScreen extends StatelessWidget {
+class CreateNewPasswordScreen extends StatefulWidget {
   static String routeName = "/CreateNewPasswordScreen";
+
+  @override
+  _CreateNewPasswordScreenState createState() => _CreateNewPasswordScreenState();
+}
+
+class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
+  String oldPassword=" ";
+  String newPassword=" ";
+  String confirmPassword=" ";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,14 +83,23 @@ class CreateNewPasswordScreen extends StatelessWidget {
                 ),
                 //enter password Text Form Field
                 Positioned(
-                  top: getProportionateScreenHeight(500),
+                  top: getProportionateScreenHeight(450),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+//                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
+                      obscureText: true,
+                      onChanged: (val){
+                        setState(() {
+                          oldPassword=val;
+                        });
+                      },
                       decoration: InputDecoration(
-                        hintText: "Enter your new Password",
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                        hintText: "Enter Your Old Password",
                         prefixIcon:
                             Icon(Icons.lock_open, color: Color(0xffA0BBF0)),
                       ),
@@ -84,14 +108,22 @@ class CreateNewPasswordScreen extends StatelessWidget {
                 ),
                 //confirm password field
                 Positioned(
-                  top: getProportionateScreenHeight(570),
+                  top: getProportionateScreenHeight(530),
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    height: getProportionateScreenHeight(36),
+//                    height: getProportionateScreenHeight(36),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     child: TextFormField(
+                      onChanged: (val){
+                        setState(() {
+                          newPassword=val;
+                        });
+                      },
                       decoration: InputDecoration(
-                        hintText: "Confirm your Password",
+                        hintText: "Enter your New Password",
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
                         prefixIcon: Icon(
                           Icons.lock_open,
                           color: Color(0xffA0BBF0),
@@ -100,7 +132,60 @@ class CreateNewPasswordScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                authButton("Save", () {}, 650, 71),
+                Positioned(
+                  top: getProportionateScreenHeight(610),
+                  left: getProportionateScreenWidth(37),
+                  child: Container(
+                    width: getProportionateScreenWidth(302),
+//                    height: getProportionateScreenHeight(36),
+                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    child: TextFormField(
+                      onChanged: (val){
+                        setState(() {
+                          confirmPassword=val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Confirm your Password",
+                        border: OutlineInputBorder(
+                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                        prefixIcon: Icon(
+                          Icons.lock_open,
+                          color: Color(0xffA0BBF0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                authButton("Save", ()async{
+                  if(oldPassword!='' && newPassword!='' && confirmPassword!=''){
+                    if(newPassword == confirmPassword){
+                      try{
+                        var url = Uri.parse('https://masla7a.herokuapp.com/my-profile/reset-password');
+                        var response = await http.post(url, body: {
+                          "current_password": oldPassword,
+                          'new_password': newPassword,
+                          "confirm_password":confirmPassword});
+                        print('Response status: ${response.statusCode}');
+                        print('Response body: ${response.body}');
+                        var result =json.decode(response.body);
+                        if(response.statusCode==200){
+                          SharedPreferences pref=await SharedPreferences.getInstance();
+                          pref.setString("token", result["token"]);
+                          pref.setBool("isAuth", true);
+                          Navigator.push(context, SlidRight(page: LoginScreen()));
+                        }
+                      }catch(ex){
+                        alertToast("${ex}", Colors.red, Colors.white);
+                        print("error with login ${ex}");
+                      }
+                    }else{
+                      alertToast("Passwords Not Match ..!", Colors.red,Colors.white);
+                    }
+                  }else{
+                    alertToast("Please Provide All Data",Colors.red, Colors.white);
+                  }
+                }, 720, 71),
               ],
             ),
           ),

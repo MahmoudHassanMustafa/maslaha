@@ -1,41 +1,34 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
-import 'package:maslaha/screens/authenticaton/create_new_password_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:maslaha/screens/home/home_screen.dart';
 import 'package:maslaha/shared/constants.dart';
 import 'package:maslaha/utils/size_config.dart';
-import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart'as http;
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_page_transition/slid_right_transition.dart';
-
-class VerifyYourEmailScreen extends StatefulWidget {
+class VerifyYourEmailClient extends StatefulWidget {
   late String gender;
   late File? image;
   late String email;
   late String password;
   late String name;
-  late String birthDate;
+  late String address;
   late String phone;
   late String nationalID;
-  late String address;
-  late String category;
-  late String serviceName;
-  late String initialPrice;
-  late String description;
-  VerifyYourEmailScreen({required this.category,required this.serviceName,required this.initialPrice,required this.description,required this.address,required this.phone,required this.nationalID,required this.birthDate,required this.email,required this.name,required this.gender,required this.password,required this.image});
-  static String routeName = "/VerifyYourEmailScreen";
+  late String birthDate;
+  VerifyYourEmailClient({required this.nationalID,required this.birthDate,required this.address,this.image,required this.phone,required this.gender,required this.email,required this.password,required this.name});
   @override
-  _VerifyYourEmailScreenState createState() => _VerifyYourEmailScreenState();
+  _VerifyYourEmailClientState createState() => _VerifyYourEmailClientState();
 }
 
-class _VerifyYourEmailScreenState extends State<VerifyYourEmailScreen> {
+class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
   final TextEditingController _pinPutController = TextEditingController();
   bool isLoading = false;
   String code='';
@@ -91,13 +84,9 @@ class _VerifyYourEmailScreenState extends State<VerifyYourEmailScreen> {
         request.fields["phone_number"]=widget.phone;
         request.fields["gender"]=widget.gender;
         request.fields["userName"]=widget.name;
-        request.fields["role"]="serviceProvider";
-        request.fields["category"]=widget.category;
-        request.fields["serviceName"]=widget.serviceName;
-        //3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt
+        request.fields["role"]="customer";
+//        "3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt"
         request.fields["address"]=widget.address;
-        request.fields["description"]=widget.description;
-        request.fields["servicePrice"]=widget.initialPrice;
         var response = await request.send();
         final respStr = await response.stream.bytesToString();
         var result =json.decode(respStr);
@@ -220,8 +209,7 @@ class _VerifyYourEmailScreenState extends State<VerifyYourEmailScreen> {
               ),
               authButton(isLoading?"Loading ...":"SignUp", ()async {
                 if(code !=""){
-//                  verifyOTP(code);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+                  verifyOTP(code);
                 }else{
                   alertToast("Please Provide The Sending Code",Colors.red, Colors.white);
                 }
