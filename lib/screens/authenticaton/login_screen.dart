@@ -27,6 +27,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email='';
   String password='';
+  bool isLoading=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,12 +119,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                authButton("Log in", () async{
+                authButton(isLoading?"Loading":"Log in", () async{
                   if(email!='' && password!=''){
                     if(email.contains("@")){
                      try{
+                       setState(() {
+                         isLoading=true;
+                       });
+                       print("this is email ${email}");
+                       print("this is password ${password}");
                        var url = Uri.parse('https://masla7a.herokuapp.com/accounts/login');
-                       var response = await http.post(url, body: {'email': email, 'password': password});
+                       var response = await http.post(url,  headers: <String, String>{
+                         'Content-Type': 'application/json; charset=UTF-8',
+                       },body: jsonEncode(<String, String>{
+                         'email': email,
+                         'password':password
+                       }),);
                        print('Response status: ${response.statusCode}');
                        print('Response body: ${response.body}');
                        var result =json.decode(response.body);
@@ -136,12 +147,21 @@ class _LoginScreenState extends State<LoginScreen> {
                      }catch(ex){
                        alertToast("${ex}", Colors.red, Colors.white);
                        print("error with login ${ex}");
+                       setState(() {
+                         isLoading=false;
+                       });
                      }
                     }else{
                       alertToast("Please Provide Valid Email", Colors.red,Colors.white);
+                      setState(() {
+                        isLoading=false;
+                      });
                     }
                   }else{
                     alertToast("Please Provide All Data",Colors.red, Colors.white);
+                    setState(() {
+                      isLoading=false;
+                    });
                   }
                 }, 630, 71),
                 Positioned(

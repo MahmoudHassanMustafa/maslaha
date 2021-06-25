@@ -85,8 +85,9 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                                 print('change ${date}');
                               }, onConfirm: (date) {
                                 setState(() {
-                                  birthDate="${date.day}/${date.month}/${date.year}";
-                                });
+                                  var day = date.day<10?"0"+date.day.toString():date.day.toString();
+                                  var month = date.month<10?"0"+date.month.toString():date.month.toString();
+                                  birthDate="$day/$month/${date.year.toString()}";                                });
                                 print(birthDate);
                               }, currentTime: DateTime.now(), locale: LocaleType.ar);
                         },

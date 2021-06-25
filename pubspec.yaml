@@ -48,6 +48,7 @@ flutter:
   assets:
     - assets/images/splash_images/
     - assets/images/auth_images/
+    - assets/images/user_male.png
     - assets/icons/
     - assets/icons/chat_icons/
     - assets/icons/drawer_icons/

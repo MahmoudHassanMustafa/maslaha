@@ -85,7 +85,7 @@ class _SignUpAsWorkerState extends State<SignUpAsWorker> {
                 //image Picker for personal information
                 Positioned(
                   top: getProportionateScreenHeight(380),
-                  left: getProportionateScreenWidth(125),
+                  left: getProportionateScreenWidth(140),
                   child:Container(
                     width: getProportionateScreenHeight(120),
                     height: getProportionateScreenHeight(120),

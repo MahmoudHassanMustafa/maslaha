@@ -162,10 +162,13 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     if(newPassword == confirmPassword){
                       try{
                         var url = Uri.parse('https://masla7a.herokuapp.com/my-profile/reset-password');
-                        var response = await http.post(url, body: {
+                        var response = await http.post(url,  headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },body: jsonEncode(<String, String>{
                           "current_password": oldPassword,
-                          'new_password': newPassword,
-                          "confirm_password":confirmPassword});
+                          "new_password":newPassword,
+                          "confirm_password":confirmPassword
+                        }),);
                         print('Response status: ${response.statusCode}');
                         print('Response body: ${response.body}');
                         var result =json.decode(response.body);

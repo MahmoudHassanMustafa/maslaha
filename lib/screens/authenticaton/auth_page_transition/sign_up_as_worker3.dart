@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart'as http;
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:maslaha/screens/authenticaton/auth_components/alertToast.dart';
@@ -10,6 +12,7 @@ import 'package:maslaha/screens/authenticaton/verify_your_email_screen.dart';
 import 'package:maslaha/screens/home/home_screen.dart';
 import 'package:maslaha/shared/constants.dart';
 import 'package:maslaha/utils/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpAsWorker3 extends StatefulWidget {
   late String gender;
@@ -123,7 +126,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                                 boxHeight: 45,
                                 boxWidth: 200,
                                 hint: Text('Category', style: TextStyle(
-                                    color: Colors.blue
+                                    color: Colors.grey
                                 ),),
                                 boxDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15)
@@ -135,7 +138,10 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                                 items: _dropdownTestItems,
                                 onChanged: onChangeDropdownTests,
                               ),
-                            Icon(Icons.arrow_downward,color: Colors.blue,)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.arrow_downward,color: Colors.blue,),
+                            )
                           ],
                         ),
 //                    TextFormField(
@@ -238,24 +244,71 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                     ),
                   ),
                 ),
-                authButton("Verify", ()async {
+                authButton(isLoading?"Loading":"Sign Up", ()async {
                   print("this is category ${category["keyword"]}");
                   if(category["keyword"] !="" && serviceName!="" && initialPrice!="" && description!=""){
-                    Navigator.of(context).push(SlidRight(page: VerifyYourEmailScreen(
-                      phone: widget.phone,
-                      nationalID: widget.nationalID,
-                      birthDate: widget.birthDate,
-                      address: widget.address,
-                      image: widget.image,
-                      password: widget.password,
-                      email: widget.email,
-                      name: widget.name,
-                      gender: widget.gender,
-                      description: description,
-                      category: category["keyword"],
-                      initialPrice: initialPrice,
-                      serviceName: serviceName,
-                    )));
+//                    Navigator.of(context).push(SlidRight(page: VerifyYourEmailScreen(
+//                      phone: widget.phone,
+//                      nationalID: widget.nationalID,
+//                      birthDate: widget.birthDate,
+//                      address: widget.address,
+//                      image: widget.image,
+//                      password: widget.password,
+//                      email: widget.email,
+//                      name: widget.name,
+//                      gender: widget.gender,
+//                      description: description,
+//                      category: category["keyword"],
+//                      initialPrice: initialPrice,
+//                      serviceName: serviceName,
+//                    )));
+                    try{
+                      setState(() {
+                        isLoading=true;
+                      });
+                      print("this is category ${category}");
+                      var url = Uri.parse('https://masla7a.herokuapp.com/accounts/sign-up');
+                      var request =http.MultipartRequest('POST',url);
+                      final file=await http.MultipartFile.fromPath("profilePic", widget.image!.path);
+                      request.files.add(file);
+                      request.fields["name"]=widget.name;
+                      request.fields["email"]=widget.email;
+                      request.fields["password"]=widget.password;
+//                    request.fields["confirm_password"]=widget.password;
+                      request.fields["birthDate"]="12/09/19";
+                      request.fields["nationalID"]=widget.nationalID;
+                      request.fields["phone_number"]=widget.phone;
+                      request.fields["gender"]=widget.gender;
+                      request.fields["userName"]=widget.name;
+                      request.fields["role"]="serviceProvider";
+                      request.fields["category"]=category["keyword"];
+                      request.fields["serviceName"]=serviceName;
+                      //3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt
+                      request.fields["address"]="3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt";
+                      request.fields["description"]=description;
+                      request.fields["servicePrice"]=initialPrice;
+                      var response = await request.send();
+                      final respStr = await response.stream.bytesToString();
+                      var result =json.decode(respStr);
+                      print(respStr);
+                      print("this is the token ${result["token"]}");
+                      setState(() {
+                        isLoading=false;
+                      });
+                      if(response.statusCode == 200){
+                        SharedPreferences pref=await SharedPreferences.getInstance();
+                        pref.setString("token", result["token"]);
+                        pref.setBool("isAuth", true);
+                        Navigator.of(context)
+                            .push(SlidRight(page: HomeScreen()));
+                      }
+                    }catch(ex){
+                      setState(() {
+                        isLoading=false;
+                      });
+                      alertToast("$ex", Colors.red, Colors.white);
+                      print("error with sed signup client request $ex");
+                    }
                   }else{
                     alertToast("Please Provide All Data",Colors.red, Colors.white);
                   }

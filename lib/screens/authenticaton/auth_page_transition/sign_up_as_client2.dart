@@ -85,7 +85,9 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                               print('change ${date}');
                             }, onConfirm: (date) {
                               setState(() {
-                                birthDate="${date.day}/${date.month}/${date.year}";
+                                var day = date.day<10?"0"+date.day.toString():date.day.toString();
+                                var month = date.month<10?"0"+date.month.toString():date.month.toString();
+                                birthDate="$day/$month/${date.year.toString()}";
                               });
                               print(birthDate);
                             }, currentTime: DateTime.now(), locale: LocaleType.ar);
@@ -174,6 +176,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                           phone=val;
                         });
                       },
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
@@ -212,9 +215,52 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                     ),
                   ),
                 ),
-                authButton("Next", ()async {
+                authButton(isLoading?"Loading":"Sign Up", ()async {
                   if(birthDate !="" && nationalID!="" && phone!="" && address!=""){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VerifyYourEmailClient(nationalID: nationalID, birthDate: birthDate, address: address, phone: phone, gender: widget.gender, email: widget.email, password: widget.password, name: widget.name)));
+//                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VerifyYourEmailClient(nationalID: nationalID, birthDate: birthDate, address: address, phone: phone, gender: widget.gender, email: widget.email, password: widget.password, name: widget.name)));
+                      setState(() {
+                        isLoading=true;
+                      });
+                    try{
+                      var url = Uri.parse('https://masla7a.herokuapp.com/accounts/sign-up');
+                      var request =http.MultipartRequest('POST',url);
+                      final file=await http.MultipartFile.fromPath("profilePic", widget.photo!.path);
+                      request.files.add(file);
+                      request.fields["name"]=widget.name;
+                      request.fields["email"]=widget.email;
+                      request.fields["password"]=widget.password;
+//                    request.fields["confirm_password"]=widget.password;
+                      request.fields["birthDate"]=birthDate;
+                      request.fields["nationalID"]=nationalID;
+                      request.fields["phone_number"]=phone;
+                      request.fields["gender"]=widget.gender;
+                      request.fields["userName"]=widget.name;
+                      request.fields["role"]="customer";
+//        "3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt"
+                      request.fields["address"]="3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt";
+                      var response = await request.send();
+                      final respStr = await response.stream.bytesToString();
+                      var result =json.decode(respStr);
+                      print(respStr);
+                      print(birthDate);
+                      print("this is the token ${result["token"]}");
+                      setState(() {
+                        isLoading=false;
+                      });
+                      if(response.statusCode == 200){
+                        SharedPreferences pref=await SharedPreferences.getInstance();
+                        pref.setString("token", result["token"]);
+                        pref.setBool("isAuth", true);
+                        Navigator.of(context)
+                            .push(SlidRight(page: HomeScreen()));
+                      }
+                    }catch(ex){
+                      setState(() {
+                        isLoading=false;
+                      });
+                      alertToast("$ex", Colors.red, Colors.white);
+                      print("error with sed signup client request $ex");
+                    }
                   }else{
                     alertToast("Please Provide All Data",Colors.red, Colors.white);
                   }
