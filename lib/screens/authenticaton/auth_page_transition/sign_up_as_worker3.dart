@@ -35,7 +35,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   String serviceName='';
   String initialPrice='';
   String description='';
-  List _testList = [{'no': 1, 'keyword': 'Car Maintenance'},{'no': 2, 'keyword': 'House'},{'no': 3, 'keyword': 'Other'}];
+  List _testList = [{'no': 1, 'keyword': 'Car maintenance'},{'no': 2, 'keyword': 'House'},{'no': 3, 'keyword': 'other'}];
   late List<DropdownMenuItem> _dropdownTestItems;
 //  var _selectedTest;
 
