@@ -142,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                          SharedPreferences pref=await SharedPreferences.getInstance();
                          pref.setString("token", result["token"]);
                          pref.setBool("isAuth", true);
+                         pref.setString("id", result["_id"]);
                          Navigator.push(context, SlidRight(page: HomeScreen()));
                        }
                      }catch(ex){
