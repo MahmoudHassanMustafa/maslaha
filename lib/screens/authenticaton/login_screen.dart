@@ -144,6 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                          pref.setBool("isAuth", true);
                          pref.setString("id", result["_id"]);
                          Navigator.push(context, SlidRight(page: HomeScreen()));
+                         setState(() {
+                           isLoading=false;
+                         });
                        }
                      }catch(ex){
                        alertToast("${ex}", Colors.red, Colors.white);
