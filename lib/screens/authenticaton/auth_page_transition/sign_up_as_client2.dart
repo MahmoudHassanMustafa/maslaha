@@ -230,7 +230,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                       request.fields["email"]=widget.email;
                       request.fields["password"]=widget.password;
 //                    request.fields["confirm_password"]=widget.password;
-                      request.fields["birthDate"]=birthDate;
+                      request.fields["birthDate"]="06/02/1988";
                       request.fields["nationalID"]=nationalID;
                       request.fields["phone_number"]=phone;
                       request.fields["gender"]=widget.gender;
@@ -250,6 +250,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                       if(response.statusCode == 200){
                         SharedPreferences pref=await SharedPreferences.getInstance();
                         pref.setString("token", result["token"]);
+                        pref.setString("id", result["_id"]);
                         pref.setBool("isAuth", true);
                         Navigator.of(context)
                             .push(SlidRight(page: HomeScreen()));
