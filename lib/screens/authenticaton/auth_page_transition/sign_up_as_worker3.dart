@@ -333,7 +333,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                             await SharedPreferences.getInstance();
                         pref.setString("token", result["token"]);
                         pref.setBool("isAuth", true);
-                        pref.setString("id", result['user']["_id"]);
+                        pref.setString("id", result["user"]["_id"]);
                         Navigator.of(context)
                             .push(SlidRight(page: HomeScreen()));
                       }
