@@ -1,44 +1,59 @@
+import 'dart:convert';
 // import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:maslaha/models/category_model.dart' as cat;
 
 import '../../../utils/size_config.dart';
 
-class CategoryCard extends StatelessWidget {
-  List<Map<String, dynamic>> categories = [
-    {
-      'id': 'g0',
-      'name': 'House Cleaning',
-      'icon': FontAwesomeIcons.bacteria,
-      'imageUrl':
-          'https://greenbuildinginsider.com/wp-content/uploads/2018/11/shutterstock_395889778.jpg.webp',
-      'color': Colors.blue,
-    },
-    {
-      'id': 'g1',
-      'name': 'Carpentry',
-      'icon': Icons.carpenter_rounded,
-      'imageUrl': 'https://sevenseasjob.com/img/job/carpentry.jpg',
-      'color': Colors.brown,
-    },
-    {
-      'id': 'g2',
-      'name': 'Hair Care',
-      'icon': Icons.cut_outlined,
-      'imageUrl':
-          'https://www.thetrendspotter.net/wp-content/uploads/2020/03/Best-Barbershops-in-Perth.jpg',
-      'color': Colors.black54,
-    },
-    {
-      'id': 'g3',
-      'name': 'Babysetting',
-      'icon': FontAwesomeIcons.babyCarriage,
-      'imageUrl':
-          'https://www.babybathmoments.com/wp-content/uploads/2020/01/featured-2-4.jpg',
-      'color': Colors.deepPurple,
-    },
+class CategoryCard extends StatefulWidget {
+  @override
+  _CategoryCardState createState() => _CategoryCardState();
+}
+
+class _CategoryCardState extends State<CategoryCard> {
+  List<cat.Category> _categories = [];
+  final _catColors = const [
+    Colors.blueAccent,
+    Colors.deepPurpleAccent,
+    Colors.indigoAccent,
+    Colors.deepOrangeAccent,
+    Colors.orangeAccent,
+    Colors.redAccent,
+    Colors.tealAccent,
+    Colors.amberAccent,
   ];
+
+  _getCategoriesInfo() async {
+    var url = Uri.parse('https://masla7a.herokuapp.com/categories');
+    var request = http.Request('GET', url);
+    var response = await request.send();
+
+    var responseStr = await response.stream.bytesToString();
+    var resBody = await json.decode(responseStr);
+
+    List<cat.Category> categories = [];
+    if (response.statusCode == 200) {
+      resBody['categories'].forEach((category) {
+        categories.add(cat.Category(
+          id: category['_id'],
+          name: category['name'],
+          coverPicUrl: category['coverPhoto'],
+          iconUrl: category['icon'],
+        ));
+      });
+    }
+
+    _categories = categories;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCategoriesInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,22 +63,23 @@ class CategoryCard extends StatelessWidget {
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: _categories.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               print('category card pressed!');
               // TODO: navigate to services under each category
               print(
-                  'show list of services under ${categories[index]['name']} category');
+                  'show list of services under ${_categories[index].name} category');
             },
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              color: categories[index]['color'],
               // Generating a random color for each card if desired.
-              // Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+              //  Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+              //     .withOpacity(1.0),
+              color: _catColors[index],
               child: Container(
                 width: getProportionateScreenWidth(125),
                 child: Column(
@@ -74,19 +90,23 @@ class CategoryCard extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 8, top: 15.0),
-                          child: Icon(
-                            categories[index]['icon'],
+                          child: SvgPicture.network(
+                            _categories[index].iconUrl,
                             color: Colors.white,
+                            fit: BoxFit.scaleDown,
+                            width: getProportionateScreenWidth(25),
+                            height: getProportionateScreenHeight(25),
                           ),
                         ),
                         const Spacer(),
                         Container(
-                          width: getProportionateScreenWidth(80),
-                          height: getProportionateScreenHeight(96),
+                          width: getProportionateScreenWidth(84),
+                          height: getProportionateScreenHeight(100),
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image:
-                                  NetworkImage(categories[index]['imageUrl']),
+                              image: NetworkImage(
+                                _categories[index].coverPicUrl,
+                              ),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: const BorderRadius.only(
@@ -97,12 +117,17 @@ class CategoryCard extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    Text(
-                      categories[index]['name'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.0,
+                    FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          _categories[index].name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.0,
+                          ),
+                        ),
                       ),
                     ),
                     const Spacer(),

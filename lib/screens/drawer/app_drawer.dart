@@ -9,15 +9,15 @@ import 'components/navigation_tabs.dart';
 
 class AppDrawer extends StatelessWidget {
   final Widget home;
+  final String userName;
+  final String location;
+  final String profilePicUrl;
 
-  AppDrawer({required this.home});
-
-  // TODO: fitch user data from server
-  final Map<String, String> _userData = {
-    'username': 'Mahmoud Hassan',
-    'location': 'Egypt, Port-Said',
-    'profileImageUrl': '',
-  };
+  AppDrawer(
+      {required this.home,
+      required this.userName,
+      required this.location,
+      required this.profilePicUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class AppDrawer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            _userData['username'] as String,
+            userName,
             style: const TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 16.0,
@@ -45,7 +45,7 @@ class AppDrawer extends StatelessWidget {
                 size: 20.0,
               ),
               Text(
-                _userData['location'] as String,
+                location,
                 style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.black,
@@ -55,12 +55,9 @@ class AppDrawer extends StatelessWidget {
           ),
         ],
       ),
-      appBarTrailing:
-          // TODO: show the user profile image in here and navigate to profile on click
-          ProfileImageContainer(
+      appBarTrailing: ProfileImageContainer(
         width: getProportionateScreenWidth(55),
-        profileImg: NetworkImage(
-            'https://scontent.fcai19-3.fna.fbcdn.net/v/t1.6435-9/30594925_2043671465890477_2859440508139208704_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=84a396&_nc_ohc=557dyAc3XgsAX_EZLAJ&_nc_ht=scontent.fcai19-3.fna&oh=446ffd3f39155560df5a1de238000254&oe=60C8F3AF'),
+        profileImg: NetworkImage(profilePicUrl),
         onTap: () => print('Navigate to profie!'),
       ),
       decoration: const BoxDecoration(
@@ -71,7 +68,11 @@ class AppDrawer extends StatelessWidget {
         ),
       ),
       leftScaffold: MenuScaffold(
-        header: header.DrawerHeader(),
+        header: header.DrawerHeader(
+          userName: userName,
+          location: location,
+          profilePicUrl: profilePicUrl,
+        ),
         children: NavigationTabs(),
         footer: DrawerFooter(),
       ),

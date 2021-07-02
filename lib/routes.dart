@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/home/filter_screen.dart';
 
 import 'screens/authenticaton/create_new_password_screen.dart';
 import 'screens/authenticaton/forget_password_screen.dart';
@@ -30,6 +31,7 @@ final Map<String, WidgetBuilder> routes = {
   CreateNewPasswordScreen.routeName: (context) => CreateNewPasswordScreen(),
 //  VerifyYourEmailScreen.routeName: (context) => VerifyYourEmailScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
+  FilterScreen.routeName: (context) => FilterScreen(),
   ChatScreen.routeName: (context) => ChatScreen(),
   MessagesScreen.routeName: (context) => MessagesScreen(),
   ContactInfoScreen.routeName: (context) => ContactInfoScreen(),

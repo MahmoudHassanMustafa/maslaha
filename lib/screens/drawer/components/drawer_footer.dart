@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../screens/welcome_screen.dart';
 import '../../../utils/size_config.dart';
@@ -39,9 +40,12 @@ class DrawerFooter extends StatelessWidget {
             color: Colors.white,
           ),
           GestureDetector(
-            // TODO: log out on click
-            onTap: () {
+            onTap: () async {
               print('Log out');
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('token', '');
+              prefs.setString('id', '');
+              prefs.setBool('isAuth', false);
               Navigator.of(context)
                   .pushReplacementNamed(WelcomeScreen.routeName);
             },

@@ -1,4 +1,4 @@
-import 'package:maslaha/utils/size_config.dart';
+import '../../../utils/size_config.dart';
 import 'package:flutter/material.dart';
 
 Widget authTitle(String title, double top, double left) {

@@ -7,7 +7,7 @@ import 'providers/conversations.dart';
 import 'providers/messages.dart';
 import 'routes.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(

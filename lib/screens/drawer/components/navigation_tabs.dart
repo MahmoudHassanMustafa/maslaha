@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:maslaha/screens/home/home_screen.dart';
+import '../../home/home_screen.dart';
 
 import '../../../screens/chat/chat_screen.dart';
 import '../../../shared/constants.dart';

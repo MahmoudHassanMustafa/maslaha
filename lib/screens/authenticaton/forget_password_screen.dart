@@ -1,6 +1,6 @@
-import 'package:maslaha/screens/authenticaton/verify_your_email_screen.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import 'verify_your_email_screen.dart';
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
@@ -56,11 +56,13 @@ class ForgetPasswordScreen extends StatelessWidget {
                   child: Container(
                     width: getProportionateScreenWidth(302),
 //                    height: getProportionateScreenHeight(36),
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     child: TextFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your E-mail",
                         prefixIcon: Icon(Icons.email_outlined,
                             color: Color(0xffA0BBF0)),

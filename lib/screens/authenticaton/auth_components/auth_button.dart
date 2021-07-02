@@ -1,5 +1,5 @@
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import '../../../shared/constants.dart';
+import '../../../utils/size_config.dart';
 import 'package:flutter/material.dart';
 
 Widget authButton(String title, Function onTap, double top, double left) {
@@ -15,9 +15,9 @@ Widget authButton(String title, Function onTap, double top, double left) {
             child: Text(
               title,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: getProportionateScreenWidth(22),
-                  ),
+                color: Colors.white,
+                fontSize: getProportionateScreenWidth(22),
+              ),
             ),
           ),
           decoration: BoxDecoration(

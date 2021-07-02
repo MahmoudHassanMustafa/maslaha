@@ -1,23 +1,73 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'category_screen.dart';
+import 'filter_screen.dart';
+import 'search_screen.dart';
+import '../../shared/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/size_config.dart';
-import '../../widgets/search_bar.dart';
+import 'components/home_search_bar.dart';
 import '../drawer/app_drawer.dart';
 import '../home/components/special_offer_cards.dart';
 import '../home/components/top_worker_cards.dart';
 import 'components/category_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static String routeName = '/home';
 
-  // TODO: get user-name here
-  final username = 'Mahmoud';
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+// with AutomaticKeepAliveClientMixin
+{
+  var _userName = '';
+  var _location = '';
+  var _profilePicUrl = '';
+
+  final _pageController = PageController(initialPage: 1, keepPage: true);
+
+  _getUserPresentationData() async {
+    var userPrefs = await SharedPreferences.getInstance();
+    var uid = userPrefs.getString('id');
+    var currentToken = userPrefs.getString('token');
+
+    var url = Uri.parse('https://masla7a.herokuapp.com/home/$uid');
+    var request = http.Request('GET', url);
+    request.headers.addAll({'x-auth-token': '$currentToken'});
+    var response = await request.send();
+
+    var responseStr = await response.stream.bytesToString();
+    var resBody = await json.decode(responseStr);
+
+    if (response.statusCode == 200) {
+      _userName =
+          '${resBody['user']['name'].split(' ')[0]} ${resBody['user']['name'].split(' ')[1]}';
+      _location =
+          '${resBody['user']['location']['city']}, ${resBody['user']['location']['countryCode']}';
+      _profilePicUrl = resBody['user']['profilePic'];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserPresentationData();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // super.build(context);
     SizeConfig().init(context);
-
     return AppDrawer(
+      userName: _userName,
+      location: _location,
+      profilePicUrl: _profilePicUrl,
       home: Container(
         height: double.infinity,
         width: double.infinity,
@@ -28,20 +78,72 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            SearchBar(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildSectionTitle('How can we serve you, $username?'),
-                    CategoryCard(),
-                    buildSectionTitle('Top Workers'),
-                    TopWorkerCards(),
-                    buildSectionTitle('Special Offers'),
-                    SpecialOfferCards(),
-                  ],
+            Row(
+              children: [
+                Flexible(
+                  flex: 6,
+                  child: HomeSearchBar(
+                    onPressed: () {
+                      _pageController.nextPage(
+                          duration: Duration(milliseconds: 250),
+                          curve: Curves.easeInOutSine);
+                    },
+                  ),
                 ),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () {
+                      print('filters pressed!');
+                      Navigator.pushNamed(context, FilterScreen.routeName);
+                    },
+                    child: Container(
+                      width: getProportionateScreenWidth(45),
+                      height: getProportionateScreenHeight(56),
+                      padding: const EdgeInsets.all(9),
+                      margin: const EdgeInsets.only(top: 2),
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              offset: Offset(0.0, 1.0),
+                              blurRadius: 5,
+                            ),
+                          ]),
+                      child: SvgPicture.asset(
+                        'assets/icons/search_icons/filters.svg',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                // physics: NeverScrollableScrollPhysics(),
+                onPageChanged: (value) => print(value),
+                pageSnapping: true,
+
+                children: [
+                  CategoryScreen(),
+                  SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildSectionTitle(
+                            'How can we serve you, ${_userName.split(' ')[0]} ?'),
+                        CategoryCard(),
+                        buildSectionTitle('Top Workers'),
+                        TopWorkerCards(),
+                        buildSectionTitle('Special Offers'),
+                        SpecialOfferCards(),
+                      ],
+                    ),
+                  ),
+                  SearchScreen(),
+                ],
               ),
             ),
           ],
@@ -64,4 +166,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  // @override
+  // bool get wantKeepAlive => true;
 }

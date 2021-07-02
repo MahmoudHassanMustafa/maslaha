@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:maslaha/screens/home/home_screen.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import '../home/home_screen.dart';
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_page_transition/slid_right_transition.dart';
+
 class VerifyYourEmailClient extends StatefulWidget {
   late String gender;
   late File? image;
@@ -23,7 +24,16 @@ class VerifyYourEmailClient extends StatefulWidget {
   late String phone;
   late String nationalID;
   late String birthDate;
-  VerifyYourEmailClient({required this.nationalID,required this.birthDate,required this.address,this.image,required this.phone,required this.gender,required this.email,required this.password,required this.name});
+  VerifyYourEmailClient(
+      {required this.nationalID,
+      required this.birthDate,
+      required this.address,
+      this.image,
+      required this.phone,
+      required this.gender,
+      required this.email,
+      required this.password,
+      required this.name});
   @override
   _VerifyYourEmailClientState createState() => _VerifyYourEmailClientState();
 }
@@ -31,11 +41,11 @@ class VerifyYourEmailClient extends StatefulWidget {
 class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
   final TextEditingController _pinPutController = TextEditingController();
   bool isLoading = false;
-  String code='';
-  var authState='';
-  String verificationID='';
+  String code = '';
+  var authState = '';
+  String verificationID = '';
   var auth = FirebaseAuth.instance;
-  bool otpDone=false;
+  bool otpDone = false;
 
   final FocusNode _pinPutFocusNode = FocusNode();
 
@@ -46,78 +56,82 @@ class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
   }
 
   // OTP
-  verifyPhone(String phone)async{
-    await auth.verifyPhoneNumber(phoneNumber: phone,
+  verifyPhone(String phone) async {
+    await auth.verifyPhoneNumber(
+        phoneNumber: phone,
         timeout: Duration(seconds: 40),
-        verificationCompleted:(AuthCredential authCredential){},
-        verificationFailed: (authException){
+        verificationCompleted: (AuthCredential authCredential) {},
+        verificationFailed: (authException) {
           alertToast("Problem with Sending the Code", Colors.red, Colors.white);
         },
-        codeSent: (String id,[int? forceResent]){
-          verificationID=id;
-          authState="login success";
+        codeSent: (String id, [int? forceResent]) {
+          verificationID = id;
+          authState = "login success";
         },
-        codeAutoRetrievalTimeout: (id){
-          verificationID=id;
-        }
-    );
+        codeAutoRetrievalTimeout: (id) {
+          verificationID = id;
+        });
   }
-  verifyOTP(String otp)async{
-    var credential=await auth.signInWithCredential(
-      PhoneAuthProvider.credential(verificationId:verificationID, smsCode: otp),
+
+  verifyOTP(String otp) async {
+    var credential = await auth.signInWithCredential(
+      PhoneAuthProvider.credential(
+          verificationId: verificationID, smsCode: otp),
     );
-    if (credential != null){
+    if (credential != null) {
       setState(() {
-        isLoading=true;
+        isLoading = true;
       });
-      try{
+      try {
         var url = Uri.parse('https://masla7a.herokuapp.com/accounts/sign-up');
-        var request =http.MultipartRequest('POST',url);
-        final file=await http.MultipartFile.fromPath("profilePic", widget.image!.path);
+        var request = http.MultipartRequest('POST', url);
+        final file =
+            await http.MultipartFile.fromPath("profilePic", widget.image!.path);
         request.files.add(file);
-        request.fields["name"]=widget.name;
-        request.fields["email"]=widget.email;
-        request.fields["password"]=widget.password;
+        request.fields["name"] = widget.name;
+        request.fields["email"] = widget.email;
+        request.fields["password"] = widget.password;
 //                    request.fields["confirm_password"]=widget.password;
-        request.fields["birthDate"]=widget.birthDate;
-        request.fields["nationalID"]=widget.nationalID;
-        request.fields["phone_number"]=widget.phone;
-        request.fields["gender"]=widget.gender;
-        request.fields["userName"]=widget.name;
-        request.fields["role"]="customer";
+        request.fields["birthDate"] = widget.birthDate;
+        request.fields["nationalID"] = widget.nationalID;
+        request.fields["phone_number"] = widget.phone;
+        request.fields["gender"] = widget.gender;
+        request.fields["userName"] = widget.name;
+        request.fields["role"] = "customer";
 //        "3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt"
-        request.fields["address"]=widget.address;
+        request.fields["address"] = widget.address;
         var response = await request.send();
         final respStr = await response.stream.bytesToString();
-        var result =json.decode(respStr);
+        var result = json.decode(respStr);
         print(respStr);
         print("this is the token ${result["token"]}");
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
-        if(response.statusCode == 200){
-          SharedPreferences pref=await SharedPreferences.getInstance();
+        if (response.statusCode == 200) {
+          SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString("token", result["token"]);
           pref.setBool("isAuth", true);
-          Navigator.of(context)
-              .push(SlidRight(page: HomeScreen()));
+          Navigator.of(context).push(SlidRight(page: HomeScreen()));
         }
-      }catch(ex){
+      } catch (ex) {
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
         alertToast("$ex", Colors.red, Colors.white);
         print("error with sed signup client request $ex");
       }
-    }else{
+    } else {
       alertToast("Code Not Match..!", Colors.red, Colors.white);
     }
   }
+
   @override
   void initState() {
     super.initState();
-    verifyPhone("+2"+widget.phone);
+    verifyPhone("+2" + widget.phone);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,7 +203,7 @@ class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
 //                  },
                   onSubmit: (val) {
                     setState(() {
-                      code=val;
+                      code = val;
                     });
                     print(code);
                   },
@@ -207,11 +221,12 @@ class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
                   ),
                 ),
               ),
-              authButton(isLoading?"Loading ...":"SignUp", ()async {
-                if(code !=""){
+              authButton(isLoading ? "Loading ..." : "SignUp", () async {
+                if (code != "") {
                   verifyOTP(code);
-                }else{
-                  alertToast("Please Provide The Sending Code",Colors.red, Colors.white);
+                } else {
+                  alertToast("Please Provide The Sending Code", Colors.red,
+                      Colors.white);
                 }
               }, 755, 71),
               //Timer
@@ -248,7 +263,7 @@ class _VerifyYourEmailClientState extends State<VerifyYourEmailClient> {
                 left: getProportionateScreenWidth(146),
                 child: GestureDetector(
                   onTap: () {
-                    verifyPhone("+2"+widget.phone);
+                    verifyPhone("+2" + widget.phone);
                   },
                   child: Text(
                     "Resend Code",

@@ -229,7 +229,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                                 child: Container(
                                   alignment: Alignment.center,
                                   child: AnimatedIcon(
-                                    icon: AnimatedIcons.menu_arrow,
+                                    icon: AnimatedIcons.menu_close,
                                     progress: _controller!,
                                     color: Colors.black,
                                     size: 35,

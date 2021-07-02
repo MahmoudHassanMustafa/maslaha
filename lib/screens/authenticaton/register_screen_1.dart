@@ -1,11 +1,11 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/alertToast.dart';
-import 'package:maslaha/screens/authenticaton/login_screen.dart';
-import 'package:maslaha/screens/authenticaton/register_screen_2.dart';
-import 'package:maslaha/screens/authenticaton/sign_up_as_client.dart';
-import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import 'auth_components/alertToast.dart';
+import 'login_screen.dart';
+import 'register_screen_2.dart';
+import 'sign_up_as_client.dart';
+import 'sign_up_as_worker.dart';
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'auth_components/arrow_back_button.dart';
@@ -21,11 +21,11 @@ class RegisterScreen1 extends StatefulWidget {
 }
 
 class _RegisterScreen1State extends State<RegisterScreen1> {
-  bool _clientValue =true;
-  bool _serviceProviderValue=false;
-  String email='';
-  String password='';
-  String rePassword='';
+  bool _clientValue = true;
+  bool _serviceProviderValue = false;
+  String email = '';
+  String password = '';
+  String rePassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +77,9 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                     child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.top,
-                      onChanged: (val){
+                      onChanged: (val) {
                         setState(() {
-                          email=val;
+                          email = val;
                         });
                       },
                       decoration: InputDecoration(
@@ -90,7 +90,8 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                           size: 30,
                         ),
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                       ),
                     ),
                   ),
@@ -100,19 +101,21 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                   top: getProportionateScreenHeight(440),
                   left: getProportionateScreenWidth(37),
                   child: Container(
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     width: getProportionateScreenWidth(302),
 //                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
-                      onChanged: (val){
+                      onChanged: (val) {
                         setState(() {
-                          password=val;
+                          password = val;
                         });
                       },
                       obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your Password",
                         prefixIcon: Icon(
                           Icons.lock_outline,
@@ -127,19 +130,21 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                   top: getProportionateScreenHeight(520),
                   left: getProportionateScreenWidth(37),
                   child: Container(
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     width: getProportionateScreenWidth(302),
 //                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
                       obscureText: true,
-                      onChanged: (val){
+                      onChanged: (val) {
                         setState(() {
-                          rePassword=val;
+                          rePassword = val;
                         });
                       },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                         hintText: "Re-Enter Your Password",
                         prefixIcon: Icon(
                           Icons.lock_open,
@@ -152,99 +157,123 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                 //client or service provider check buttons
                 Positioned(
                     top: getProportionateScreenHeight(610),
-                    left:getProportionateScreenWidth(37),
+                    left: getProportionateScreenWidth(37),
                     child: Row(
-                  children: [
-                    Container(
-                      height: getProportionateScreenHeight(45),
-                      width: getProportionateScreenWidth(119),
-                      decoration: BoxDecoration(
-                        border: Border.all(color:_clientValue?Colors.blueAccent:Colors.grey),
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _clientValue = true;
-                                  _serviceProviderValue=false;
-                                });
-                              },
-                              child: Container(
-                                width: getProportionateScreenHeight(20),
-                                height: getProportionateScreenHeight(20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Color(0xFF979797)),
-                                    color: _clientValue==true?Colors.blueAccent:Colors.white
+                      children: [
+                        Container(
+                          height: getProportionateScreenHeight(45),
+                          width: getProportionateScreenWidth(119),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: _clientValue
+                                      ? Colors.blueAccent
+                                      : Colors.grey),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _clientValue = true;
+                                      _serviceProviderValue = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: getProportionateScreenHeight(20),
+                                    height: getProportionateScreenHeight(20),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Color(0xFF979797)),
+                                        color: _clientValue == true
+                                            ? Colors.blueAccent
+                                            : Colors.white),
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  "Client",
+                                  style: TextStyle(
+                                      color: _clientValue == true
+                                          ? Colors.blueAccent
+                                          : Colors.grey),
+                                )
+                              ],
                             ),
-                            Text("Client",style: TextStyle(
-                                color: _clientValue==true?Colors.blueAccent:Colors.grey
-                            ),)
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: getProportionateScreenWidth(10)),
-                      height: getProportionateScreenHeight(45),
-                      width: getProportionateScreenWidth(173),
-                      decoration: BoxDecoration(
-                          border: Border.all(color:_serviceProviderValue?Colors.blueAccent:Colors.grey),
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _serviceProviderValue = true;
-                                  _clientValue=false;
-                                });
-                              },
-                              child: Container(
-                                width: getProportionateScreenHeight(20),
-                                height: getProportionateScreenHeight(20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Color(0xFF979797)),
-                                  color: _serviceProviderValue==true?Colors.blueAccent:Colors.white
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: getProportionateScreenWidth(10)),
+                          height: getProportionateScreenHeight(45),
+                          width: getProportionateScreenWidth(173),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: _serviceProviderValue
+                                      ? Colors.blueAccent
+                                      : Colors.grey),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _serviceProviderValue = true;
+                                      _clientValue = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: getProportionateScreenHeight(20),
+                                    height: getProportionateScreenHeight(20),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                            color: Color(0xFF979797)),
+                                        color: _serviceProviderValue == true
+                                            ? Colors.blueAccent
+                                            : Colors.white),
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  "Service Provider",
+                                  style: TextStyle(
+                                      color: _serviceProviderValue == true
+                                          ? Colors.blueAccent
+                                          : Colors.grey),
+                                )
+                              ],
                             ),
-                            Text("Service Provider",style: TextStyle(
-                                color: _serviceProviderValue==true?Colors.blueAccent:Colors.grey
-                            ),)
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                )),
+                      ],
+                    )),
                 authButton("Next", () {
-                  if(email!=''&& password!=''&& rePassword!=''){
-                    if(password == rePassword){
-                      if(email.contains("@")){
-                        if(_clientValue){
-                          Navigator.of(context).push(SlidRight(page: SignUpAsClient(password: password,email:email)));
-                        }else if(_serviceProviderValue){
-                          Navigator.of(context).push(SlidRight(page: SignUpAsWorker(password: password,email:email)));
+                  if (email != '' && password != '' && rePassword != '') {
+                    if (password == rePassword) {
+                      if (email.contains("@")) {
+                        if (_clientValue) {
+                          Navigator.of(context).push(SlidRight(
+                              page: SignUpAsClient(
+                                  password: password, email: email)));
+                        } else if (_serviceProviderValue) {
+                          Navigator.of(context).push(SlidRight(
+                              page: SignUpAsWorker(
+                                  password: password, email: email)));
                         }
-                      }else{
-                        alertToast("Please Provide Valid Email", Colors.red, Colors.white);
+                      } else {
+                        alertToast("Please Provide Valid Email", Colors.red,
+                            Colors.white);
                       }
-                    }else{
-                      alertToast("Password Not Match ...!", Colors.red, Colors.white);
+                    } else {
+                      alertToast(
+                          "Password Not Match ...!", Colors.red, Colors.white);
                     }
-                  }else{
-                   alertToast("Please provide all data", Colors.red, Colors.white);
+                  } else {
+                    alertToast(
+                        "Please provide all data", Colors.red, Colors.white);
                   }
 
 //                  Navigator.of(context)

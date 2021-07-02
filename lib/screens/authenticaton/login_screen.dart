@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:maslaha/screens/authenticaton/auth_components/alertToast.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/arrow_back_button.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/auth_button.dart';
-import 'package:maslaha/screens/authenticaton/auth_components/social_Button.dart';
-import 'package:maslaha/screens/authenticaton/auth_page_transition/slid_right_transition.dart';
-import 'package:maslaha/screens/authenticaton/create_new_password_screen.dart';
-import 'package:maslaha/screens/authenticaton/forget_password_screen.dart';
-import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
-import 'package:maslaha/screens/home/home_screen.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import 'auth_components/alertToast.dart';
+import 'auth_components/arrow_back_button.dart';
+import 'auth_components/auth_button.dart';
+import 'auth_components/social_Button.dart';
+import 'auth_page_transition/slid_right_transition.dart';
+import 'create_new_password_screen.dart';
+import 'forget_password_screen.dart';
+import 'register_screen_1.dart';
+import '../home/home_screen.dart';
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,9 +25,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String email='';
-  String password='';
-  bool isLoading=false;
+  String email = '';
+  String password = '';
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,17 +74,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   left: getProportionateScreenWidth(37),
                   child: Container(
                     width: getProportionateScreenWidth(302),
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(10)),
 //                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
-                      onChanged: (val){
+                      onChanged: (val) {
                         setState(() {
-                          email=val;
+                          email = val;
                         });
                       },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your Email",
                         prefixIcon: Icon(Icons.email_outlined,
                             color: Color(0xffA0BBF0)),
@@ -99,17 +101,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     width: getProportionateScreenWidth(302),
 //                    height: getProportionateScreenHeight(37),
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(10)),
                     child: TextFormField(
                       obscureText: true,
-                      onChanged: (val){
+                      onChanged: (val) {
                         setState(() {
-                          password=val;
+                          password = val;
                         });
                       },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderSide:BorderSide(color: Color(0xffE4DCDC)),borderRadius: BorderRadius.circular(15)),
+                            borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                            borderRadius: BorderRadius.circular(15)),
                         hintText: "Enter your Password",
                         prefixIcon: Icon(
                           Icons.lock_open,
@@ -119,49 +123,58 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                authButton(isLoading?"Loading":"Log in", () async{
-                  if(email!='' && password!=''){
-                    if(email.contains("@")){
-                     try{
-                       setState(() {
-                         isLoading=true;
-                       });
-                       print("this is email ${email}");
-                       print("this is password ${password}");
-                       var url = Uri.parse('https://masla7a.herokuapp.com/accounts/login');
-                       var response = await http.post(url,  headers: <String, String>{
-                         'Content-Type': 'application/json; charset=UTF-8',
-                       },body: jsonEncode(<String, String>{
-                         'email': email,
-                         'password':password
-                       }),);
-                       print('Response status: ${response.statusCode}');
-                       print('Response body: ${response.body}');
-                       var result =json.decode(response.body);
-                       if(response.statusCode==200){
-                         SharedPreferences pref=await SharedPreferences.getInstance();
-                         pref.setString("token", result["token"]);
-                         pref.setBool("isAuth", true);
-                         pref.setString("id", result["_id"]);
-                         Navigator.push(context, SlidRight(page: HomeScreen()));
-                       }
-                     }catch(ex){
-                       alertToast("${ex}", Colors.red, Colors.white);
-                       print("error with login ${ex}");
-                       setState(() {
-                         isLoading=false;
-                       });
-                     }
-                    }else{
-                      alertToast("Please Provide Valid Email", Colors.red,Colors.white);
+                authButton(isLoading ? "Loading" : "Log in", () async {
+                  if (email != '' && password != '') {
+                    if (email.contains("@")) {
+                      try {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        print("this is email ${email}");
+                        print("this is password ${password}");
+                        var url = Uri.parse(
+                            'https://masla7a.herokuapp.com/accounts/login');
+                        var response = await http.post(
+                          url,
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode(<String, String>{
+                            'email': email,
+                            'password': password
+                          }),
+                        );
+                        print('Response status: ${response.statusCode}');
+                        print('Response body: ${response.body}');
+                        var result = json.decode(response.body);
+                        if (response.statusCode == 200) {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          pref.setString("token", result["token"]);
+                          pref.setBool("isAuth", true);
+                          pref.setString("id", result["_id"]);
+                          Navigator.push(
+                              context, SlidRight(page: HomeScreen()));
+                        }
+                      } catch (ex) {
+                        alertToast("${ex}", Colors.red, Colors.white);
+                        print("error with login ${ex}");
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    } else {
+                      alertToast("Please Provide Valid Email", Colors.red,
+                          Colors.white);
                       setState(() {
-                        isLoading=false;
+                        isLoading = false;
                       });
                     }
-                  }else{
-                    alertToast("Please Provide All Data",Colors.red, Colors.white);
+                  } else {
+                    alertToast(
+                        "Please Provide All Data", Colors.red, Colors.white);
                     setState(() {
-                      isLoading=false;
+                      isLoading = false;
                     });
                   }
                 }, 630, 71),

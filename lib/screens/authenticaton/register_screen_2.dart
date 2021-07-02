@@ -1,5 +1,5 @@
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'auth_components/arrow_back_button.dart';

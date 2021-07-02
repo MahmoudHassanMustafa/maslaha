@@ -132,6 +132,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_date_picker_timeline:
+    dependency: "direct main"
+    description:
+      name: flutter_date_picker_timeline
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   flutter_datetime_picker:
     dependency: "direct main"
     description:
@@ -359,6 +366,20 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
+  scroll_to_index:
+    dependency: transitive
+    description:
+      name: scroll_to_index
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  shamsi_date:
+    dependency: transitive
+    description:
+      name: shamsi_date
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -434,6 +455,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.2.44+1"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.2.44"
   term_glyph:
     dependency: transitive
     description:

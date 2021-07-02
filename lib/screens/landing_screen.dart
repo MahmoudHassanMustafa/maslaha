@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/splash_screen/splash_screen.dart';
@@ -20,6 +21,7 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   late bool _showSplashScreen;
+  late bool _isAuthorized;
 
   final List<String> _nextScreenSvgsPath = const [
     'assets/images/splash_images/find_your_service.svg',
@@ -40,6 +42,7 @@ class _LandingScreenState extends State<LandingScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _showSplashScreen = prefs.getBool('show_splash_screens') ?? true;
+      _isAuthorized = prefs.getBool('isAuth') ?? false;
     });
     return _showSplashScreen
         ? Future.wait(_cacheNextScreenSvgs(_nextScreenSvgsPath))
@@ -52,7 +55,11 @@ class _LandingScreenState extends State<LandingScreen> {
       future: _prepareNextScreen(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _showSplashScreen ? SplashScreen() : WelcomeScreen();
+          return _showSplashScreen
+              ? SplashScreen()
+              : _isAuthorized
+                  ? HomeScreen()
+                  : WelcomeScreen();
         } else {
           return Scaffold(
             body: Center(
