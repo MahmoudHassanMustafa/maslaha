@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class TopWorker {
   final String id;
   final String name;
@@ -20,23 +18,4 @@ class TopWorker {
     required this.status,
     this.isFav = false,
   });
-
-  Map<String, Object> statusParser() {
-    late var status;
-    switch (this.status) {
-      case 'online':
-        status = {'text': 'Online', 'color': Colors.green};
-        break;
-      case 'busy':
-        status = {'text': 'Busy', 'color': Colors.yellow};
-        break;
-      case 'offline':
-        status = {'text': 'Offline', 'color': Colors.red};
-        break;
-      default:
-        status = {'text': 'Offline', 'color': Colors.red};
-        break;
-    }
-    return status;
-  }
 }

@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../../utils/user_status_parser.dart';
 import '../../../models/top_worker_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,14 +22,13 @@ class _TopWorkerCardsState extends State<TopWorkerCards> {
     var userPrefs = await SharedPreferences.getInstance();
     var currentToken = userPrefs.getString('token');
 
-    var url = Uri.parse('https://masla7a.herokuapp.com/home/top-workers');
-    var request = http.Request('GET', url);
-    request.headers.addAll({'x-auth-token': '$currentToken'});
+    var url = Uri.https('masla7a.herokuapp.com', '/home/top-workers');
+    var response = await http.get(url, headers: {
+      HttpHeaders.authorizationHeader: 'x-auth-token' '$currentToken',
+      HttpHeaders.contentTypeHeader: 'application/json',
+    });
 
-    var response = await request.send();
-
-    var responseStr = await response.stream.bytesToString();
-    var resBody = await json.decode(responseStr);
+    var resBody = await json.decode(response.body);
 
     List<TopWorker> topWorkers = [];
     if (response.statusCode == 200) {
@@ -145,8 +146,8 @@ class _TopWorkerCardsState extends State<TopWorkerCards> {
                                   Row(
                                     children: [
                                       StatusBadge(
-                                          status: _topWorkers[index]
-                                              .statusParser()),
+                                          status: statusParser(
+                                              _topWorkers[index].status)),
                                       const SizedBox(width: 4),
                                       Container(
                                         constraints: BoxConstraints(

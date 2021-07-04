@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../home/home_screen.dart';
 
 import '../../../screens/chat/chat_screen.dart';
 import '../../../shared/constants.dart';
 import '../../favourites/favourites_screen.dart';
+import '../../home/home_screen.dart';
 
 class NavigationTabs extends StatefulWidget {
   @override

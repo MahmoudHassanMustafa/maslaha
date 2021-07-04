@@ -19,7 +19,7 @@ class DrawerHeader extends StatelessWidget {
     return Row(
       children: [
         ProfileImageContainer(
-          profileImg: NetworkImage(profilePicUrl),
+          profileImg: profilePicUrl,
           width: getProportionateScreenWidth(60),
           height: getProportionateScreenHeight(80),
           margin: const EdgeInsets.symmetric(horizontal: 8),

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'providers/filters.dart';
+import 'providers/search_result.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/conversations.dart';
@@ -25,6 +27,12 @@ class MaslahaApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Messages(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SearchResult(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Filters(),
         ),
       ],
       child: MaterialApp(

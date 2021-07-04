@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../home/home_screen.dart';
-import '../../shared/constants.dart';
-import '../../utils/size_config.dart';
+import 'package:http/http.dart' as http;
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+
+import '../../shared/constants.dart';
+import '../../utils/size_config.dart';
+import '../home/home_screen.dart';
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';

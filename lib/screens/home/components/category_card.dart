@@ -27,12 +27,10 @@ class _CategoryCardState extends State<CategoryCard> {
   ];
 
   _getCategoriesInfo() async {
-    var url = Uri.parse('https://masla7a.herokuapp.com/categories');
-    var request = http.Request('GET', url);
-    var response = await request.send();
+    var url = Uri.https('masla7a.herokuapp.com', '/categories');
+    var response = await http.get(url);
 
-    var responseStr = await response.stream.bytesToString();
-    var resBody = await json.decode(responseStr);
+    var resBody = await json.decode(response.body);
 
     List<cat.Category> categories = [];
     if (response.statusCode == 200) {

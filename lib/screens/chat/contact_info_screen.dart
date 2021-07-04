@@ -46,7 +46,7 @@ class ContactInfoScreen extends StatelessWidget {
                           ProfileImageContainer(
                             width: getProportionateScreenWidth(190),
                             height: getProportionateScreenWidth(190),
-                            profileImg: NetworkImage(profileImg),
+                            profileImg: profileImg,
                           ),
                           const SizedBox(height: 10),
                           Text(

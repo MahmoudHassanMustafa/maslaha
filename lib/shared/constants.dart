@@ -15,3 +15,23 @@ const kAnimationDuration = Duration(milliseconds: 250);
 
 const kAuthMainColor = Color(0xff3669CB);
 const kAuthSecondaryColor = Color(0xff4378E3);
+
+// filter preferences keys
+
+// price filter
+const kPriceFilterState = 'isPriceFilterActive';
+const kCurrentPriceFilterOption = 'selectedPriceOption';
+const kFixedPriceOptionValue = 'fixedPriceValue';
+const kRangePriceOptionStartValue = 'rangePriceStartValue';
+const kRangePriceOptionEndValue = 'rangePriceEndValue';
+
+// distance filter
+const kDistanceFilterState = 'isDistanceFilterActive';
+const kDistanceFilterValue = 'distanceFilterValue';
+
+// rating filter
+const kRatingFilterState = 'isRatingFilterActive';
+const kRatingFilterValue = 'ratingFilterValue';
+
+// availability filter
+const kAvailabilityFilterState = 'isAvailabilityFilterActive';

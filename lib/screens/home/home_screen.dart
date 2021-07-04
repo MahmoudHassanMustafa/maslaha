@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:maslaha/providers/search_result.dart';
+import 'package:provider/provider.dart';
 import 'category_screen.dart';
 import 'filter_screen.dart';
 import 'search_screen.dart';
@@ -31,19 +34,20 @@ class _HomeScreenState extends State<HomeScreen>
   var _profilePicUrl = '';
 
   final _pageController = PageController(initialPage: 1, keepPage: true);
+  var currentPageIndex = 1;
 
   _getUserPresentationData() async {
     var userPrefs = await SharedPreferences.getInstance();
     var uid = userPrefs.getString('id');
     var currentToken = userPrefs.getString('token');
 
-    var url = Uri.parse('https://masla7a.herokuapp.com/home/$uid');
-    var request = http.Request('GET', url);
-    request.headers.addAll({'x-auth-token': '$currentToken'});
-    var response = await request.send();
+    var url = Uri.https('masla7a.herokuapp.com', '/home/$uid', {});
+    var response = await http.get(url, headers: {
+      HttpHeaders.authorizationHeader: 'x-auth-token' '$currentToken',
+      HttpHeaders.contentTypeHeader: 'application/json',
+    });
 
-    var responseStr = await response.stream.bytesToString();
-    var resBody = await json.decode(responseStr);
+    var resBody = await json.decode(response.body);
 
     if (response.statusCode == 200) {
       _userName =
@@ -122,10 +126,15 @@ class _HomeScreenState extends State<HomeScreen>
             Expanded(
               child: PageView(
                 controller: _pageController,
-                // physics: NeverScrollableScrollPhysics(),
-                onPageChanged: (value) => print(value),
+                onPageChanged: (value) {
+                  setState(() {
+                    currentPageIndex = value;
+                  });
+                  if (value == 1)
+                    Provider.of<SearchResult>(context, listen: false)
+                        .clearSearchResultList();
+                },
                 pageSnapping: true,
-
                 children: [
                   CategoryScreen(),
                   SingleChildScrollView(

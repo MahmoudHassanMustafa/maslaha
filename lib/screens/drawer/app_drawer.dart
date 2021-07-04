@@ -57,7 +57,7 @@ class AppDrawer extends StatelessWidget {
       ),
       appBarTrailing: ProfileImageContainer(
         width: getProportionateScreenWidth(55),
-        profileImg: NetworkImage(profilePicUrl),
+        profileImg: profilePicUrl,
         onTap: () => print('Navigate to profie!'),
       ),
       decoration: const BoxDecoration(

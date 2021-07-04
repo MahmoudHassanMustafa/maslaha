@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../utils/user_status_parser.dart';
 import '../utils/size_config.dart';
 import 'profile_image_container.dart';
 import 'status_badge.dart';
 
 class ServiceProviderCard extends StatelessWidget {
   ServiceProviderCard({
+    required this.id,
     required this.profilePicUrl,
     required this.userName,
     required this.service,
@@ -16,12 +18,13 @@ class ServiceProviderCard extends StatelessWidget {
     required this.isFav,
   });
 
+  final String id;
   final String profilePicUrl;
   final String userName;
   final String service;
   final double distanceAway;
   final double startingPrice;
-  final Map<String, Object> status;
+  final String status;
   final double rating;
   bool isFav;
 
@@ -40,7 +43,7 @@ class ServiceProviderCard extends StatelessWidget {
           child: Row(
             children: [
               ProfileImageContainer(
-                profileImg: NetworkImage(profilePicUrl),
+                profileImg: profilePicUrl,
                 width: getProportionateScreenWidth(65),
                 height: getProportionateScreenHeight(90),
               ),
@@ -52,7 +55,7 @@ class ServiceProviderCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StatusBadge(
-                          status: status,
+                          status: statusParser(status),
                           size: 5,
                           withText: true,
                           textColor: Colors.black54,

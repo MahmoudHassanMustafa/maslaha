@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../providers/search_result.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/service_provider_card.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+enum SortOption { PriceAsc, PriceDesc, MostRated, Popularity }
 
+class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -11,32 +13,90 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
+    var searchResults = Provider.of<SearchResult>(context).serviceProviders;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Text(
-              '4 Results for Sara Ortiz',
-              style: TextStyle(fontWeight: FontWeight.w600),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${searchResults.length} Results found.',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                PopupMenuButton(
+                    icon: Icon(
+                      Icons.sort_rounded,
+                      color: Colors.black,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onSelected: (selectedOption) {
+                      switch (selectedOption) {
+                        case SortOption.Popularity:
+                          print('popularity');
+                          break;
+                        case SortOption.MostRated:
+                          print('most rated');
+                          break;
+                        case SortOption.PriceDesc:
+                          print('highest price');
+                          break;
+                        case SortOption.PriceAsc:
+                          print('lowest price');
+                          break;
+                        default:
+                          break;
+                      }
+                    },
+                    itemBuilder: (ctx) {
+                      return [
+                        PopupMenuItem(
+                          child: Text('Most Popular'),
+                          value: SortOption.Popularity,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Most Rated'),
+                          value: SortOption.MostRated,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Highest price'),
+                          value: SortOption.PriceDesc,
+                        ),
+                        PopupMenuItem(
+                          child: Text('Lowest Price'),
+                          value: SortOption.PriceAsc,
+                        ),
+                      ];
+                    }),
+              ],
             )),
         Expanded(
-          child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return ServiceProviderCard(
-                profilePicUrl:
-                    'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
-                status: {'text': 'Online', 'color': Colors.green},
-                userName: 'Sara Ortiz',
-                rating: 3.5,
-                service: 'Baby-Sitter',
-                distanceAway: 3,
-                startingPrice: 100,
-                isFav: index % 2 == 0 ? true : false,
-              );
-            },
-          ),
+          child: searchResults.isEmpty
+              ? Center(
+                  child: Text('No result yet!'),
+                )
+              : ListView.builder(
+                  itemCount: searchResults.length,
+                  itemBuilder: (context, index) {
+                    return ServiceProviderCard(
+                      id: searchResults[index].id,
+                      userName: searchResults[index].name,
+                      profilePicUrl: searchResults[index].profileImg,
+                      status: searchResults[index].stauts,
+                      rating: searchResults[index].rating,
+                      service: searchResults[index].serviceName,
+                      distanceAway:
+                          searchResults[index].distanceAway.toDouble(),
+                      startingPrice:
+                          searchResults[index].initialPrice.toDouble(),
+                      isFav: searchResults[index].isFav,
+                    );
+                  },
+                ),
         ),
       ],
     );

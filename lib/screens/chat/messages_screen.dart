@@ -41,7 +41,7 @@ class MessagesScreen extends StatelessWidget {
               margin: const EdgeInsets.only(left: 4),
               width: getProportionateScreenWidth(45),
               height: getProportionateScreenHeight(60),
-              profileImg: NetworkImage(imageUrl),
+              profileImg: imageUrl,
             ),
             SizedBox(width: getProportionateScreenWidth(8)),
             Expanded(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ProfileImageContainer extends StatelessWidget {
-  final ImageProvider profileImg;
+  final String profileImg;
   final double? width;
   final double? height;
   final EdgeInsets? margin;
   final Function()? onTap;
 
   const ProfileImageContainer({
-    this.profileImg = const AssetImage('assets/icons/user_male.png'),
+    required this.profileImg,
     this.width,
     this.height,
     this.margin = const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -25,7 +25,8 @@ class ProfileImageContainer extends StatelessWidget {
           margin: margin,
           decoration: BoxDecoration(
             color: Colors.grey[100],
-            image: DecorationImage(image: profileImg, fit: BoxFit.cover),
+            image: DecorationImage(
+                image: NetworkImage(profileImg), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

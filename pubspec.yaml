@@ -3,7 +3,7 @@ description: A project meant for both craft-owners & customer that enables
   craft-owners to widen their customer base and reach out more profits, and for
   customers to easily & safely find a service they want and get the job done.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -41,7 +41,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

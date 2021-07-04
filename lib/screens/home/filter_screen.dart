@@ -1,46 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../../providers/filters.dart';
+import 'package:provider/provider.dart';
 import 'components/filter_section.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:flutter_date_picker_timeline/flutter_date_picker_timeline.dart';
 
-enum PriceFilteringOptions { FixedValue, Range }
 enum AvailabilityFilteringOptions { AvailableNow, AvailableLater }
 
 class FilterScreen extends StatefulWidget {
   static const routeName = '/search-filters';
-
-  const FilterScreen({Key? key}) : super(key: key);
 
   @override
   _FilterScreenState createState() => _FilterScreenState();
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  PriceFilteringOptions? _priceFilteringOption =
-      PriceFilteringOptions.FixedValue;
-  var _priceRangeValues = SfRangeValues(125.0, 560.0);
-  var _isPriceFilterActive = false;
-
-  double _distanceFilter = 1;
-  var _isDistanceFilterActive = false;
-
   AvailabilityFilteringOptions? _availabilityFilteringOption =
       AvailabilityFilteringOptions.AvailableNow;
 
-  var _isRatingFilterActive = false;
-
-  var _isAvailabilityFilterActive = false;
+  var _isFiltersInitialized = false;
 
   @override
   Widget build(BuildContext context) {
+    var _filterHandler = Provider.of<Filters>(context);
+    var filterState = _filterHandler.getfiltersState;
+    if (!_isFiltersInitialized) {
+      setState(() {
+        _isFiltersInitialized = true;
+      });
+      _filterHandler.initializeFiltersState();
+    }
+    // Provider.of<HomeViewIndex>(context).updateViewIndex(2);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.close, color: Colors.red),
           onPressed: () {
+            _filterHandler.printKeysValues();
             Navigator.of(context).pop();
           },
         ),
@@ -52,15 +51,6 @@ class _FilterScreenState extends State<FilterScreen> {
           style: TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.close,
-              size: 30,
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -71,11 +61,10 @@ class _FilterScreenState extends State<FilterScreen> {
                   filterTitle: 'Price',
                   filterDescription:
                       'Helps you find an affordable service provider that suits your needs, specify a fixed price or a range to efficiently manage your budget.',
-                  enabled: _isPriceFilterActive,
+                  enabled: filterState['price'],
                   onEnabled: (toggler) {
-                    setState(() {
-                      _isPriceFilterActive = toggler;
-                    });
+                    _filterHandler.toggleFilterState(
+                        FilteringOptions.Price, toggler);
                   },
                   children: [
                     RadioListTile<PriceFilteringOptions>(
@@ -85,29 +74,37 @@ class _FilterScreenState extends State<FilterScreen> {
                       ),
                       subtitle: const Text('Fixed value for price.'),
                       value: PriceFilteringOptions.FixedValue,
-                      groupValue: _priceFilteringOption,
-                      selected: _priceFilteringOption ==
+                      groupValue: PriceFilteringOptions.values[
+                          _filterHandler.currentSelectedPriceFilterOption],
+                      selected: PriceFilteringOptions.values[_filterHandler
+                                  .currentSelectedPriceFilterOption] ==
                               PriceFilteringOptions.FixedValue
                           ? true
                           : false,
-                      toggleable: true,
                       dense: true,
-                      onChanged: _isPriceFilterActive
+                      onChanged: filterState['price']
                           ? (newOption) {
-                              setState(() {
-                                _priceFilteringOption = newOption;
-                              });
+                              _filterHandler.togglePriceFilteringOptions(
+                                  newOption!.index);
                             }
                           : null,
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 14),
                       child: TextFormField(
-                        onChanged: (val) {
-                          setState(() {});
-                        },
+                        onChanged: filterState['price'] &&
+                                PriceFilteringOptions.values[_filterHandler
+                                        .currentSelectedPriceFilterOption] ==
+                                    PriceFilteringOptions.FixedValue
+                            ? (val) {
+                                _filterHandler
+                                    .updateFixedPriceFilterOptionValue(
+                                        int.parse(val));
+                              }
+                            : null,
                         keyboardType: TextInputType.number,
-                        enabled: _priceFilteringOption ==
+                        enabled: PriceFilteringOptions.values[_filterHandler
+                                    .currentSelectedPriceFilterOption] ==
                                 PriceFilteringOptions.FixedValue
                             ? true
                             : false,
@@ -132,18 +129,18 @@ class _FilterScreenState extends State<FilterScreen> {
                       ),
                       subtitle: const Text('Range value for price.'),
                       value: PriceFilteringOptions.Range,
-                      groupValue: _priceFilteringOption,
-                      selected:
-                          _priceFilteringOption == PriceFilteringOptions.Range
-                              ? true
-                              : false,
-                      toggleable: true,
+                      groupValue: PriceFilteringOptions.values[
+                          _filterHandler.currentSelectedPriceFilterOption],
+                      selected: PriceFilteringOptions.values[_filterHandler
+                                  .currentSelectedPriceFilterOption] ==
+                              PriceFilteringOptions.Range
+                          ? true
+                          : false,
                       dense: true,
-                      onChanged: _isPriceFilterActive
+                      onChanged: filterState['price']
                           ? (newOption) {
-                              setState(() {
-                                _priceFilteringOption = newOption;
-                              });
+                              _filterHandler.togglePriceFilteringOptions(
+                                  newOption!.index);
                             }
                           : null,
                     ),
@@ -152,18 +149,20 @@ class _FilterScreenState extends State<FilterScreen> {
                       child: SfRangeSliderTheme(
                         data: SfRangeSliderThemeData(
                           activeLabelStyle: TextStyle(
-                            color: _priceFilteringOption ==
+                            color: PriceFilteringOptions.values[_filterHandler
+                                            .currentSelectedPriceFilterOption] ==
                                         PriceFilteringOptions.Range &&
-                                    _isPriceFilterActive
+                                    filterState['price']
                                 ? Colors.black
                                 : Colors.grey,
                             fontSize: 12,
                             fontStyle: FontStyle.italic,
                           ),
                           inactiveLabelStyle: TextStyle(
-                            color: _priceFilteringOption ==
+                            color: PriceFilteringOptions.values[_filterHandler
+                                            .currentSelectedPriceFilterOption] ==
                                         PriceFilteringOptions.Range &&
-                                    _isPriceFilterActive
+                                    filterState['price']
                                 ? Colors.black
                                 : Colors.grey,
                             fontSize: 12,
@@ -173,7 +172,9 @@ class _FilterScreenState extends State<FilterScreen> {
                         child: SfRangeSlider(
                           min: 50.0,
                           max: 10000.0,
-                          values: _priceRangeValues,
+                          values: SfRangeValues(
+                              _filterHandler.rangePriceOptionStartValue,
+                              _filterHandler.rangePriceOptionEndValue),
                           showTicks: true,
                           showLabels: true,
                           labelFormatterCallback: (actualValue, formattedText) {
@@ -208,13 +209,15 @@ class _FilterScreenState extends State<FilterScreen> {
                             formattedText = '${actualValue.toInt()} LE.';
                             return formattedText;
                           },
-                          onChanged: _priceFilteringOption ==
+                          onChanged: PriceFilteringOptions.values[_filterHandler
+                                          .currentSelectedPriceFilterOption] ==
                                       PriceFilteringOptions.Range &&
-                                  _isPriceFilterActive
+                                  filterState['price']
                               ? (newRange) {
-                                  setState(() {
-                                    _priceRangeValues = newRange;
-                                  });
+                                  _filterHandler
+                                      .updateRangePriceFilterOptionValue(
+                                          newRange.start.toInt(),
+                                          newRange.end.toInt());
                                 }
                               : null,
                         ),
@@ -226,11 +229,10 @@ class _FilterScreenState extends State<FilterScreen> {
                   filterTitle: 'Distance',
                   filterDescription:
                       'Find service providers nearest to you, or maybe a little far up to 20km from your location, it\'s your call, use the slider to set the desired distance.',
-                  enabled: _isDistanceFilterActive,
+                  enabled: filterState['distance'],
                   onEnabled: (toggler) {
-                    setState(() {
-                      _isDistanceFilterActive = toggler;
-                    });
+                    _filterHandler.toggleFilterState(
+                        FilteringOptions.Distance, toggler);
                   },
                   children: [
                     Container(
@@ -238,18 +240,14 @@ class _FilterScreenState extends State<FilterScreen> {
                       child: SfSliderTheme(
                         data: SfSliderThemeData(
                           activeLabelStyle: TextStyle(
-                            color: _priceFilteringOption ==
-                                        PriceFilteringOptions.Range &&
-                                    _isPriceFilterActive
+                            color: filterState['distance']
                                 ? Colors.black
                                 : Colors.grey,
                             fontSize: 12,
                             fontStyle: FontStyle.italic,
                           ),
                           inactiveLabelStyle: TextStyle(
-                            color: _priceFilteringOption ==
-                                        PriceFilteringOptions.Range &&
-                                    _isPriceFilterActive
+                            color: filterState['distance']
                                 ? Colors.black
                                 : Colors.grey,
                             fontSize: 12,
@@ -259,7 +257,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         child: SfSlider(
                           min: 1,
                           max: 20,
-                          value: _distanceFilter,
+                          value: _filterHandler.distanceValue,
                           showTicks: true,
                           showLabels: true,
                           labelFormatterCallback: (actualValue, formattedText) {
@@ -275,11 +273,11 @@ class _FilterScreenState extends State<FilterScreen> {
                             formattedText = '${actualValue.toInt()} km.';
                             return formattedText;
                           },
-                          onChanged: _isDistanceFilterActive
+                          onChanged: filterState['distance']
                               ? (newValue) {
-                                  setState(() {
-                                    _distanceFilter = newValue;
-                                  });
+                                  _filterHandler
+                                      .updateDistanceFilterOptionValue(
+                                          newValue.toInt());
                                 }
                               : null,
                         ),
@@ -291,21 +289,20 @@ class _FilterScreenState extends State<FilterScreen> {
                   filterTitle: 'Rating',
                   filterDescription:
                       'Control rating of the shown service providers as you desire.',
-                  enabled: _isRatingFilterActive,
+                  enabled: filterState['rating'],
                   onEnabled: (toggler) {
-                    setState(() {
-                      _isRatingFilterActive = toggler;
-                    });
+                    _filterHandler.toggleFilterState(
+                        FilteringOptions.Rating, toggler);
                   },
                   children: [
                     Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: RatingBar.builder(
-                        initialRating: 1,
+                        initialRating: _filterHandler.ratingValue,
                         allowHalfRating: true,
                         maxRating: 5,
-                        minRating: 0,
+                        minRating: 1,
                         direction: Axis.horizontal,
                         itemCount: 5,
                         itemPadding: const EdgeInsets.symmetric(horizontal: 4),
@@ -313,15 +310,15 @@ class _FilterScreenState extends State<FilterScreen> {
                         itemBuilder: (_, index) {
                           return Icon(
                             Icons.star_rate_rounded,
-                            color: _isRatingFilterActive
+                            color: filterState['rating']
                                 ? Colors.amber
                                 : Colors.grey,
                           );
                         },
                         glow: false,
-                        ignoreGestures: !_isRatingFilterActive,
+                        ignoreGestures: !filterState['rating'],
                         onRatingUpdate: (rating) {
-                          print(rating);
+                          _filterHandler.updateRatingFilterOptionValue(rating);
                         },
                       ),
                     ),
@@ -331,11 +328,10 @@ class _FilterScreenState extends State<FilterScreen> {
                   filterTitle: 'Availability',
                   filterDescription:
                       'Make your order in a quick manner; only show service providers available and ready to take your order, want it later? No problem, we got you covered.',
-                  enabled: _isAvailabilityFilterActive,
+                  enabled: filterState['availability'],
                   onEnabled: (toggler) {
-                    setState(() {
-                      _isAvailabilityFilterActive = toggler;
-                    });
+                    _filterHandler.toggleFilterState(
+                        FilteringOptions.Availability, toggler);
                   },
                   children: [
                     RadioListTile<AvailabilityFilteringOptions>(
@@ -351,9 +347,8 @@ class _FilterScreenState extends State<FilterScreen> {
                               AvailabilityFilteringOptions.AvailableNow
                           ? true
                           : false,
-                      toggleable: true,
                       dense: true,
-                      onChanged: _isAvailabilityFilterActive
+                      onChanged: filterState['availability']
                           ? (newOption) {
                               setState(() {
                                 _availabilityFilteringOption = newOption;
@@ -373,9 +368,8 @@ class _FilterScreenState extends State<FilterScreen> {
                               AvailabilityFilteringOptions.AvailableLater
                           ? true
                           : false,
-                      toggleable: true,
                       dense: true,
-                      onChanged: _isAvailabilityFilterActive
+                      onChanged: filterState['availability']
                           ? (newOption) {
                               setState(() {
                                 _availabilityFilteringOption = newOption;
@@ -384,8 +378,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           : null,
                     ),
                     Visibility(
-                      visible: _availabilityFilteringOption ==
-                              AvailabilityFilteringOptions.AvailableLater
+                      visible: filterState['availability'] &&
+                              _availabilityFilteringOption ==
+                                  AvailabilityFilteringOptions.AvailableLater
                           ? true
                           : false,
                       child: Container(
@@ -395,13 +390,14 @@ class _FilterScreenState extends State<FilterScreen> {
                           startDate: DateTime.now(),
                           endDate: DateTime.now().add(Duration(days: 30)),
                           initialSelectedDate: DateTime.now(),
+                          initialFocusedDate: DateTime.now(),
                           unselectedItemBackgroundColor: Colors.grey.shade400,
                           unselectedItemTextStyle:
                               TextStyle(color: Colors.white),
                           selectedItemBackgroundColor: Colors.blue,
                           selectedItemTextStyle: TextStyle(color: Colors.white),
-                          onSelectedDateChange: (selectedTime) {
-                            print(selectedTime);
+                          onSelectedDateChange: (selectedDate) {
+                            print(selectedDate);
                           },
                         ),
                       ),
@@ -419,13 +415,8 @@ class _FilterScreenState extends State<FilterScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _isPriceFilterActive = false;
-                        _isDistanceFilterActive = false;
-                        _isRatingFilterActive = false;
-                        _isAvailabilityFilterActive = false;
-                      });
+                    onPressed: () async {
+                      _filterHandler.resetFiltersState();
                     },
                     child: Text('Reset'),
                     style: ButtonStyle(
@@ -437,7 +428,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _filterHandler.saveFiltersState();
+                      _filterHandler.saveFiltersData();
+                      _filterHandler.printKeysValues();
+                      Navigator.of(context).pop();
+                    },
                     child: Text('Apply'),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(

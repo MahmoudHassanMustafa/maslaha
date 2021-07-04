@@ -77,7 +77,7 @@ class ChatCard extends StatelessWidget {
                   borderSize: 3,
                   status: status,
                   child: ProfileImageContainer(
-                    profileImg: NetworkImage(imageUrl),
+                    profileImg: imageUrl,
                     width: getProportionateScreenWidth(55),
                     height: getProportionateScreenHeight(80),
                   ),
