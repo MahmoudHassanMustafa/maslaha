@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -36,6 +37,18 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
   String nationalID = '';
   String address = '';
   bool isLoading = false;
+  String deviceToken='';
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _firebaseMessaging.getToken().then((value){
+      setState(() {
+        deviceToken=value!;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -272,6 +285,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                           "profilePic", widget.photo!.path);
                       request.files.add(file);
                       request.fields["name"] = widget.name;
+                      request.fields["deviceToken"]=deviceToken;
                       request.fields["email"] = widget.email;
                       request.fields["password"] = widget.password;
 //                    request.fields["confirm_password"]=widget.password;
