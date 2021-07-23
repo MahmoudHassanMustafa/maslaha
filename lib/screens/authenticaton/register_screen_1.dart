@@ -1,4 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:maslaha/screens/complaint_box/complaint_box.dart';
+import 'package:maslaha/screens/notifications/notifications.dart';
+import 'package:maslaha/screens/order/order.dart';
+import 'package:maslaha/screens/profile/profile_screen.dart';
 import 'auth_components/alertToast.dart';
 import 'login_screen.dart';
 import 'register_screen_2.dart';
