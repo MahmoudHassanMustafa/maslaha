@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../utils/toggle_favourite.dart';
 import '../../providers/search_result.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/service_provider_card.dart';
-
-enum SortOption { PriceAsc, PriceDesc, MostRated, Popularity }
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -11,9 +10,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  var _isFavLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    var searchResults = Provider.of<SearchResult>(context).serviceProviders;
+    var searchProviderHandler = Provider.of<SearchResult>(context);
+    var searchResults = searchProviderHandler.serviceProviders;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,10 +26,10 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Text(
                   '${searchResults.length} Results found.',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 PopupMenuButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.sort_rounded,
                       color: Colors.black,
                     ),
@@ -36,16 +38,24 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     onSelected: (selectedOption) {
                       switch (selectedOption) {
-                        case SortOption.Popularity:
+                        case SortOptions.Popularity:
+                          searchProviderHandler.updateSortOption('popularity');
                           print('popularity');
                           break;
-                        case SortOption.MostRated:
+                        case SortOptions.MostRated:
+                          searchProviderHandler.updateSortOption('most_rated');
                           print('most rated');
                           break;
-                        case SortOption.PriceDesc:
+                        case SortOptions.Nearest:
+                          searchProviderHandler.updateSortOption('nearest');
+                          print('nearest');
+                          break;
+                        case SortOptions.PriceDesc:
+                          searchProviderHandler.updateSortOption('price_desc');
                           print('highest price');
                           break;
-                        case SortOption.PriceAsc:
+                        case SortOptions.PriceAsc:
+                          searchProviderHandler.updateSortOption('price_asc');
                           print('lowest price');
                           break;
                         default:
@@ -55,20 +65,24 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (ctx) {
                       return [
                         PopupMenuItem(
-                          child: Text('Most Popular'),
-                          value: SortOption.Popularity,
+                          child: const Text('Most Popular'),
+                          value: SortOptions.Popularity,
                         ),
                         PopupMenuItem(
-                          child: Text('Most Rated'),
-                          value: SortOption.MostRated,
+                          child: const Text('Most Rated'),
+                          value: SortOptions.MostRated,
                         ),
                         PopupMenuItem(
-                          child: Text('Highest price'),
-                          value: SortOption.PriceDesc,
+                          child: const Text('Nearest'),
+                          value: SortOptions.Nearest,
                         ),
                         PopupMenuItem(
-                          child: Text('Lowest Price'),
-                          value: SortOption.PriceAsc,
+                          child: const Text('Highest price'),
+                          value: SortOptions.PriceDesc,
+                        ),
+                        PopupMenuItem(
+                          child: const Text('Lowest Price'),
+                          value: SortOptions.PriceAsc,
                         ),
                       ];
                     }),
@@ -77,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
         Expanded(
           child: searchResults.isEmpty
               ? Center(
-                  child: Text('No result yet!'),
+                  child: const Text('No result yet!'),
                 )
               : ListView.builder(
                   itemCount: searchResults.length,
@@ -94,6 +108,30 @@ class _SearchScreenState extends State<SearchScreen> {
                       startingPrice:
                           searchResults[index].initialPrice.toDouble(),
                       isFav: searchResults[index].isFav,
+                      isLoading: _isFavLoading,
+                      onHeartPressed: () async {
+                        if (searchResults[index].isFav == true) {
+                          setState(() {
+                            _isFavLoading = true;
+                          });
+                          await removeFavourite(searchResults[index].id);
+                          await searchProviderHandler
+                              .search(searchProviderHandler.searchKeyword);
+                          setState(() {
+                            _isFavLoading = false;
+                          });
+                        } else {
+                          setState(() {
+                            _isFavLoading = true;
+                          });
+                          await addToFavourites(searchResults[index].id);
+                          await searchProviderHandler
+                              .search(searchProviderHandler.searchKeyword);
+                          setState(() {
+                            _isFavLoading = false;
+                          });
+                        }
+                      },
                     );
                   },
                 ),

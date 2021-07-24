@@ -34,12 +34,18 @@ class ResideMenu extends StatefulWidget {
 
   final Widget? appBarTrailing;
 
+  final Widget? fab;
+
+  final FloatingActionButtonLocation? fabLocation;
+
   ResideMenu.scaffold(
       {required this.child,
       Widget? leftBuilder,
       MenuScaffold? leftScaffold,
       this.appBarTitle,
       this.appBarTrailing,
+      this.fab,
+      this.fabLocation,
       this.decoration: const BoxDecoration(),
       this.elevation: 12.0,
       this.onOpen,
@@ -59,7 +65,7 @@ class ResideMenu extends StatefulWidget {
 class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   //determine width
   double _width = 0.0;
-  MenuController? _controller;
+  late var _controller = MenuController(vsync: this);
   ValueNotifier<ScrollState> _scrollState =
       ValueNotifier<ScrollState>(ScrollState.NONE);
 
@@ -74,31 +80,31 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
 
   void _onScrollMove(DragUpdateDetails details) {
     double offset = details.delta.dx / _width * 2.0;
-    if (_controller!.value == 0.0) {
+    if (_controller.value == 0.0) {
       if (details.delta.dy.abs() > details.delta.dx.abs() ||
           details.delta.dx.abs() < 10) return;
     }
 
-    _controller!.value += offset;
+    _controller.value += offset;
   }
 
   void _onScrollEnd(DragEndDetails details) {
-    if (_controller!.value > 0.5) {
-      _controller!.openMenu();
+    if (_controller.value > 0.5) {
+      _controller.openMenu();
     } else {
-      _controller!.closeMenu();
+      _controller.closeMenu();
     }
   }
 
   void _handleScrollChange() {
     _scrollState.value =
-        _controller!.value == 0.0 ? ScrollState.NONE : ScrollState.ScrollToLeft;
+        _controller.value == 0.0 ? ScrollState.NONE : ScrollState.ScrollToLeft;
     if (widget.onOffsetChange != null) {
-      widget.onOffsetChange!(_controller!.value.abs());
+      widget.onOffsetChange!(_controller.value.abs());
     }
 
     //  Keep the content screen borders curved only if the drawer is opened
-    if (_controller!.value > 0.001)
+    if (_controller.value > 0.001)
       _toggleBorderRadius(20);
     else
       _toggleBorderRadius(0);
@@ -106,7 +112,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
 
   void _handleScrollEnd(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      if (_controller!.value == 1.0) {
+      if (_controller.value == 1.0) {
         if (widget.onOpen != null) {
           widget.onOpen!();
         }
@@ -118,12 +124,6 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    _update();
-    super.didChangeDependencies();
-  }
-
   // update listener
   void _update() {
     final MenuController newController = widget.controller ??
@@ -131,12 +131,12 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
           vsync: this,
         );
     if (newController == _controller) return;
-    if (_controller != null)
-      _controller!
-        ..removeListener(_handleScrollChange)
-        ..removeStatusListener(_handleScrollEnd);
+    // if (_controller != null)
+    _controller
+      ..removeListener(_handleScrollChange)
+      ..removeStatusListener(_handleScrollEnd);
     _controller = newController;
-    _controller!
+    _controller
       ..addListener(_handleScrollChange)
       ..addStatusListener(_handleScrollEnd);
 
@@ -144,29 +144,35 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _update();
+  }
+
+  @override
   void initState() {
+    super.initState();
     _scrollState.addListener(() {
       setState(() {});
     });
-    super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _scrollState.dispose();
-    _controller!
+    _controller
       ..removeListener(_handleScrollChange)
       ..removeStatusListener(_handleScrollEnd);
     if (widget.controller == null) {
-      _controller!.dispose();
+      _controller.dispose();
     }
-    super.dispose();
   }
 
   @override
   void didUpdateWidget(ResideMenu oldWidget) {
-    _update();
     super.didUpdateWidget(oldWidget);
+    _update();
   }
 
   @override
@@ -185,7 +191,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                 ),
               if (_scrollState.value != ScrollState.NONE)
                 MenuTransition(
-                  offset: _controller!,
+                  offset: _controller,
                   child: new Container(
                     margin: new EdgeInsets.only(
                       right: cons.biggest.width * 0.3,
@@ -230,27 +236,32 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                                   alignment: Alignment.center,
                                   child: AnimatedIcon(
                                     icon: AnimatedIcons.menu_close,
-                                    progress: _controller!,
+                                    progress: _controller,
                                     color: Colors.black,
                                     size: 35,
                                   ),
                                 ),
                                 onTap: () {
-                                  _controller!.isOpen
-                                      ? _controller!.closeMenu()
-                                      : _controller!.openMenu();
+                                  _controller.isOpen
+                                      ? _controller.closeMenu()
+                                      : _controller.openMenu();
+                                  print('${_controller.value}');
                                 },
                               ),
-                              title: widget.appBarTitle!,
-                              actions: [widget.appBarTrailing!],
+                              title: widget.appBarTitle,
+                              actions: [
+                                widget.appBarTrailing ?? SizedBox.shrink()
+                              ],
                             ),
                             body: widget.child,
+                            floatingActionButton: widget.fab,
+                            floatingActionButtonLocation: widget.fabLocation,
                           ),
                         ),
                       ),
                       if (_scrollState.value != ScrollState.NONE)
                         AnimatedBuilder(
-                          animation: _controller!,
+                          animation: _controller,
                           builder: (c, w) {
                             return GestureDetector(
                               child: Container(
@@ -263,7 +274,7 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                                   color: new Color.fromARGB(
                                       !widget.enableFade
                                           ? 0
-                                          : (125 * _controller!.value.abs())
+                                          : (125 * _controller.value.abs())
                                               .toInt(),
                                       0,
                                       0,
@@ -271,20 +282,20 @@ class _ResideMenuState extends State<ResideMenu> with TickerProviderStateMixin {
                                 ),
                               ),
                               onTap: () {
-                                _controller!.closeMenu();
+                                _controller.closeMenu();
                               },
                             );
                           },
                         )
                     ].toList(),
                   ),
-                  menuOffset: _controller!),
+                  menuOffset: _controller),
             ].toList(),
           ),
         ),
         onWillPop: () async {
-          if (_controller!.value != 0) {
-            _controller!.closeMenu();
+          if (_controller.value != 0) {
+            _controller.closeMenu();
             return false;
           }
           return true;
@@ -298,10 +309,10 @@ class MenuController extends AnimationController {
   bool _isOpen = false;
 
   MenuController(
-      {TickerProvider? vsync,
+      {required TickerProvider vsync,
       Duration openDuration: const Duration(milliseconds: 300)})
       : super(
-            vsync: vsync!,
+            vsync: vsync,
             lowerBound: 0.0,
             upperBound: 1.0,
             duration: openDuration,

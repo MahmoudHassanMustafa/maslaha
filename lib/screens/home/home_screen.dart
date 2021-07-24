@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:maslaha/providers/search_result.dart';
+import '../../providers/category_id.dart';
+import '../../providers/search_result.dart';
 import 'package:provider/provider.dart';
 import 'category_screen.dart';
 import 'filter_screen.dart';
@@ -34,27 +34,30 @@ class _HomeScreenState extends State<HomeScreen>
   var _profilePicUrl = '';
 
   final _pageController = PageController(initialPage: 1, keepPage: true);
-  var currentPageIndex = 1;
+  var _currentPageIndex = 1;
 
   _getUserPresentationData() async {
     var userPrefs = await SharedPreferences.getInstance();
     var uid = userPrefs.getString('id');
     var currentToken = userPrefs.getString('token');
 
-    var url = Uri.https('masla7a.herokuapp.com', '/home/$uid', {});
-    var response = await http.get(url, headers: {
-      HttpHeaders.authorizationHeader: 'x-auth-token' '$currentToken',
-      HttpHeaders.contentTypeHeader: 'application/json',
-    });
+    var url = Uri.parse('https://masla7a.herokuapp.com/home/$uid');
+    var request = http.Request('GET', url);
+    request.headers.addAll({'x-auth-token': '$currentToken'});
+    var response = await request.send();
 
-    var resBody = await json.decode(response.body);
+    final respStr = await response.stream.bytesToString();
+    var resBody = json.decode(respStr);
 
     if (response.statusCode == 200) {
-      _userName =
-          '${resBody['user']['name'].split(' ')[0]} ${resBody['user']['name'].split(' ')[1]}';
-      _location =
-          '${resBody['user']['location']['city']}, ${resBody['user']['location']['countryCode']}';
-      _profilePicUrl = resBody['user']['profilePic'];
+      setState(() {
+        var name = resBody['user']['name'].split(' ');
+        print(name);
+        _userName = '${name[0]} ${name.length > 1 ? name[1] : ''}';
+        _location =
+            '${resBody['user']['location']['city']}, ${resBody['user']['location']['countryCode']}';
+        _profilePicUrl = resBody['user']['profilePic'];
+      });
     }
   }
 
@@ -65,13 +68,41 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // super.build(context);
     SizeConfig().init(context);
+    var catIDHandler = Provider.of<CategoryID>(context);
     return AppDrawer(
       userName: _userName,
       location: _location,
       profilePicUrl: _profilePicUrl,
+      fab: _currentPageIndex != 1
+          ? FloatingActionButton(
+              onPressed: () {
+                _currentPageIndex == 0
+                    ? _pageController.nextPage(
+                        duration: Duration(milliseconds: 250),
+                        curve: Curves.easeInOutSine)
+                    : _pageController.previousPage(
+                        duration: Duration(milliseconds: 250),
+                        curve: Curves.easeInOutSine);
+              },
+              backgroundColor: kPrimaryColor,
+              child: Icon(
+                _currentPageIndex == 0 ? Icons.arrow_forward : Icons.arrow_back,
+                color: Colors.white,
+              ),
+            )
+          : null,
+      fabLocation: _currentPageIndex == 0
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.startFloat,
       home: Container(
         height: double.infinity,
         width: double.infinity,
@@ -126,9 +157,10 @@ class _HomeScreenState extends State<HomeScreen>
             Expanded(
               child: PageView(
                 controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (value) {
                   setState(() {
-                    currentPageIndex = value;
+                    _currentPageIndex = value;
                   });
                   if (value == 1)
                     Provider.of<SearchResult>(context, listen: false)
@@ -136,14 +168,20 @@ class _HomeScreenState extends State<HomeScreen>
                 },
                 pageSnapping: true,
                 children: [
-                  CategoryScreen(),
+                  CategoryScreen(catID: catIDHandler.categoryID),
                   SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildSectionTitle(
                             'How can we serve you, ${_userName.split(' ')[0]} ?'),
-                        CategoryCard(),
+                        CategoryCard(
+                          onCatPresss: () {
+                            _pageController.previousPage(
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.easeInOutSine);
+                          },
+                        ),
                         buildSectionTitle('Top Workers'),
                         TopWorkerCards(),
                         buildSectionTitle('Special Offers'),

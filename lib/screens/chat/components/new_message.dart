@@ -3,30 +3,30 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../../providers/messages.dart';
 import '../../../shared/constants.dart';
 import 'service_submit_form.dart';
 
 class NewMessage extends StatefulWidget {
-  final String chatId;
-  final String userId;
+  final String receiverId;
+  final IO.Socket socket;
 
-  const NewMessage(this.chatId, this.userId);
+  const NewMessage({required this.receiverId, required this.socket});
 
   @override
   _NewMessageState createState() => _NewMessageState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _NewMessageState extends State<NewMessage>
+    with SingleTickerProviderStateMixin {
   File? _selectedMediaFile;
-  final _pageController = PageController();
-
-  final _controller = TextEditingController();
   final _picker = ImagePicker();
 
-  var showSendButton = false;
+  final _controller = TextEditingController();
+
+  var _showSendButton = false;
 
   Future getMedia() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -38,8 +38,13 @@ class _NewMessageState extends State<NewMessage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final messages = Provider.of<Messages>(context, listen: false);
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Row(
@@ -52,18 +57,34 @@ class _NewMessageState extends State<NewMessage> {
                   onChanged: (msg) {
                     if (msg.isNotEmpty)
                       setState(() {
-                        showSendButton = true;
+                        _showSendButton = true;
                       });
                     else
                       setState(() {
-                        showSendButton = false;
+                        _showSendButton = false;
                       });
                   },
-                  onSubmitted: (msg) {
-                    if (msg.isNotEmpty) {
-                      messages.sendMessage(
-                          widget.chatId, widget.userId, ContentType.Text, msg);
+                  onSubmitted: (msg) async {
+                    var prefs = await SharedPreferences.getInstance();
+                    var token = prefs.getString('token');
+
+                    if (_controller.text.isNotEmpty) {
+                      widget.socket.connect();
+                      print('sending');
+                      widget.socket.emit('authenticate', {'token': token});
+                      widget.socket.emit(
+                        'private',
+                        {
+                          'content': _controller.value.text,
+                          'to': widget.receiverId,
+                        },
+                      );
+                      print('sent');
+
                       _controller.clear();
+                      setState(() {
+                        _showSendButton = false;
+                      });
                     }
                   },
                   decoration: InputDecoration(
@@ -81,7 +102,7 @@ class _NewMessageState extends State<NewMessage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.photo,
                     size: 28,
                     color: kPrimaryColor,
@@ -89,9 +110,20 @@ class _NewMessageState extends State<NewMessage> {
                   splashRadius: 1,
                   onPressed: () async {
                     await getMedia();
-                    if (_selectedMediaFile != null)
-                      messages.sendMessage(widget.chatId, widget.userId,
-                          ContentType.Image, _selectedMediaFile);
+
+                    var prefs = await SharedPreferences.getInstance();
+                    var token = prefs.getString('token');
+
+                    if (_selectedMediaFile != null) {
+                      // socket.emit('authenticate', token);
+                      // socket.emit(
+                      //   'private',
+                      //   {
+                      //     'to': widget.receiverId,
+                      //     // 'content': _controller.text,
+                      //   },
+                      // );
+                    }
                   },
                 ),
               ],
@@ -99,59 +131,63 @@ class _NewMessageState extends State<NewMessage> {
           ),
           const SizedBox(width: 6),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: kPrimaryColor,
               shape: BoxShape.circle,
             ),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                showSendButton
-                    ? 'assets/icons/chat_icons/send.svg'
-                    : 'assets/icons/chat_icons/contract.svg',
-                color: Colors.white,
-              ),
-              onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  messages.sendMessage(widget.chatId, widget.userId,
-                      ContentType.Text, _controller.text);
-                  _controller.clear();
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
+            child: _showSendButton
+                ? IconButton(
+                    icon: SvgPicture.asset(
+                      'assets/icons/chat_icons/send.svg',
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      print('sent button pressed');
+                      var prefs = await SharedPreferences.getInstance();
+                      var token = prefs.getString('token');
+
+                      if (_controller.text.isNotEmpty) {
+                        widget.socket.connect();
+                        print('sending');
+                        widget.socket.emit('authenticate', {'token': token});
+                        widget.socket.emit(
+                          'private',
+                          {
+                            'content': _controller.value.text,
+                            'to': widget.receiverId,
+                          },
+                        );
+                        print('sent');
+
+                        _controller.clear();
+                        setState(() {
+                          _showSendButton = false;
+                        });
+                      }
+                    },
+                  )
+                : IconButton(
+                    icon: SvgPicture.asset(
+                      'assets/icons/chat_icons/contract.svg',
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        enableDrag: true,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        title: Text(
-                          'Pose a service',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        content: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: 170,
-                          ),
-                          child: ServiceSubmitForm(_pageController),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              _pageController.nextPage(
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.bounceInOut);
-                            },
-                            child: Text('Next'),
-                          )
-                        ],
+                        builder: (context) {
+                          return ServiceSubmitForm();
+                        },
                       );
                     },
-                  );
-                }
-              },
-            ),
+                  ),
           ),
         ],
       ),

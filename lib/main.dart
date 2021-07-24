@@ -1,12 +1,11 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'providers/filters.dart';
-import 'providers/search_result.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/conversations.dart';
-import 'providers/messages.dart';
+import 'providers/category_id.dart';
+import 'providers/filters.dart';
+import 'providers/search_result.dart';
 import 'routes.dart';
 
 void main() async {
@@ -23,16 +22,13 @@ class MaslahaApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Conversations(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Messages(),
-        ),
-        ChangeNotifierProvider(
           create: (ctx) => SearchResult(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Filters(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => CategoryID(),
         ),
       ],
       child: MaterialApp(

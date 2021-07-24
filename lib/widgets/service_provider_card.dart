@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../shared/constants.dart';
 import '../utils/user_status_parser.dart';
 import '../utils/size_config.dart';
 import 'profile_image_container.dart';
@@ -16,6 +17,8 @@ class ServiceProviderCard extends StatelessWidget {
     required this.status,
     required this.rating,
     required this.isFav,
+    this.onHeartPressed,
+    this.isLoading = false,
   });
 
   final String id;
@@ -26,7 +29,9 @@ class ServiceProviderCard extends StatelessWidget {
   final double startingPrice;
   final String status;
   final double rating;
-  bool isFav;
+  final bool isFav;
+  final Function()? onHeartPressed;
+  bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -111,11 +116,22 @@ class ServiceProviderCard extends StatelessWidget {
                           ),
                         ),
                         Flexible(
-                          child: Icon(
-                            Icons.favorite_sharp,
-                            color: isFav ? Colors.red : Colors.grey,
-                            size: 30,
-                          ),
+                          child: isLoading
+                              ? SizedBox.fromSize(
+                                  size: const Size.fromRadius(15),
+                                  child: const CircularProgressIndicator(
+                                    color: kPrimaryColor,
+                                    strokeWidth: 3,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: onHeartPressed,
+                                  child: Icon(
+                                    Icons.favorite_sharp,
+                                    color: isFav ? Colors.red : Colors.grey,
+                                    size: 30,
+                                  ),
+                                ),
                         ),
                       ],
                     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/constants.dart';
+
 class ProfileImageContainer extends StatelessWidget {
   final String profileImg;
   final double? width;
@@ -25,10 +27,21 @@ class ProfileImageContainer extends StatelessWidget {
           margin: margin,
           decoration: BoxDecoration(
             color: Colors.grey[100],
-            image: DecorationImage(
-                image: NetworkImage(profileImg), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(10),
           ),
+          child: profileImg.isEmpty
+              ? Center(
+                  child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: const CircularProgressIndicator(color: kPrimaryColor),
+                ))
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    profileImg,
+                    fit: BoxFit.cover,
+                  ),
+                ),
         ),
         onTap: onTap ?? () {},
       );
