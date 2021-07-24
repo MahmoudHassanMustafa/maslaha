@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../models/service_provider_overview_model.dart';
-import '../../utils/toggle_favourite.dart';
-import '../../widgets/service_provider_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/service_provider_overview_model.dart';
 import '../../shared/constants.dart';
+import '../../utils/toggle_favourite.dart';
+import '../../widgets/service_provider_card.dart';
 
 class FavouritesScreen extends StatefulWidget {
   static const routeName = '/favourites';

@@ -1,19 +1,13 @@
 import 'dart:io';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'auth_components/alertToast.dart';
 import 'auth_page_transition/sign_up_as_client2.dart';
-import 'login_screen.dart';
-import 'register_screen_2.dart';
-import '../home/home_screen.dart';
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
-import 'auth_components/social_Button.dart';
 import 'auth_page_transition/slid_right_transition.dart';
 
 class SignUpAsClient extends StatefulWidget {

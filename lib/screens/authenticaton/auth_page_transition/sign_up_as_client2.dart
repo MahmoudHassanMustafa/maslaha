@@ -102,7 +102,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                               showTitleActions: true,
                               minTime: DateTime(1960, 1, 1),
                               maxTime: DateTime.now(), onChanged: (date) {
-                            print('change ${date}');
+                            print('change $date');
                           }, onConfirm: (date) {
                             setState(() {
                               var day = date.day < 10

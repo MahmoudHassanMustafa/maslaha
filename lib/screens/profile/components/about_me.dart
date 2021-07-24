@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maslaha/utils/size_config.dart';
+import '../../../utils/size_config.dart';
 
 class AboutMe extends StatefulWidget {
   String text;
@@ -22,18 +22,21 @@ class _AboutMeState extends State<AboutMe> {
         children: [
           Padding(
             padding: EdgeInsets.only(bottom: getProportionateScreenHeight(5)),
-            child: Text('About Me',style: TextStyle(
-                fontSize: getProportionateScreenWidth(14),
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                letterSpacing: .8
-            ),
+            child: Text(
+              'About Me',
+              style: TextStyle(
+                  fontSize: getProportionateScreenWidth(14),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  letterSpacing: .8),
             ),
           ),
-          Text(widget.text,style: TextStyle(
-            fontSize: getProportionateScreenWidth(10),
-            fontWeight: FontWeight.bold,
-          ),
+          Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: getProportionateScreenWidth(10),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maslaha/utils/user_status_parser.dart';
+import '../../../utils/user_status_parser.dart';
 
 import '../../../utils/size_config.dart';
 import '../../../widgets/profile_image_container.dart';

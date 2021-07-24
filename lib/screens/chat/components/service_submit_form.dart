@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:maslaha/shared/constants.dart';
-import 'package:maslaha/utils/size_config.dart';
+import '../../../shared/constants.dart';
+import '../../../utils/size_config.dart';
 
 class ServiceSubmitForm extends StatefulWidget {
   @override

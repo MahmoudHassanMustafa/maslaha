@@ -305,7 +305,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                       setState(() {
                         isLoading = true;
                       });
-                      print("this is category ${category}");
+                      print("this is category $category");
                       var url = Uri.parse(
                           'https://masla7a.herokuapp.com/accounts/sign-up');
                       var request = http.MultipartRequest('POST', url);

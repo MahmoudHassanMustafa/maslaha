@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import '../shared/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../shared/constants.dart';
 
 enum FilteringOptions { Price, Distance, Rating, Availability }
 enum PriceFilteringOptions { FixedValue, Range }

@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
+import '../../models/conversation_tile_model.dart';
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
 import 'components/conversation_card.dart';
-import '../../models/conversation_tile_model.dart';
 
 class ConversationsScreen extends StatefulWidget {
   static const routeName = '/conversations';
@@ -60,11 +60,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       var request = http.Request('GET', url)
         ..headers.addAll({'x-auth-token': '$currentToken'});
       var response = await request.send();
-        final respStr = await response.stream.bytesToString();
-        var resBody = json.decode(respStr);
+      final respStr = await response.stream.bytesToString();
+      var resBody = json.decode(respStr);
 
       if (response.statusCode == 200) {
-
         List<ConversationTile> conversations = [];
 
         resBody.forEach((conv) {

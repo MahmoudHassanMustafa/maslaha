@@ -3,17 +3,14 @@ import 'dart:convert';
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
-import 'auth_components/social_Button.dart';
 import 'auth_page_transition/slid_right_transition.dart';
 import 'create_new_password_screen.dart';
-import 'forget_password_screen.dart';
 import 'register_screen_1.dart';
 import '../home/home_screen.dart';
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_components/auth_title.dart';
 
@@ -130,8 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           isLoading = true;
                         });
-                        print("this is email ${email}");
-                        print("this is password ${password}");
+                        print("this is email $email");
+                        print("this is password $password");
                         var url = Uri.parse(
                             'https://masla7a.herokuapp.com/accounts/login');
                         var response = await http.post(
@@ -160,8 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         }
                       } catch (ex) {
-                        alertToast("${ex}", Colors.red, Colors.white);
-                        print("error with login ${ex}");
+                        alertToast("$ex", Colors.red, Colors.white);
+                        print("error with login $ex");
                         setState(() {
                           isLoading = false;
                         });

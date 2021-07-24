@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:maslaha/screens/complaint_box/complaint_box.dart';
-import 'package:maslaha/screens/notifications/notifications.dart';
-import 'package:maslaha/screens/order/order.dart';
-import 'package:maslaha/screens/profile/profile_screen.dart';
-import 'auth_components/alertToast.dart';
 import 'login_screen.dart';
-import 'register_screen_2.dart';
 import 'sign_up_as_client.dart';
 import 'sign_up_as_worker.dart';
 import '../../shared/constants.dart';
@@ -16,9 +9,6 @@ import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_page_transition/slid_right_transition.dart';
-import 'login_screen.dart';
-import 'sign_up_as_client.dart';
-import 'sign_up_as_worker.dart';
 
 class RegisterScreen1 extends StatefulWidget {
   static String routeName = "/RegisterScreen1";

@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../complaint_box/complaint_box.dart';
+import '../../notifications/notifications.dart';
+import '../../order/order.dart';
 import '../../../utils/size_config.dart';
 
 import '../../chat/conversations_screen.dart';
@@ -35,7 +40,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Notifications",
         "icon": 'assets/icons/drawer_icons/notifications.svg',
-        "routeName": '',
+        "routeName": Notifications.routeName,
       },
       {
         "label": "Provide a service",
@@ -50,19 +55,15 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Orders",
         "icon": 'assets/icons/drawer_icons/credit-card.svg',
-        "routeName": '',
+        "routeName": Order.routeName,
       },
       {
         "label": "Make complains",
         "icon": 'assets/icons/drawer_icons/dislike.svg',
-        "routeName": '',
-      },
-      {
-        "label": "About",
-        "icon": 'assets/icons/drawer_icons/info-button.svg',
-        "routeName": '',
+        "routeName": ComplaintBox.routeName,
       },
     ];
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -74,18 +75,20 @@ class _NavigationTabsState extends State<NavigationTabs> {
             setState(() {
               _activeTab = index;
             });
-            var route = tabs[_activeTab]['routeName'] as String;
-            if (route.startsWith('/'))
-              Navigator.pushNamed(context, route);
-            else {
+            Timer(Duration(seconds: 1), () {
+              var route = tabs[_activeTab]['routeName'] as String;
+              if (route.startsWith('/'))
+                Navigator.pushNamed(context, route);
+              else {
+                setState(() {
+                  _activeTab = 0;
+                });
+                Navigator.pushReplacementNamed(
+                    context, tabs[_activeTab]['routeName'] as String);
+              }
               setState(() {
                 _activeTab = 0;
               });
-              Navigator.pushReplacementNamed(
-                  context, tabs[_activeTab]['routeName'] as String);
-            }
-            setState(() {
-              _activeTab = 0;
             });
           },
           child: AnimatedContainer(
