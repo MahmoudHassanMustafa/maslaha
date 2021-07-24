@@ -304,7 +304,7 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                             //Navigator.pushNamed(context,LoginScreen.routeName);
                             //Slid right Navigate
                             Navigator.of(context)
-                                .push(SlidRight(page: LoginScreen()));
+                                .push(SlidRight(page: ProfileScreen(serviceProviderId: "60f59d7fb97f2e96fce9a597",)));
                           },
                           child: Text('Login',
                               style: TextStyle(

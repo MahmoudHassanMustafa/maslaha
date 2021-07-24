@@ -15,8 +15,8 @@ import 'package:maslaha/utils/size_config.dart';
 import 'package:http/http.dart'as http;
 
 class ProfileScreen extends StatefulWidget {
-//  final String image;
-//  ProfileScreen(this.image);
+  var serviceProviderId;
+  ProfileScreen({this.serviceProviderId});
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   fetchProfileInfo() async {
     final response =
     await http.get(
-        Uri.parse('https://masla7a.herokuapp.com/my-profile/60f59d7fb97f2e96fce9a597'),
+        Uri.parse('https://masla7a.herokuapp.com/my-profile/${widget.serviceProviderId}'),
         headers: {
       "x-auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGY1OWQ3ZmI5N2YyZTk2ZmNlOWE1OTciLCJlbWFpbCI6ImthcmltYWxhYTE5QGdtYWlsLmNvbSIsInVzZXJOYW1lIjoiS2FyaW0xOSIsInJvbGUiOiJzZXJ2aWNlUHJvdmlkZXIiLCJnb3RBZGRyZXNzIjp0cnVlLCJpYXQiOjE2MjY3MDkzNzd9.5ep1qCzoogSgHCQwpegHUEg3Zy_-ESS9wi-dvicx96Y"
     });
@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               //profile pic
             ProfilePicShaderMask(image: data["serviceProviderInfo"]["profilePic"]),
-              AppBarProfile(rating: data["service"]["averageRating"],),
+              AppBarProfile(serviceProviderId:widget.serviceProviderId),
               //info part with (Send a request) button
               Positioned(
                 top:getProportionateScreenHeight(326),
@@ -199,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             AboutMe(text:data["service"]["description"]==null?"":data["service"]["description"]),
                             WorkGallery(gallery:data["service"]["gallery"]),
-                            RatingAndReviews(ratings:data["reviewsDetails"]),
+                            RatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId: widget.serviceProviderId,),
                           ],
                         ),
                     ),
