@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -41,10 +41,12 @@ class SignUpAsWorker3 extends StatefulWidget {
 
 class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   bool isLoading = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   var category;
   String serviceName = '';
   String initialPrice = '';
   String description = '';
+  String deviceToken = '';
   List _testList = [
     {'no': 1, 'keyword': 'Car Maintenance'},
     {'no': 2, 'keyword': 'House'},
@@ -57,6 +59,11 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   void initState() {
     _dropdownTestItems = buildDropdownTestItems(_testList);
     super.initState();
+    _firebaseMessaging.getToken().then((value) {
+      setState(() {
+        deviceToken = value!;
+      });
+    });
   }
 
   List<DropdownMenuItem> buildDropdownTestItems(List _testList) {
@@ -274,6 +281,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                 ),
                 authButton(isLoading ? "Loading" : "Sign Up", () async {
                   print("this is category ${category["keyword"]}");
+                  print("this is the device token ############ $deviceToken");
                   if (category["keyword"] != "" &&
                       serviceName != "" &&
                       initialPrice != "" &&
@@ -304,6 +312,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                       final file = await http.MultipartFile.fromPath(
                           "profilePic", widget.image!.path);
                       request.files.add(file);
+                      request.fields["deviceToken"] = deviceToken;
                       request.fields["name"] = widget.name;
                       request.fields["email"] = widget.email;
                       request.fields["password"] = widget.password;
@@ -330,6 +339,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                         isLoading = false;
                       });
                       if (response.statusCode == 200) {
+                        print("***************************** $deviceToken");
                         SharedPreferences pref =
                             await SharedPreferences.getInstance();
                         pref.setString("token", result["token"]);
@@ -343,7 +353,8 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                         isLoading = false;
                       });
                       alertToast("$ex", Colors.red, Colors.white);
-                      print("error with sed signup client request $ex");
+                      print("***************************** $deviceToken");
+                      print("error with send signup client request $ex");
                     }
                   } else {
                     alertToast(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/widgets.dart';
 import '../models/service_provider_overview_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
