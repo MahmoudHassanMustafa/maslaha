@@ -37,7 +37,7 @@ class _FilterScreenState extends State<FilterScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.close, color: Colors.red),
+          icon: const Icon(Icons.close, color: Colors.red),
           onPressed: () {
             _filterHandler.printKeysValues();
             Navigator.of(context).pop();
@@ -48,7 +48,7 @@ class _FilterScreenState extends State<FilterScreen> {
         backgroundColor: Colors.white,
         title: const Text(
           'Fliters',
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ),
@@ -70,7 +70,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     RadioListTile<PriceFilteringOptions>(
                       title: const Text(
                         'Amount',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: const Text('Fixed value for price.'),
                       value: PriceFilteringOptions.FixedValue,
@@ -110,12 +110,13 @@ class _FilterScreenState extends State<FilterScreen> {
                             : false,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffE4DCDC)),
+                              borderSide:
+                                  const BorderSide(color: Color(0xffE4DCDC)),
                               borderRadius: BorderRadius.circular(15)),
                           hintText: "Enter price you want in L.E.",
-                          hintStyle:
-                              TextStyle(color: Colors.black45, fontSize: 14),
-                          prefixIcon: Icon(
+                          hintStyle: const TextStyle(
+                              color: Colors.black45, fontSize: 14),
+                          prefixIcon: const Icon(
                             Icons.attach_money_outlined,
                             color: Color(0xffA0BBF0),
                           ),
@@ -125,7 +126,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     RadioListTile<PriceFilteringOptions>(
                       title: const Text(
                         'Range',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: const Text('Range value for price.'),
                       value: PriceFilteringOptions.Range,
@@ -189,7 +190,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             fit: BoxFit.scaleDown,
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(7, 4, 4, 4),
-                              child: Icon(Icons.arrow_forward_ios,
+                              child: const Icon(Icons.arrow_forward_ios,
                                   color: Colors.white),
                             ),
                           ),
@@ -198,7 +199,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             fit: BoxFit.scaleDown,
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(9, 4, 0, 4),
-                              child: Icon(Icons.arrow_back_ios,
+                              child: const Icon(Icons.arrow_back_ios,
                                   color: Colors.white),
                             ),
                           ),
@@ -337,7 +338,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     RadioListTile<AvailabilityFilteringOptions>(
                       title: const Text(
                         'Currently Available',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: const Text(
                           'Only online and available service providers.'),
@@ -359,7 +360,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     RadioListTile<AvailabilityFilteringOptions>(
                       title: const Text(
                         'Available later',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: const Text('Choose the time that suits you.'),
                       value: AvailabilityFilteringOptions.AvailableLater,
@@ -393,9 +394,10 @@ class _FilterScreenState extends State<FilterScreen> {
                           initialFocusedDate: DateTime.now(),
                           unselectedItemBackgroundColor: Colors.grey.shade400,
                           unselectedItemTextStyle:
-                              TextStyle(color: Colors.white),
+                              const TextStyle(color: Colors.white),
                           selectedItemBackgroundColor: Colors.blue,
-                          selectedItemTextStyle: TextStyle(color: Colors.white),
+                          selectedItemTextStyle:
+                              const TextStyle(color: Colors.white),
                           onSelectedDateChange: (selectedDate) {
                             print(selectedDate);
                           },
@@ -418,14 +420,14 @@ class _FilterScreenState extends State<FilterScreen> {
                     onPressed: () async {
                       _filterHandler.resetFiltersState();
                     },
-                    child: Text('Reset'),
+                    child: const Text('Reset'),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.red.shade400),
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
@@ -434,7 +436,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       _filterHandler.printKeysValues();
                       Navigator.of(context).pop();
                     },
-                    child: Text('Apply'),
+                    child: const Text('Apply'),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                         Theme.of(context).primaryColor,

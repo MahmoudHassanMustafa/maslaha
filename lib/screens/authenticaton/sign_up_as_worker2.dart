@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'auth_page_transition/sign_up_as_worker3.dart';
-import '../home/home_screen.dart';
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
@@ -87,7 +83,7 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                               showTitleActions: true,
                               minTime: DateTime(1960, 1, 1),
                               maxTime: DateTime.now(), onChanged: (date) {
-                            print('change ${date}');
+                            print('change $date');
                           }, onConfirm: (date) {
                             setState(() {
                               var day = date.day < 10

@@ -9,25 +9,30 @@ import 'components/navigation_tabs.dart';
 
 class AppDrawer extends StatelessWidget {
   final Widget home;
+  final Widget? fab;
+  final FloatingActionButtonLocation? fabLocation;
   final String userName;
   final String location;
   final String profilePicUrl;
 
   AppDrawer(
       {required this.home,
+      this.fab,
+      this.fabLocation,
       required this.userName,
       required this.location,
       required this.profilePicUrl});
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ResideMenu.scaffold(
       appBarTitle: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            userName,
+            userName.isEmpty ? 'Loading...' : userName,
             style: const TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 16.0,
@@ -45,7 +50,7 @@ class AppDrawer extends StatelessWidget {
                 size: 20.0,
               ),
               Text(
-                location,
+                location.isEmpty ? 'Loading...' : location,
                 style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.black,
@@ -78,6 +83,8 @@ class AppDrawer extends StatelessWidget {
       ),
       enableFade: false,
       child: home,
+      fab: fab,
+      fabLocation: fabLocation,
     );
   }
 }

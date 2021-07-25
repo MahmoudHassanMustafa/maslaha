@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ComplaintDialog extends StatefulWidget {
   final String tag;
@@ -55,9 +54,7 @@ class _ComplaintDialogState extends State<ComplaintDialog>
             Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.blue
-              ),
+                  borderRadius: BorderRadius.circular(100), color: Colors.blue),
               child: Image.asset(
                 widget.tag,
                 height: 80.0,
@@ -70,10 +67,9 @@ class _ComplaintDialogState extends State<ComplaintDialog>
             Text(
               widget.title,
               style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 25
-              ),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -84,29 +80,25 @@ class _ComplaintDialogState extends State<ComplaintDialog>
         content: Text(
           widget.description,
           style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20
-          ),
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
           textAlign: TextAlign.center,
         ),
         actions: [
           Center(
             child: Container(
-              padding: EdgeInsets.only(left: 10,right: 10),
+              padding: EdgeInsets.only(left: 10, right: 10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blue
-              ),
+                  borderRadius: BorderRadius.circular(10), color: Colors.blue),
               child: TextButton(
                 onPressed: () {
                   _controller.reverse();
                   Navigator.of(context).pop();
                 },
-                child:Text('Understood',style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold
-                ),),
+                child: Text(
+                  'Understood',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),

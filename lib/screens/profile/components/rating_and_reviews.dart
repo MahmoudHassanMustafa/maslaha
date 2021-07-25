@@ -61,15 +61,15 @@ class _RatingAndReviewsState extends State<RatingAndReviews> {
                         Container(
                           height: getProportionateScreenHeight(300),
                           child: ListView(
-                            scrollDirection: Axis.vertical,
-                            children:widget.ratings.map((rating){
-                              return ListItemRatingsAndReviews(
-                                image: rating["user"]["profilePic"],
-                                userName:rating["user"]["name"],
-                                rating: rating["rating"],
-                                description: rating["content"],
-                              );
-                            }).toList()
+                              scrollDirection: Axis.vertical,
+                              children:widget.ratings.map((rating){
+                                return ListItemRatingsAndReviews(
+                                  image: rating["user"]["profilePic"],
+                                  userName:rating["user"]["name"],
+                                  rating: rating["rating"],
+                                  description: rating["content"],
+                                );
+                              }).toList()
                           ),
                         ),
                       ],
@@ -90,21 +90,21 @@ class _RatingAndReviewsState extends State<RatingAndReviews> {
                                 });
                               },
                               decoration: InputDecoration(
-                                hintText: "Write a review ...",
-                                hintStyle:TextStyle(
-                                  color: Color(0xffC4C5C9),
-                                  fontSize: getProportionateScreenHeight(15)
-                                ),
-                                suffixIcon: Container(
-                                    width: getProportionateScreenWidth(130),
-                                    height: getProportionateScreenHeight(12),
-                                    child: StarRating(onRatingChanged: (rating) => setState(() =>this.rating = rating),color: Colors.yellow,rating: rating,)),
-                                prefixIcon:Icon(Icons.emoji_emotions,size: getProportionateScreenHeight(30),),
-                                border:OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                fillColor: Color(0xffF1F2F6),
-                                filled: true
+                                  hintText: "Write a review ...",
+                                  hintStyle:TextStyle(
+                                      color: Color(0xffC4C5C9),
+                                      fontSize: getProportionateScreenHeight(15)
+                                  ),
+                                  suffixIcon: Container(
+                                      width: getProportionateScreenWidth(130),
+                                      height: getProportionateScreenHeight(12),
+                                      child: StarRating(onRatingChanged: (rating) => setState(() =>this.rating = rating),color: Colors.yellow,rating: rating,)),
+                                  prefixIcon:Icon(Icons.emoji_emotions,size: getProportionateScreenHeight(30),),
+                                  border:OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  fillColor: Color(0xffF1F2F6),
+                                  filled: true
                               ),
                             ),
                           ),
@@ -161,14 +161,14 @@ class _RatingAndReviewsState extends State<RatingAndReviews> {
                               decoration: BoxDecoration(
                                   color: Color(0xff4378E3),
                                   borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xff4378E3),
-                                    spreadRadius: .2,
-                                    blurRadius: 10,
-                                    offset: Offset(0,1)
-                                  )
-                                ]
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Color(0xff4378E3),
+                                        spreadRadius: .2,
+                                        blurRadius: 10,
+                                        offset: Offset(0,1)
+                                    )
+                                  ]
                               ),
                             ),
                           ),
@@ -181,8 +181,8 @@ class _RatingAndReviewsState extends State<RatingAndReviews> {
         ),
       ),
     ):Center(child: Text("Ratings and Reviews",style: TextStyle(
-      color:Colors.black,
-      fontWeight: FontWeight.bold
+        color:Colors.black,
+        fontWeight: FontWeight.bold
     ),),);
   }
 }

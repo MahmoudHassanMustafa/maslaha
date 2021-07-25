@@ -1,16 +1,17 @@
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'login_screen.dart';
-import '../home/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_components/alertToast.dart';
 import 'auth_components/arrow_back_button.dart';
 import 'auth_components/auth_button.dart';
 import 'auth_components/auth_title.dart';
 import 'auth_page_transition/slid_right_transition.dart';
+import 'login_screen.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
   static String routeName = "/CreateNewPasswordScreen";
@@ -195,8 +196,8 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                               context, SlidRight(page: LoginScreen()));
                         }
                       } catch (ex) {
-                        alertToast("${ex}", Colors.red, Colors.white);
-                        print("error with login ${ex}");
+                        alertToast("$ex", Colors.red, Colors.white);
+                        print("error with login $ex");
                       }
                     } else {
                       alertToast(

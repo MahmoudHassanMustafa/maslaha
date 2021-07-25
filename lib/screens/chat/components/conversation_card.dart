@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../../../utils/user_status_parser.dart';
 
 import '../../../utils/size_config.dart';
 import '../../../widgets/profile_image_container.dart';
-import '../messages_screen.dart';
+import '../chat_screen.dart';
 import '../../../widgets/status_badge.dart';
-import '../../../providers/messages.dart';
-import '../../../providers/conversations.dart';
 
-class ChatCard extends StatelessWidget {
-  final String id;
-  final String userName;
-  final String imageUrl;
-  final Map<String, Object> status;
-  final Message lastMessage;
+class ConversationCard extends StatelessWidget {
+  final String convId;
+  final String receiverId;
+  final String receiverName;
+  final String receiverProfilePic;
+  final String receiverStatus;
+  final String lastMessage;
   final String lastMessageTime;
+  final Function(DismissDirection)? onDismissed;
 
-  ChatCard({
-    required this.id,
-    required this.userName,
-    required this.imageUrl,
-    required this.status,
+  ConversationCard({
+    required this.convId,
+    required this.receiverId,
+    required this.receiverName,
+    required this.receiverProfilePic,
+    required this.receiverStatus,
     required this.lastMessage,
     required this.lastMessageTime,
+    this.onDismissed,
   });
-
-  String _showLastMessage(Message lmsg) {
-    if (lmsg.type == ContentType.Image) return 'Image';
-    return lmsg.messageContent;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey('${DateTime.now()}'),
-      onDismissed: (_) =>
-          Provider.of<Conversations>(context, listen: false).deleteChat(id),
+      onDismissed: onDismissed,
       direction: DismissDirection.endToStart,
       background: Container(
         decoration: BoxDecoration(
@@ -59,13 +55,18 @@ class ChatCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(5),
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(MessagesScreen.routeName, arguments: {
-              'id': id,
-              'userName': userName,
-              'imageUrl': imageUrl,
-              'status': status,
-            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(
+                  convID: convId,
+                  receiverID: receiverId,
+                  receiverName: receiverName,
+                  receiverProfilePic: receiverProfilePic,
+                  receiverStatus: receiverStatus,
+                ),
+              ),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -75,9 +76,9 @@ class ChatCard extends StatelessWidget {
                   right: 10,
                   bottom: 7,
                   borderSize: 3,
-                  status: status,
+                  status: statusParser(receiverStatus),
                   child: ProfileImageContainer(
-                    profileImg: imageUrl,
+                    profileImg: receiverProfilePic,
                     width: getProportionateScreenWidth(55),
                     height: getProportionateScreenHeight(80),
                   ),
@@ -92,7 +93,7 @@ class ChatCard extends StatelessWidget {
                           Flexible(
                             flex: 2,
                             child: Text(
-                              userName,
+                              receiverName,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -112,29 +113,27 @@ class ChatCard extends StatelessWidget {
                           Flexible(
                             flex: 2,
                             child: Text(
-                              lastMessage.userId == 'me'
-                                  ? 'Me: ${_showLastMessage(lastMessage)}'
-                                  : '${userName.split(' ')[0]}: ${_showLastMessage(lastMessage)}',
+                              lastMessage,
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(color: Colors.black54),
                             ),
                           ),
-                          Flexible(
-                            child: const CircleAvatar(
-                              radius: 10,
-                              child: FittedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: Text(
-                                    '1',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: Colors.red,
-                            ),
-                          ),
+                          // Flexible(
+                          //   child: const CircleAvatar(
+                          //     radius: 10,
+                          //     child: FittedBox(
+                          //       child: Padding(
+                          //         padding: const EdgeInsets.all(4),
+                          //         child: Text(
+                          //           '1',
+                          //           style: const TextStyle(color: Colors.white),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     backgroundColor: Colors.red,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],

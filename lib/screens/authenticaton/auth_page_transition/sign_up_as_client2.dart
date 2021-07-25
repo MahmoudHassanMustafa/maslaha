@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../shared/constants.dart';
+import '../../../utils/size_config.dart';
+import '../../home/home_screen.dart';
 import '../auth_components/alertToast.dart';
 import '../auth_components/arrow_back_button.dart';
 import '../auth_components/auth_button.dart';
 import '../auth_components/auth_title.dart';
 import 'slid_right_transition.dart';
-import '../verify_your_email_screen_client.dart';
-import '../../home/home_screen.dart';
-import '../../../shared/constants.dart';
-import '../../../utils/size_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpAsClient2 extends StatefulWidget {
   late String gender;
@@ -37,18 +38,19 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
   String nationalID = '';
   String address = '';
   bool isLoading = false;
-  String deviceToken='';
+  String deviceToken = '';
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firebaseMessaging.getToken().then((value){
+    _firebaseMessaging.getToken().then((value) {
       setState(() {
-        deviceToken=value!;
+        deviceToken = value!;
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +102,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                               showTitleActions: true,
                               minTime: DateTime(1960, 1, 1),
                               maxTime: DateTime.now(), onChanged: (date) {
-                            print('change ${date}');
+                            print('change $date');
                           }, onConfirm: (date) {
                             setState(() {
                               var day = date.day < 10
@@ -285,7 +287,7 @@ class _SignUpAsClient2State extends State<SignUpAsClient2> {
                           "profilePic", widget.photo!.path);
                       request.files.add(file);
                       request.fields["name"] = widget.name;
-                      request.fields["deviceToken"]=deviceToken;
+                      request.fields["deviceToken"] = deviceToken;
                       request.fields["email"] = widget.email;
                       request.fields["password"] = widget.password;
 //                    request.fields["confirm_password"]=widget.password;

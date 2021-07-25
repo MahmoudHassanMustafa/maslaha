@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../complaint_box/complaint_box.dart';
+import '../../notifications/notifications.dart';
+import '../../order/order.dart';
+import '../../../utils/size_config.dart';
 
-import '../../../screens/chat/chat_screen.dart';
+import '../../chat/conversations_screen.dart';
 import '../../../shared/constants.dart';
 import '../../favourites/favourites_screen.dart';
 import '../../home/home_screen.dart';
@@ -15,7 +21,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
   int _activeTab = 0;
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> tabs = [
+    final List<Map<String, String>> tabs = [
       {
         "label": "Home",
         "icon": 'assets/icons/drawer_icons/home.svg',
@@ -23,17 +29,22 @@ class _NavigationTabsState extends State<NavigationTabs> {
       },
       {
         "label": "Profile",
-        "icon": 'assets/icons/drawer_icons/user.svg',
+        "icon": 'assets/icons/drawer_icons/avatar.svg',
         'routeName': '',
       },
       {
         "label": "Chat",
-        "icon": 'assets/icons/drawer_icons/chat-bubble.svg',
-        "routeName": ChatScreen.routeName,
+        "icon": 'assets/icons/drawer_icons/chat.svg',
+        "routeName": ConversationsScreen.routeName,
+      },
+      {
+        "label": "Notifications",
+        "icon": 'assets/icons/drawer_icons/notifications.svg',
+        "routeName": Notifications.routeName,
       },
       {
         "label": "Provide a service",
-        "icon": 'assets/icons/drawer_icons/edit.svg',
+        "icon": 'assets/icons/drawer_icons/pencil.svg',
         "routeName": '',
       },
       {
@@ -44,23 +55,19 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Orders",
         "icon": 'assets/icons/drawer_icons/credit-card.svg',
-        "routeName": '',
+        "routeName": Order.routeName,
       },
       {
         "label": "Make complains",
-        "icon": 'assets/icons/drawer_icons/thumbs-down.svg',
-        "routeName": '',
-      },
-      {
-        "label": "About",
-        "icon": 'assets/icons/drawer_icons/information-circle.svg',
-        "routeName": '',
+        "icon": 'assets/icons/drawer_icons/dislike.svg',
+        "routeName": ComplaintBox.routeName,
       },
     ];
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemExtent: 50,
+      itemExtent: 45,
       itemCount: tabs.length,
       itemBuilder: (context, index) {
         return GestureDetector(
@@ -68,16 +75,21 @@ class _NavigationTabsState extends State<NavigationTabs> {
             setState(() {
               _activeTab = index;
             });
-            var route = tabs[_activeTab]['routeName'] as String;
-            if (route.isNotEmpty)
-              Navigator.pushNamed(context, route);
-            else {
+            Timer(Duration(seconds: 1), () {
+              var route = tabs[_activeTab]['routeName'] as String;
+              if (route.startsWith('/'))
+                Navigator.pushNamed(context, route);
+              else {
+                setState(() {
+                  _activeTab = 0;
+                });
+                Navigator.pushReplacementNamed(
+                    context, tabs[_activeTab]['routeName'] as String);
+              }
               setState(() {
                 _activeTab = 0;
               });
-              Navigator.pushReplacementNamed(
-                  context, tabs[_activeTab]['routeName'] as String);
-            }
+            });
           },
           child: AnimatedContainer(
             duration: kAnimationDuration,
@@ -117,7 +129,10 @@ class _NavigationTabsState extends State<NavigationTabs> {
                 ),
                 SvgPicture.asset(
                   tabs[index]['icon'] as String,
-                  color: _activeTab == index ? Colors.white : null,
+                  color: _activeTab == index ? Colors.white : Colors.white54,
+                  fit: BoxFit.cover,
+                  height: getProportionateScreenHeight(26),
+                  width: getProportionateScreenWidth(26),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),

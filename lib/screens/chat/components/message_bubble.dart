@@ -1,10 +1,9 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:video_player/video_player.dart';
 
-import '../../../providers/messages.dart';
 import '../../../shared/constants.dart';
+import '../../../models/chat_message_model.dart';
 
 class MessageBubble extends StatefulWidget {
   MessageBubble(
@@ -24,31 +23,11 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble> {
-  VideoPlayerController? _playerController;
-  late VoidCallback listener;
-
-  @override
-  void initState() {
-    super.initState();
-    listener = () {
-      setState(() {});
-    };
-  }
-
-  void initializeVideoController() {
-    if (_playerController == null) {
-      _playerController = VideoPlayerController.file(widget.content)
-        ..addListener(listener)
-        ..setVolume(0.7)
-        ..initialize();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Bubble(
       alignment: widget.isMe ? Alignment.centerRight : Alignment.centerLeft,
-      margin: BubbleEdges.symmetric(horizontal: 8, vertical: 3),
+      margin: const BubbleEdges.symmetric(horizontal: 8, vertical: 3),
       color: widget.isMe ? Colors.blueGrey[400] : kPrimaryColor,
       nip: widget.isMe ? BubbleNip.rightTop : BubbleNip.leftTop,
       child: Wrap(
@@ -60,7 +39,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         children: [
           Text(
             widget.content,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
             ),
             textAlign: TextAlign.start,
@@ -69,7 +48,7 @@ class _MessageBubbleState extends State<MessageBubble> {
           ),
           Text(
             intl.DateFormat.jm().format(widget.sentAt),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white70,
               fontSize: 12,
             ),
@@ -79,10 +58,10 @@ class _MessageBubbleState extends State<MessageBubble> {
     );
   }
 
-  Widget buildMessageBubbleContent(ContentType type) {
+  Widget buildMessageBubbleContent(MessageType type) {
     late Widget resultedWidget;
     switch (type) {
-      case ContentType.Text:
+      case MessageType.Text:
         resultedWidget = Text(
           widget.content,
           style: TextStyle(
@@ -93,15 +72,14 @@ class _MessageBubbleState extends State<MessageBubble> {
           overflow: TextOverflow.visible,
         );
         break;
-      case ContentType.Image:
+      case MessageType.Picture:
         resultedWidget = Image.file(
           widget.content,
           fit: BoxFit.cover,
         );
         break;
-      case ContentType.Video:
-        initializeVideoController();
-        resultedWidget = VideoPlayer(_playerController!);
+      default:
+        break;
     }
     return resultedWidget;
   }

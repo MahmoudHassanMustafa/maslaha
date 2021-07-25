@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart' as http;
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../shared/constants.dart';
+import '../../../utils/size_config.dart';
+import '../../home/home_screen.dart';
 import '../auth_components/alertToast.dart';
 import '../auth_components/arrow_back_button.dart';
 import '../auth_components/auth_button.dart';
 import '../auth_components/auth_title.dart';
 import 'slid_right_transition.dart';
-import '../verify_your_email_screen.dart';
-import '../../home/home_screen.dart';
-import '../../../shared/constants.dart';
-import '../../../utils/size_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpAsWorker3 extends StatefulWidget {
   late String gender;
@@ -46,7 +46,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   String serviceName = '';
   String initialPrice = '';
   String description = '';
-  String deviceToken='';
+  String deviceToken = '';
   List _testList = [
     {'no': 1, 'keyword': 'Car Maintenance'},
     {'no': 2, 'keyword': 'House'},
@@ -59,12 +59,11 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   void initState() {
     _dropdownTestItems = buildDropdownTestItems(_testList);
     super.initState();
-    _firebaseMessaging.getToken().then((value){
+    _firebaseMessaging.getToken().then((value) {
       setState(() {
-        deviceToken=value!;
+        deviceToken = value!;
       });
     });
-
   }
 
   List<DropdownMenuItem> buildDropdownTestItems(List _testList) {
@@ -306,14 +305,14 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                       setState(() {
                         isLoading = true;
                       });
-                      print("this is category ${category}");
+                      print("this is category $category");
                       var url = Uri.parse(
                           'https://masla7a.herokuapp.com/accounts/sign-up');
                       var request = http.MultipartRequest('POST', url);
                       final file = await http.MultipartFile.fromPath(
                           "profilePic", widget.image!.path);
                       request.files.add(file);
-                      request.fields["deviceToken"]=deviceToken;
+                      request.fields["deviceToken"] = deviceToken;
                       request.fields["name"] = widget.name;
                       request.fields["email"] = widget.email;
                       request.fields["password"] = widget.password;

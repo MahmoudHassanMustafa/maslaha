@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'create_new_password_screen.dart';
 import '../home/home_screen.dart';
 import '../../shared/constants.dart';
 import '../../utils/size_config.dart';

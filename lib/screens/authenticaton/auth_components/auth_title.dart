@@ -1,5 +1,6 @@
-import '../../../utils/size_config.dart';
 import 'package:flutter/material.dart';
+
+import '../../../utils/size_config.dart';
 
 Widget authTitle(String title, double top, double left) {
   return Positioned(

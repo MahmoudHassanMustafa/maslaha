@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:maslaha/shared/constants.dart';
+import '../../../shared/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../providers/search_result.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,6 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
   @override
   Widget build(BuildContext context) {
     var searchRequest = Provider.of<SearchResult>(context);
-
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 10, 8, 10),
       decoration: BoxDecoration(
@@ -32,10 +31,12 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
           ]),
       child: TextField(
         onChanged: (keyword) async {
+          searchRequest.updateKeyword(keyword);
           final prefs = await SharedPreferences.getInstance();
           if (keyword.isNotEmpty) {
-            searchRequest.search(
+            await searchRequest.search(
               keyword,
+              sort: searchRequest.currentSortOption,
               startPrice: prefs.getInt(kRangePriceOptionStartValue),
               endPrice: prefs.getInt(kRangePriceOptionEndValue),
               distance: prefs.getInt(kDistanceFilterValue),
@@ -57,7 +58,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
             fit: BoxFit.scaleDown,
           ),
           hintText: 'Search service providers.',
-          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+          hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
