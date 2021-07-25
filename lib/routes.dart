@@ -21,7 +21,7 @@ import 'screens/welcome_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   // Initial route
-  // '/': (context) => LandingScreen(),
+  '/': (context) => LandingScreen(),
 
   SplashScreen.routeName: (context) => SplashScreen(),
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
@@ -33,8 +33,7 @@ final Map<String, WidgetBuilder> routes = {
 //  VerifyYourEmailScreen.routeName: (context) => VerifyYourEmailScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
   FilterScreen.routeName: (context) => FilterScreen(),
-  // ConversationsScreen.routeName:
-  '/': (context) => ConversationsScreen(),
+  ConversationsScreen.routeName : (context) => ConversationsScreen(),
   FavouritesScreen.routeName: (context) => FavouritesScreen(),
   Notifications.routeName: (context) => Notifications(),
   ComplaintBox.routeName: (context) => ComplaintBox(),
