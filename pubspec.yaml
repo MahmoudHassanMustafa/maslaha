@@ -36,6 +36,7 @@ dependencies:
   socket_io_client: ^1.0.1
   syncfusion_flutter_sliders: ^19.2.44
   firebase_messaging: ^10.0.3
+  syncfusion_flutter_calendar: ^19.2.48
 
 dev_dependencies:
   flutter_test:
