@@ -10,7 +10,11 @@ class _SchedualState extends State<Schedual> {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      view: CalendarView.timelineDay,
+      view: CalendarView.month,
+      initialSelectedDate: DateTime.now(),
+//      dataSource: DataSuorce(),
     );
   }
 }
+
+

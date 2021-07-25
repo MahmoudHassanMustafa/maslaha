@@ -81,8 +81,8 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                         onTap: () {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
-                              minTime: DateTime(1960, 1, 1),
-                              maxTime: DateTime.now(), onChanged: (date) {
+                              minTime: DateTime(1961, 1, 1),
+                              maxTime: DateTime(2003, 12, 30), onChanged: (date) {
                             print('change $date');
                           }, onConfirm: (date) {
                             setState(() {
@@ -97,7 +97,7 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                             print(birthDate);
                           },
                               currentTime: DateTime.now(),
-                              locale: LocaleType.ar);
+                              locale: LocaleType.en);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,6 +176,7 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                     width: getProportionateScreenWidth(302),
 //                    height: getProportionateScreenHeight(36),
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       onChanged: (val) {
                         setState(() {
                           nationalID = val;
@@ -256,18 +257,26 @@ class _SignUpAsWorker2State extends State<SignUpAsWorker2> {
                       nationalID != "" &&
                       phone != "" &&
                       address != "") {
-                    Navigator.of(context).push(SlidRight(
-                        page: SignUpAsWorker3(
-                      gender: widget.gender,
-                      name: widget.name,
-                      email: widget.email,
-                      password: widget.password,
-                      image: widget.photo,
-                      address: address,
-                      birthDate: birthDate,
-                      nationalID: nationalID,
-                      phone: phone,
-                    )));
+                      if(phone.length==11){
+                        if(nationalID.length==14){
+                          Navigator.of(context).push(SlidRight(
+                              page: SignUpAsWorker3(
+                                gender: widget.gender,
+                                name: widget.name,
+                                email: widget.email,
+                                password: widget.password,
+                                image: widget.photo,
+                                address: address,
+                                birthDate: birthDate,
+                                nationalID: nationalID,
+                                phone: phone,
+                              )));
+                        }else{
+                          alertToast("Please Provide Valid National Id", Colors.red, Colors.white);
+                        }
+                      }else{
+                        alertToast("Please Provide Valid Phone", Colors.red, Colors.white);
+                      }
                   } else {
                     alertToast(
                         "Please Provide All Data", Colors.red, Colors.white);

@@ -262,20 +262,19 @@ class _OrderState extends State<Order> {
                                     GestureDetector(
                                       onTap:()async{
                                         SharedPreferences _pref = await SharedPreferences.getInstance();
-                                        final response = await http.put(
+                                         http.put(
                                             Uri.parse('https://masla7a.herokuapp.com/orders/cancele-order/${order["_id"]}'),
-                                            headers: {"x-auth-token": _pref.getString("token").toString()});
-                                        if (response.statusCode == 200) {
+                                            headers: {"x-auth-token": _pref.getString("token").toString()}).then((value) {
                                           print(
-                                              "the order canceled successfully ${jsonDecode(response.body)}");
+                                              "the order canceled successfully");
                                           fetchPendingOrders();
                                           fetchCancelledOrders();
                                           fetchCompleteOrders();
-                                          return jsonDecode(response.body);
-                                        } else {
-                                          alertToast(response.body.toString(), Colors.blue, Colors.white);
+                                          alertToast("Order Canceled Successfully", Colors.red, Colors.white);
+                                        }).catchError((ex){
+                                          alertToast(ex.toString(), Colors.blue, Colors.white);
                                           throw Exception('failed to canceled this order');
-                                        }
+                                        });
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(top: 15),
@@ -299,20 +298,19 @@ class _OrderState extends State<Order> {
                                     GestureDetector(
                                       onTap: ()async{
                                         SharedPreferences _pref = await SharedPreferences.getInstance();
-                                        final response = await http.put(
+                                         http.put(
                                             Uri.parse('https://masla7a.herokuapp.com/orders/complete-order/${order["_id"]}'),
-                                            headers: {"x-auth-token": _pref.getString("token").toString()});
-                                        if (response.statusCode == 200) {
+                                            headers: {"x-auth-token": _pref.getString("token").toString()}).then((value){
                                           print(
-                                              "the order completed successfully ${jsonDecode(response.body)}");
+                                              "the order completed successfully");
+                                          alertToast("Order Completed Sucessfully", Colors.green, Colors.white);
                                           fetchPendingOrders();
                                           fetchCancelledOrders();
                                           fetchCompleteOrders();
-                                          return jsonDecode(response.body);
-                                        } else {
-                                          alertToast(response.body.toString(), Colors.blue, Colors.white);
-                                          throw Exception('failed to completed this order this order${response.body.toString()}');
-                                        }
+                                        }).catchError((ex){
+                                          alertToast(ex.toString(), Colors.blue, Colors.white);
+                                          throw Exception('failed to completed this order this order${ex.toString()}');
+                                        });
 
 //                                      showDialog(
 //                                        context: context,
