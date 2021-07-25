@@ -8,6 +8,7 @@ import '../../../widgets/status_badge.dart';
 
 class ConversationCard extends StatelessWidget {
   final String convId;
+  final String myRole;
   final String receiverId;
   final String receiverName;
   final String receiverProfilePic;
@@ -18,6 +19,7 @@ class ConversationCard extends StatelessWidget {
 
   ConversationCard({
     required this.convId,
+    required this.myRole,
     required this.receiverId,
     required this.receiverName,
     required this.receiverProfilePic,
@@ -60,6 +62,7 @@ class ConversationCard extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => ChatScreen(
                   convID: convId,
+                  myRole: myRole,
                   receiverID: receiverId,
                   receiverName: receiverName,
                   receiverProfilePic: receiverProfilePic,

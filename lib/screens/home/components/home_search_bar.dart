@@ -32,20 +32,8 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
       child: TextField(
         onChanged: (keyword) async {
           searchRequest.updateKeyword(keyword);
-          final prefs = await SharedPreferences.getInstance();
           if (keyword.isNotEmpty) {
-            await searchRequest.search(
-              keyword,
-              sort: searchRequest.currentSortOption,
-              startPrice: prefs.getInt(kRangePriceOptionStartValue),
-              endPrice: prefs.getInt(kRangePriceOptionEndValue),
-              distance: prefs.getInt(kDistanceFilterValue),
-              rating: prefs.getDouble(kRatingFilterValue),
-            );
-            // print('start: ${prefs.getInt(kRangePriceOptionStartValue)}');
-            // print('end: ${prefs.getInt(kRangePriceOptionEndValue)}');
-            // print('distance: ${prefs.getInt(kDistanceFilterValue)}');
-            // print('rating: ${prefs.getDouble(kRatingFilterValue)}');
+            await searchRequest.search(keyword);
           } else {
             searchRequest.clearSearchResultList();
           }

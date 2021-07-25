@@ -1,5 +1,6 @@
 class ConversationTile {
   final String convId;
+  final String myRole;
   final String receiverId;
   final String receiverName;
   final String receiverProfilePic;
@@ -9,6 +10,7 @@ class ConversationTile {
 
   ConversationTile({
     required this.convId,
+    required this.myRole,
     required this.receiverId,
     required this.receiverName,
     required this.receiverProfilePic,

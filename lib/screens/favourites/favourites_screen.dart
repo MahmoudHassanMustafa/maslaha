@@ -78,7 +78,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
           'Favourites',
           style: const TextStyle(
             fontSize: 24,
-            color: Colors.black87,
+            color: kPrimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),

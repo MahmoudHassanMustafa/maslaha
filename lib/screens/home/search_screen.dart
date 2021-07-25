@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maslaha/utils/size_config.dart';
 import '../../utils/toggle_favourite.dart';
 import '../../providers/search_result.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +17,13 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     var searchProviderHandler = Provider.of<SearchResult>(context);
     var searchResults = searchProviderHandler.serviceProviders;
+    SizeConfig().init(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            height: getProportionateScreenHeight(50),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -38,10 +41,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     onSelected: (selectedOption) {
                       switch (selectedOption) {
-                        case SortOptions.Popularity:
-                          searchProviderHandler.updateSortOption('popularity');
-                          print('popularity');
-                          break;
                         case SortOptions.MostRated:
                           searchProviderHandler.updateSortOption('most_rated');
                           print('most rated');
@@ -64,10 +63,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                     itemBuilder: (ctx) {
                       return [
-                        PopupMenuItem(
-                          child: const Text('Most Popular'),
-                          value: SortOptions.Popularity,
-                        ),
                         PopupMenuItem(
                           child: const Text('Most Rated'),
                           value: SortOptions.MostRated,

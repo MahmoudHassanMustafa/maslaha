@@ -65,46 +65,46 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           child: Column(
             children: [
               //  Join as guest button
-              Align(
-                alignment: Alignment.topRight,
-                child: SlideTransition(
-                  position: _guestOffset,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Join as a guest',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: getProportionateScreenWidth(16),
-                              letterSpacing: 0.75,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 4.0,
-                          ),
-                          const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.black54,
-                            size: 18.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.topRight,
+              //   child: SlideTransition(
+              //     position: _guestOffset,
+              //     child: TextButton(
+              //       style: TextButton.styleFrom(
+              //         padding: EdgeInsets.zero,
+              //       ),
+              //       onPressed: () {
+              //         Navigator.pushReplacementNamed(
+              //             context, HomeScreen.routeName);
+              //       },
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: Row(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             Text(
+              //               'Join as a guest',
+              //               style: TextStyle(
+              //                 color: Colors.black54,
+              //                 fontSize: getProportionateScreenWidth(16),
+              //                 letterSpacing: 0.75,
+              //                 fontWeight: FontWeight.w600,
+              //               ),
+              //             ),
+              //             const SizedBox(
+              //               width: 4.0,
+              //             ),
+              //             const Icon(
+              //               Icons.arrow_forward_ios,
+              //               color: Colors.black54,
+              //               size: 18.0,
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               //  Page view
               Expanded(
                 flex: 4,

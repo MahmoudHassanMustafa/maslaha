@@ -325,87 +325,87 @@ class _FilterScreenState extends State<FilterScreen> {
                     ),
                   ],
                 ),
-                FilterSection(
-                  filterTitle: 'Availability',
-                  filterDescription:
-                      'Make your order in a quick manner; only show service providers available and ready to take your order, want it later? No problem, we got you covered.',
-                  enabled: filterState['availability'],
-                  onEnabled: (toggler) {
-                    _filterHandler.toggleFilterState(
-                        FilteringOptions.Availability, toggler);
-                  },
-                  children: [
-                    RadioListTile<AvailabilityFilteringOptions>(
-                      title: const Text(
-                        'Currently Available',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: const Text(
-                          'Only online and available service providers.'),
-                      value: AvailabilityFilteringOptions.AvailableNow,
-                      groupValue: _availabilityFilteringOption,
-                      selected: _availabilityFilteringOption ==
-                              AvailabilityFilteringOptions.AvailableNow
-                          ? true
-                          : false,
-                      dense: true,
-                      onChanged: filterState['availability']
-                          ? (newOption) {
-                              setState(() {
-                                _availabilityFilteringOption = newOption;
-                              });
-                            }
-                          : null,
-                    ),
-                    RadioListTile<AvailabilityFilteringOptions>(
-                      title: const Text(
-                        'Available later',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: const Text('Choose the time that suits you.'),
-                      value: AvailabilityFilteringOptions.AvailableLater,
-                      groupValue: _availabilityFilteringOption,
-                      selected: _availabilityFilteringOption ==
-                              AvailabilityFilteringOptions.AvailableLater
-                          ? true
-                          : false,
-                      dense: true,
-                      onChanged: filterState['availability']
-                          ? (newOption) {
-                              setState(() {
-                                _availabilityFilteringOption = newOption;
-                              });
-                            }
-                          : null,
-                    ),
-                    Visibility(
-                      visible: filterState['availability'] &&
-                              _availabilityFilteringOption ==
-                                  AvailabilityFilteringOptions.AvailableLater
-                          ? true
-                          : false,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 14),
-                        child: FlutterDatePickerTimeline(
-                          startDate: DateTime.now(),
-                          endDate: DateTime.now().add(Duration(days: 30)),
-                          initialSelectedDate: DateTime.now(),
-                          initialFocusedDate: DateTime.now(),
-                          unselectedItemBackgroundColor: Colors.grey.shade400,
-                          unselectedItemTextStyle:
-                              const TextStyle(color: Colors.white),
-                          selectedItemBackgroundColor: Colors.blue,
-                          selectedItemTextStyle:
-                              const TextStyle(color: Colors.white),
-                          onSelectedDateChange: (selectedDate) {
-                            print(selectedDate);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // FilterSection(
+                //   filterTitle: 'Availability',
+                //   filterDescription:
+                //       'Make your order in a quick manner; only show service providers available and ready to take your order, want it later? No problem, we got you covered.',
+                //   enabled: filterState['availability'],
+                //   onEnabled: (toggler) {
+                //     _filterHandler.toggleFilterState(
+                //         FilteringOptions.Availability, toggler);
+                //   },
+                //   children: [
+                //     RadioListTile<AvailabilityFilteringOptions>(
+                //       title: const Text(
+                //         'Currently Available',
+                //         style: const TextStyle(fontWeight: FontWeight.w600),
+                //       ),
+                //       subtitle: const Text(
+                //           'Only online and available service providers.'),
+                //       value: AvailabilityFilteringOptions.AvailableNow,
+                //       groupValue: _availabilityFilteringOption,
+                //       selected: _availabilityFilteringOption ==
+                //               AvailabilityFilteringOptions.AvailableNow
+                //           ? true
+                //           : false,
+                //       dense: true,
+                //       onChanged: filterState['availability']
+                //           ? (newOption) {
+                //               setState(() {
+                //                 _availabilityFilteringOption = newOption;
+                //               });
+                //             }
+                //           : null,
+                //     ),
+                //     RadioListTile<AvailabilityFilteringOptions>(
+                //       title: const Text(
+                //         'Available later',
+                //         style: const TextStyle(fontWeight: FontWeight.w600),
+                //       ),
+                //       subtitle: const Text('Choose the time that suits you.'),
+                //       value: AvailabilityFilteringOptions.AvailableLater,
+                //       groupValue: _availabilityFilteringOption,
+                //       selected: _availabilityFilteringOption ==
+                //               AvailabilityFilteringOptions.AvailableLater
+                //           ? true
+                //           : false,
+                //       dense: true,
+                //       onChanged: filterState['availability']
+                //           ? (newOption) {
+                //               setState(() {
+                //                 _availabilityFilteringOption = newOption;
+                //               });
+                //             }
+                //           : null,
+                //     ),
+                //     Visibility(
+                //       visible: filterState['availability'] &&
+                //               _availabilityFilteringOption ==
+                //                   AvailabilityFilteringOptions.AvailableLater
+                //           ? true
+                //           : false,
+                //       child: Container(
+                //         margin: const EdgeInsets.symmetric(
+                //             vertical: 10, horizontal: 14),
+                //         child: FlutterDatePickerTimeline(
+                //           startDate: DateTime.now(),
+                //           endDate: DateTime.now().add(Duration(days: 30)),
+                //           initialSelectedDate: DateTime.now(),
+                //           initialFocusedDate: DateTime.now(),
+                //           unselectedItemBackgroundColor: Colors.grey.shade400,
+                //           unselectedItemTextStyle:
+                //               const TextStyle(color: Colors.white),
+                //           selectedItemBackgroundColor: Colors.blue,
+                //           selectedItemTextStyle:
+                //               const TextStyle(color: Colors.white),
+                //           onSelectedDateChange: (selectedDate) {
+                //             print(selectedDate);
+                //           },
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

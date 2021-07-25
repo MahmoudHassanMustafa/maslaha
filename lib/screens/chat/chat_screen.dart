@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:maslaha/models/order_message_model.dart';
+import 'package:maslaha/screens/chat/components/image_msg_container.dart';
 import '../../models/chat_message_model.dart';
 import '../../utils/user_status_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,13 +15,14 @@ import '../../widgets/profile_image_container.dart';
 import '../../widgets/status_badge.dart';
 import 'components/message_bubble.dart';
 import 'components/new_message.dart';
-import 'contact_info_screen.dart';
+import 'components/order_message.dart';
 
 class ChatScreen extends StatefulWidget {
   static const routeName = '/chat-messages';
 
   ChatScreen({
     required this.convID,
+    required this.myRole,
     required this.receiverID,
     required this.receiverName,
     required this.receiverProfilePic,
@@ -27,6 +30,7 @@ class ChatScreen extends StatefulWidget {
   });
 
   final String convID;
+  final String myRole;
   final String receiverID;
   final String receiverName;
   final String receiverProfilePic;
@@ -37,8 +41,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<ChatMessage> _messages = [];
+  List<Map<String, dynamic>> _messages = [];
   var _isLoading = false;
+
+  OrderMessageBubble? _orderMessage;
+
+  var _lastMessage = '';
+  var _lastImage = '';
+  var _lastOrder = '';
 
   final _scrollController = ScrollController();
 
@@ -59,18 +69,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
     final respStr = await response.stream.bytesToString();
     var resBody = json.decode(respStr);
+    print(resBody);
 
-    List<ChatMessage> messages = [];
+    List<Map<String, dynamic>> messages = [];
     if (response.statusCode == 200) {
       resBody.forEach((msg) {
-        messages.insert(
-            0,
-            ChatMessage(
-              isMyMsg: msg['user']['_id'] == uid ? true : false,
-              messageType: MessageType.Text,
-              content: msg['content'],
-              sentAt: msg['createdAt'],
-            ));
+        messages.insert(0, {
+          'isOrder': false,
+          'message': ChatMessage(
+            isMyMsg: msg['user']['_id'] == uid ? true : false,
+            messageType:
+                msg['type'] == 'text' ? MessageType.Text : MessageType.Picture,
+            content: msg['type'] == 'text' ? msg['content'] : null,
+            attachment: msg['type'] != 'text' ? msg['attachment'] : null,
+            sentAt: msg['createdAt'],
+          )
+        });
       });
     }
     setState(() {
@@ -94,22 +108,118 @@ class _ChatScreenState extends State<ChatScreen> {
           .disableAutoConnect()
           .build());
 
-  _updateMessages() async {
+  _incomingTextMessages() async {
     var prefs = await SharedPreferences.getInstance();
     var uid = prefs.getString('id');
 
     _socket.connect();
     _socket.on('new-message', (data) {
-      print('new message');
-      var newMessage = ChatMessage(
-        isMyMsg: data['sender'] == uid ? true : false,
-        messageType: MessageType.Text,
-        content: data['content'],
-        sentAt: data['createdAt'],
-      );
-      setState(() {
-        _messages.add(newMessage);
-      });
+      print(data);
+      if (data['type'] == 'text') {
+        if (_lastMessage == data['content']) return;
+
+        print('text message: $data');
+        setState(() {
+          _lastMessage = data['content'];
+        });
+
+        var newTextMessage = {
+          'isOrder': false,
+          'message': ChatMessage(
+            isMyMsg: data['sender'] == uid ? true : false,
+            messageType: MessageType.Text,
+            content: data['content'],
+            sentAt: data['createdAt'],
+          )
+        };
+        setState(() {
+          _messages.add(newTextMessage);
+        });
+      }
+
+      if (data['type'] == 'files') {
+        if (_lastImage == data['attachment']) return;
+
+        print('image message: $data');
+        setState(() {
+          _lastImage = data['attachment'];
+        });
+
+        var newImgMessage = {
+          'isOrder': false,
+          'message': ChatMessage(
+            isMyMsg: data['senderID'] == uid ? true : false,
+            messageType: MessageType.Picture,
+            attachment: data['attachment'],
+            sentAt: data['createdAt'],
+          )
+        };
+        setState(() {
+          _messages.add(newImgMessage);
+        });
+      }
+
+      if (data['dataType'] != null && data['dataType'] == 'order') {
+        if (_lastOrder == data['order']['serviceName']) return;
+
+        print('order message: $data');
+        setState(() {
+          _lastOrder = data['order']['serviceName'];
+        });
+
+        var newOrderMessage = {
+          'isOrder': true,
+          'message': OrderMessage(
+            isMe: data['senderID'] == uid ? true : false,
+            receiverId: data['receiverId'],
+            sentAt: DateTime.parse(data['order']['createdAt']),
+            service: data['order']['serviceName'],
+            price: data['order']['price'].toDouble(),
+            date: DateTime.parse(data['order']['orderDate']),
+            startAt: DateTime.parse(data['order']['startsAt']),
+            endAt: DateTime.parse(data['order']['endsAt']),
+            location: data['order']['address'],
+          )
+        };
+        setState(() {
+          _messages.add(newOrderMessage);
+        });
+      }
+
+      if (data['type'] == 'acceptance') {
+        print('acceptance message: $data');
+
+        var newTextMessage = {
+          'isOrder': false,
+          'message': ChatMessage(
+            isMyMsg: data['senderID'] == uid ? true : false,
+            messageType: MessageType.Text,
+            content: data['content'],
+            sentAt: data['createdAt'],
+          )
+        };
+        setState(() {
+          _messages.add(newTextMessage);
+        });
+      }
+
+      if (data['type'] == 'cancelation') {
+        print('cancelation message: $data');
+
+        var newTextMessage = {
+          'isOrder': false,
+          'message': ChatMessage(
+            isMyMsg: data['senderID'] == uid ? true : false,
+            messageType: MessageType.Text,
+            content: data['content'],
+            sentAt: data['createdAt'],
+          )
+        };
+        setState(() {
+          _messages.add(newTextMessage);
+        });
+      }
+
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         if (_scrollController.hasClients) {
           _scrollController.animateTo(
@@ -126,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     _getConversationContent();
-    _updateMessages();
+    _incomingTextMessages();
   }
 
   @override
@@ -145,6 +255,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
@@ -206,13 +317,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             onSelected: (selectedOption) {
               switch (selectedOption) {
-                case 'contact-info':
-                  Navigator.of(context)
-                      .pushNamed(ContactInfoScreen.routeName, arguments: {
-                    'username': widget.receiverName,
-                    'profile-img': widget.receiverProfilePic,
-                  });
-                  break;
                 case 'delete-chat':
                   Navigator.pop(context);
                   _deleteConversation(widget.convID);
@@ -224,10 +328,6 @@ class _ChatScreenState extends State<ChatScreen> {
             },
             itemBuilder: (ctx) {
               return [
-                PopupMenuItem(
-                  child: Text('Contact info'),
-                  value: 'contact-info',
-                ),
                 PopupMenuItem(
                   child: Text('Delete chat'),
                   value: 'delete-chat',
@@ -259,15 +359,42 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _scrollController,
                     itemCount: _messages.length,
                     itemBuilder: (_, index) {
-                      return MessageBubble(
-                        _messages[index].isMyMsg,
-                        _messages[index].content,
-                        DateTime.parse(_messages[index].sentAt),
-                      );
+                      return _messages[index]['isOrder'] == true
+                          ? OrderMessageBubble(
+                              isMe: _messages[index]['message'].isMe,
+                              receiverId:
+                                  _messages[index]['message'].receiverId,
+                              sentAt: _messages[index]['message'].sentAt,
+                              service: _messages[index]['message'].service,
+                              price: _messages[index]['message'].price,
+                              date: _messages[index]['message'].date,
+                              startAt: _messages[index]['message'].startAt,
+                              endAt: _messages[index]['message'].endAt,
+                              location: _messages[index]['message'].location,
+                              socket: _socket,
+                            )
+                          : _messages[index]['message'].messageType ==
+                                  MessageType.Text
+                              ? MessageBubble(
+                                  _messages[index]['message'].isMyMsg,
+                                  _messages[index]['message'].content,
+                                  DateTime.parse(
+                                      _messages[index]['message'].sentAt),
+                                )
+                              : ImageMsgContainer(
+                                  _messages[index]['message'].isMyMsg,
+                                  _messages[index]['message'].attachment,
+                                  DateTime.parse(
+                                      _messages[index]['message'].sentAt),
+                                );
                     },
                   ),
           ),
-          NewMessage(receiverId: widget.receiverID, socket: _socket),
+          NewMessage(
+              receiverId: widget.receiverID,
+              myRole: widget.myRole,
+              socket: _socket,
+              convId: widget.convID),
         ],
       ),
     );

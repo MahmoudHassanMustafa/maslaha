@@ -57,30 +57,4 @@ class _MessageBubbleState extends State<MessageBubble> {
       ),
     );
   }
-
-  Widget buildMessageBubbleContent(MessageType type) {
-    late Widget resultedWidget;
-    switch (type) {
-      case MessageType.Text:
-        resultedWidget = Text(
-          widget.content,
-          style: TextStyle(
-            color: Colors.white,
-          ),
-          textAlign: TextAlign.start,
-          softWrap: true,
-          overflow: TextOverflow.visible,
-        );
-        break;
-      case MessageType.Picture:
-        resultedWidget = Image.file(
-          widget.content,
-          fit: BoxFit.cover,
-        );
-        break;
-      default:
-        break;
-    }
-    return resultedWidget;
-  }
 }

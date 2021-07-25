@@ -69,8 +69,11 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         resBody.forEach((conv) {
           var recevierData =
               (conv['users'] as List).firstWhere((usr) => usr['_id'] != uid);
+          var currentUser =
+              (conv['users'] as List).firstWhere((usr) => usr['_id'] == uid);
           conversations.add(ConversationTile(
             convId: conv['_id'],
+            myRole: currentUser['role'],
             receiverId: recevierData['_id'],
             receiverName: recevierData['name'],
             receiverProfilePic: recevierData['profilePic'],
@@ -119,7 +122,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           'Chat',
           style: const TextStyle(
             fontSize: 24,
-            color: Colors.black87,
+            color: kPrimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -152,6 +155,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                       .contains(value.toLowerCase())) {
                     results.add(ConversationTile(
                       convId: conv.convId,
+                      myRole: conv.myRole,
                       receiverId: conv.receiverId,
                       receiverName: conv.receiverName,
                       receiverProfilePic: conv.receiverProfilePic,
@@ -211,6 +215,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                           _conversations.removeAt(index);
                         },
                         convId: _conversations[index].convId,
+                        myRole: _conversations[index].myRole,
                         receiverId: _conversations[index].receiverId,
                         receiverName: _conversations[index].receiverName,
                         receiverProfilePic:

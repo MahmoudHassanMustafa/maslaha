@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'screens/complaint_box/complaint_box.dart';
 import 'screens/notifications/notifications.dart';
 import 'screens/order/order.dart';
 import 'screens/home/filter_screen.dart';
-
 import 'screens/authenticaton/create_new_password_screen.dart';
 import 'screens/authenticaton/forget_password_screen.dart';
 import 'screens/authenticaton/login_screen.dart';
@@ -11,7 +11,6 @@ import 'screens/authenticaton/register_screen_1.dart';
 import 'screens/authenticaton/register_screen_2.dart';
 import 'screens/authenticaton/verify_your_email_screen.dart';
 import 'screens/chat/conversations_screen.dart';
-import 'screens/chat/contact_info_screen.dart';
 import 'screens/favourites/favourites_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/landing_screen.dart';
@@ -22,7 +21,7 @@ import 'screens/welcome_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   // Initial route
-  '/': (context) => LandingScreen(),
+  // '/': (context) => LandingScreen(),
 
   SplashScreen.routeName: (context) => SplashScreen(),
   WelcomeScreen.routeName: (context) => WelcomeScreen(),
@@ -34,8 +33,8 @@ final Map<String, WidgetBuilder> routes = {
 //  VerifyYourEmailScreen.routeName: (context) => VerifyYourEmailScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
   FilterScreen.routeName: (context) => FilterScreen(),
-  ConversationsScreen.routeName: (context) => ConversationsScreen(),
-  ContactInfoScreen.routeName: (context) => ContactInfoScreen(),
+  // ConversationsScreen.routeName:
+  '/': (context) => ConversationsScreen(),
   FavouritesScreen.routeName: (context) => FavouritesScreen(),
   Notifications.routeName: (context) => Notifications(),
   ComplaintBox.routeName: (context) => ComplaintBox(),

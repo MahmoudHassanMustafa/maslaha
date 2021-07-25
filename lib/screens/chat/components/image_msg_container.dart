@@ -9,17 +9,16 @@ import '../../../utils/size_config.dart';
 import '../view_image_screen.dart';
 
 class ImageMsgContainer extends StatelessWidget {
-  const ImageMsgContainer(this.isMe, this.img, this.sentAt, {this.key});
+  const ImageMsgContainer(this.isMe, this.img, this.sentAt);
 
-  final Key? key;
   final bool isMe;
   final DateTime sentAt;
-  final File img;
+  final String img;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isMe ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         Container(
           width: getProportionateScreenWidth(250),
@@ -32,26 +31,31 @@ class ImageMsgContainer extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ViewImageScreen(image: FileImage(img));
-              }));
+              try {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ViewImageScreen(
+                    image: NetworkImage(img),
+                    receiveTime: intl.DateFormat.jm().format(sentAt),
+                  );
+                }));
+              } catch (err) {
+                print(err);
+              }
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child: Hero(
-                tag: 'image',
-                child: PhotoView(
-                  imageProvider: FileImage(img),
-                ),
+              child: PhotoView(
+                imageProvider: NetworkImage(img),
               ),
             ),
           ),
         ),
         Positioned(
-          bottom: 10,
-          right: 16,
           child: Container(
             padding: const EdgeInsets.all(4),
+            margin: isMe
+                ? const EdgeInsets.only(bottom: 12, right: 24)
+                : const EdgeInsets.only(bottom: 12, left: 24),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.4),
               borderRadius: BorderRadius.circular(20),
