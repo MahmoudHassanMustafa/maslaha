@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
+import 'package:maslaha/screens/myProfile/my_profile_screen.dart';
 
 import 'screens/complaint_box/complaint_box.dart';
 import 'screens/notifications/notifications.dart';
@@ -39,4 +40,5 @@ final Map<String, WidgetBuilder> routes = {
   Notifications.routeName: (context) => Notifications(),
   ComplaintBox.routeName: (context) => ComplaintBox(),
   Order.routeName: (context) => Order(),
+  MyProfileScreen.routeName: (context) => MyProfileScreen(),
 };

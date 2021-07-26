@@ -18,29 +18,28 @@ import 'package:maslaha/screens/profile/components/star_rating_line.dart';
 import 'package:maslaha/screens/profile/components/work_gallery.dart';
 import 'package:maslaha/screens/profile/schedual/schedual.dart';
 import 'package:maslaha/utils/size_config.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfileScreen extends StatefulWidget {
+  static const routeName = '/my-profile';
   @override
   _MyProfileScreenState createState() => _MyProfileScreenState();
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
-  Map data={};
-  String serviceProviderId='';
+  Map data = {};
+  String serviceProviderId = '';
   fetchProfileInfo() async {
-    SharedPreferences _pref =await SharedPreferences.getInstance();
-    final response =
-    await http.get(
-        Uri.parse('https://masla7a.herokuapp.com/my-profile/${_pref.getString("id").toString()}'),
-        headers: {
-          "x-auth-token":_pref.getString("token").toString()
-        });
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    final response = await http.get(
+        Uri.parse(
+            'https://masla7a.herokuapp.com/my-profile/${_pref.getString("id").toString()}'),
+        headers: {"x-auth-token": _pref.getString("token").toString()});
     if (response.statusCode == 200) {
       print("this is the jsoooooooooon ${jsonDecode(response.body)}");
       setState(() {
-        data=jsonDecode(response.body);
+        data = jsonDecode(response.body);
       });
       return jsonDecode(response.body);
     } else {
@@ -49,24 +48,25 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     }
   }
 
-  bool isOpened =false;
-  double rating =3.0;
-  double getWhitePanelHeight ( ){
-    if(isOpened ==false ){
-      return getProportionateScreenHeight(317) ;
-    }else if (isOpened==true){
+  bool isOpened = false;
+  double rating = 3.0;
+  double getWhitePanelHeight() {
+    if (isOpened == false) {
+      return getProportionateScreenHeight(317);
+    } else if (isOpened == true) {
       return getProportionateScreenHeight(711);
-    }else{
+    } else {
       return getProportionateScreenHeight(317);
     }
   }
 
-  setUserId()async{
+  setUserId() async {
     SharedPreferences pre = await SharedPreferences.getInstance();
     setState(() {
-      serviceProviderId=pre.getString('id').toString();
+      serviceProviderId = pre.getString('id').toString();
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -74,20 +74,23 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     fetchProfileInfo();
     setUserId();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body:data.isNotEmpty?SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              //profile pic
-              MyProfilePicShaderMask(image: data["serviceProviderInfo"]["profilePic"]),
-              MyAppBarProfile(serviceProviderId:serviceProviderId),
-              //info part with (Send a request) button
+      body: data.isNotEmpty
+          ? SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    //profile pic
+                    MyProfilePicShaderMask(
+                        image: data["serviceProviderInfo"]["profilePic"]),
+                    MyAppBarProfile(serviceProviderId: serviceProviderId),
+                    //info part with (Send a request) button
 //              Positioned(
 //                top:getProportionateScreenHeight(326),
 //                child: Container(
@@ -138,101 +141,150 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 //                child:BioInformation(fontSize: 13,color: Color(0xffFFDF00), title: data["service"]["averageRating"], fIcon: FontAwesomeIcons.solidStar, iconSize: 17.0),
 //
 //              ),
-              Positioned(
-                  top: getProportionateScreenHeight(336),
-                  left: getProportionateScreenWidth(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MyBioInformation(fontSize: 17,color: Color(0xff30E423), title: data["serviceProviderInfo"]["name"], fIcon: FontAwesomeIcons.solidCircle, iconSize: 17.0),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: getProportionateScreenHeight(3)),
-                        child: MyBioInformation(fontSize: 13,color: Color(0xffffffff), title: data["service"]["serviceName"], fIcon:FontAwesomeIcons.archive, iconSize: 17.0),
-                      ),
-                      Padding(
-                        padding:EdgeInsets.only(top:getProportionateScreenHeight(5),bottom: getProportionateScreenHeight(3)),
-                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["address"], fIcon: FontAwesomeIcons.mapMarkerAlt, iconSize: 17.0),
-                      ),
-                      Padding(
-                        padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
-                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["phone_number"], fIcon: FontAwesomeIcons.phone, iconSize: 17.0),
-                      ),
-                    ],
-                  )),
-              //second column
-              Positioned(
-                  top: getProportionateScreenHeight(336),
-                  right: getProportionateScreenWidth(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MyBioInformation(fontSize: 17,color: Color(0xff30E423), title: data["service"]["servicePrice"].toString(), fIcon: FontAwesomeIcons.tags, iconSize: 17.0),
-                      Padding(
-                        padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
-                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["age"].toString(), fIcon: FontAwesomeIcons.userClock, iconSize: 17.0),
-                      ),
+                    Positioned(
+                        top: getProportionateScreenHeight(336),
+                        left: getProportionateScreenWidth(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            MyBioInformation(
+                                fontSize: 17,
+                                color: Color(0xff30E423),
+                                title: data["serviceProviderInfo"]["name"],
+                                fIcon: FontAwesomeIcons.solidCircle,
+                                iconSize: 17.0),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: getProportionateScreenHeight(3)),
+                              child: MyBioInformation(
+                                  fontSize: 13,
+                                  color: Color(0xffffffff),
+                                  title: data["service"]["serviceName"],
+                                  fIcon: FontAwesomeIcons.archive,
+                                  iconSize: 17.0),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: getProportionateScreenHeight(5),
+                                  bottom: getProportionateScreenHeight(3)),
+                              child: MyBioInformation(
+                                  fontSize: 13,
+                                  color: Color(0xffE92B2B),
+                                  title: data["serviceProviderInfo"]["address"],
+                                  fIcon: FontAwesomeIcons.mapMarkerAlt,
+                                  iconSize: 17.0),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: getProportionateScreenHeight(3),
+                                  bottom: getProportionateScreenHeight(3)),
+                              child: MyBioInformation(
+                                  fontSize: 13,
+                                  color: Color(0xffE92B2B),
+                                  title: data["serviceProviderInfo"]
+                                      ["phone_number"],
+                                  fIcon: FontAwesomeIcons.phone,
+                                  iconSize: 17.0),
+                            ),
+                          ],
+                        )),
+                    //second column
+                    Positioned(
+                        top: getProportionateScreenHeight(336),
+                        right: getProportionateScreenWidth(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            MyBioInformation(
+                                fontSize: 17,
+                                color: Color(0xff30E423),
+                                title:
+                                    data["service"]["servicePrice"].toString(),
+                                fIcon: FontAwesomeIcons.tags,
+                                iconSize: 17.0),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: getProportionateScreenHeight(3),
+                                  bottom: getProportionateScreenHeight(3)),
+                              child: MyBioInformation(
+                                  fontSize: 13,
+                                  color: Color(0xffE92B2B),
+                                  title: data["serviceProviderInfo"]["age"]
+                                      .toString(),
+                                  fIcon: FontAwesomeIcons.userClock,
+                                  iconSize: 17.0),
+                            ),
 //                      Padding(
 //                        padding: EdgeInsets.only(bottom: getProportionateScreenHeight(3)),
 //                        child: BioInformation(fontSize: 13,color: Color(0xffffffff), title: data["serviceProviderInfo"]["gender"], fIcon:FontAwesomeIcons.venusMars, iconSize: 17.0),
 //                      ),
-                    ],
-                  )),
-              //animated modal bottom sheet
-              Positioned(
-                bottom: 0,
-                child: GestureDetector(
-                  onVerticalDragUpdate:(DragUpdateDetails details){
-                    print(details.primaryDelta);
-                    if(details.primaryDelta !<-1){
-                      setState(() {
-                        isOpened=true;
-                      });
-                    }else if (details.primaryDelta !>1){
-                      setState(() {
-                        isOpened=false;
-                      });
-                    }else{
-                      setState(() {
-                        isOpened=false;
-                      });
-                    }
-                  },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    width: MediaQuery.of(context).size.width,
-                    height:getWhitePanelHeight(),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
-                        color: Colors.white
-                    ),
-                    child:  Column(
-                      children: [
-                        //sheet notch
-                        Container(
-                          width: getProportionateScreenWidth(72),
-                          height: getProportionateScreenHeight(5),
+                          ],
+                        )),
+                    //animated modal bottom sheet
+                    Positioned(
+                      bottom: 0,
+                      child: GestureDetector(
+                        onVerticalDragUpdate: (DragUpdateDetails details) {
+                          print(details.primaryDelta);
+                          if (details.primaryDelta! < -1) {
+                            setState(() {
+                              isOpened = true;
+                            });
+                          } else if (details.primaryDelta! > 1) {
+                            setState(() {
+                              isOpened = false;
+                            });
+                          } else {
+                            setState(() {
+                              isOpened = false;
+                            });
+                          }
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          width: MediaQuery.of(context).size.width,
+                          height: getWhitePanelHeight(),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20)),
+                              color: Colors.white),
+                          child: Column(
+                            children: [
+                              //sheet notch
+                              Container(
+                                width: getProportionateScreenWidth(72),
+                                height: getProportionateScreenHeight(5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey),
+                                margin: EdgeInsets.only(
+                                    top: getProportionateScreenWidth(10)),
+                              ),
+                              MyAboutMe(
+                                  text: data["service"]["description"] == null
+                                      ? ""
+                                      : data["service"]["description"]),
+                              MyWorkGallery(
+                                  gallery: data["service"]["gallery"]),
+                              MyRatingAndReviews(
+                                ratings: data["reviewsDetails"],
+                                serviceProviderId: serviceProviderId,
+                              ),
+                            ],
                           ),
-                          margin: EdgeInsets.only(top: getProportionateScreenWidth(10)),
                         ),
-                        MyAboutMe(text:data["service"]["description"]==null?"":data["service"]["description"]),
-                        MyWorkGallery(gallery:data["service"]["gallery"]),
-                        MyRatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId:serviceProviderId,),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ):Center(
-        child: CircularProgressIndicator(
-          color: Colors.blue,
-        ),
-      ),
+            )
+          : Center(
+              child: CircularProgressIndicator(
+                color: Colors.blue,
+              ),
+            ),
     );
   }
 }

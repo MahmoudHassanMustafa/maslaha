@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
 import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
+import 'package:maslaha/screens/myProfile/my_profile_screen.dart';
 import 'package:maslaha/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../complaint_box/complaint_box.dart';
@@ -34,7 +35,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Profile",
         "icon": 'assets/icons/drawer_icons/avatar.svg',
-        'routeName': '',
+        'routeName': MyProfileScreen.routeName,
       },
       {
         "label": "Chat",
