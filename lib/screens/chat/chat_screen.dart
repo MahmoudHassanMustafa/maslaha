@@ -22,7 +22,7 @@ class ChatScreen extends StatefulWidget {
 
   ChatScreen({
     required this.convID,
-    required this.myRole,
+    this.myRole,
     required this.receiverID,
     required this.receiverName,
     required this.receiverProfilePic,
@@ -30,7 +30,7 @@ class ChatScreen extends StatefulWidget {
   });
 
   final String convID;
-  final String myRole;
+  final String? myRole;
   final String receiverID;
   final String receiverName;
   final String receiverProfilePic;
@@ -405,7 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: NewMessage(
                 receiverId: widget.receiverID,
-                myRole: widget.myRole,
+                myRole: widget.myRole ?? 'servceProvider',
                 socket: _socket,
                 convId: widget.convID),
           ),
