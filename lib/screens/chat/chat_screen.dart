@@ -405,7 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: NewMessage(
                 receiverId: widget.receiverID,
-                myRole: widget.myRole ?? 'servceProvider',
+                myRole: widget.myRole ?? 'serviceProvider',
                 socket: _socket,
                 convId: widget.convID),
           ),
