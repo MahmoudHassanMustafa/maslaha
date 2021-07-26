@@ -24,6 +24,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   List<ConversationTile> _conversations = [];
   var _isLoading = false;
 
+  late Timer requestTimer;
+
   String formatMessageTime(DateTime dateTime) {
     var timePassed = DateTime.now().difference(dateTime);
 
@@ -56,7 +58,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     var url =
         Uri.parse('https://masla7a.herokuapp.com/chatting/my-conversations');
 
-    Timer.periodic(Duration(seconds: 1), (_) async {
+    requestTimer = Timer.periodic(Duration(seconds: 1), (_) async {
       var request = http.Request('GET', url)
         ..headers.addAll({'x-auth-token': '$currentToken'});
       var response = await request.send();
@@ -86,13 +88,17 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           ));
         });
         if (_isSearchActive == false) {
-          setState(() {
-            _conversations = conversations;
-          });
+          try {
+            setState(() {
+              _conversations = conversations;
+            });
+          } catch (err) {}
         }
-        setState(() {
-          _isLoading = false;
-        });
+        try {
+          setState(() {
+            _isLoading = false;
+          });
+        } catch (err) {}
       }
     });
   }
@@ -101,6 +107,12 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   void initState() {
     super.initState();
     _getUserConversations();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    requestTimer.cancel();
   }
 
   @override
@@ -178,7 +190,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey.withOpacity(0.3),
+                fillColor: Colors.grey.shade300,
                 hintText: 'Search',
                 hintStyle: const TextStyle(
                   fontSize: 14,

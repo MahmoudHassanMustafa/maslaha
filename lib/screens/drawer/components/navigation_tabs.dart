@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:maslaha/screens/authenticaton/register_screen_1.dart';
 import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
 import 'package:maslaha/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +49,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Provide a service",
         "icon": 'assets/icons/drawer_icons/pencil.svg',
-        "routeName": SignUpAsWorker.routeName,
+        "routeName": RegisterScreen1.routeName,
       },
       {
         "label": "Favourites",
@@ -61,7 +62,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
         "routeName": Order.routeName,
       },
       {
-        "label": "Make complains",
+        "label": "Make complaints",
         "icon": 'assets/icons/drawer_icons/dislike.svg',
         "routeName": ComplaintBox.routeName,
       },

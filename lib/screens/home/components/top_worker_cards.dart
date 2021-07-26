@@ -132,7 +132,9 @@ class _TopWorkerCardsState extends State<TopWorkerCards> {
                                       const Icon(Icons.star_rate_rounded,
                                           color: Color(0xFFFFDF00)),
                                       Text(
-                                        _topWorkers[index].rating.toString(),
+                                        _topWorkers[index]
+                                            .rating
+                                            .toStringAsFixed(1),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: Colors.white),

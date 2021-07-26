@@ -400,11 +400,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                   ),
           ),
-          NewMessage(
-              receiverId: widget.receiverID,
-              myRole: widget.myRole,
-              socket: _socket,
-              convId: widget.convID),
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: NewMessage(
+                receiverId: widget.receiverID,
+                myRole: widget.myRole,
+                socket: _socket,
+                convId: widget.convID),
+          ),
         ],
       ),
     );

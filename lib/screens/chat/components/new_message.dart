@@ -102,6 +102,7 @@ class _NewMessageState extends State<NewMessage>
                       }
                     }
                   },
+                  maxLines: null,
                   decoration: InputDecoration(
                     prefixIcon: SizedBox.shrink(),
                     hintText: 'Send a message...',
@@ -190,10 +191,6 @@ class _NewMessageState extends State<NewMessage>
                             'content': _controller.value.text,
                           },
                         );
-                        // widget.socket
-                        //     .emit('acceptance', {'to': widget.receiverId});
-                        // widget.socket
-                        //     .emit('decline', {'to': widget.receiverId});
 
                         print('sent');
 
