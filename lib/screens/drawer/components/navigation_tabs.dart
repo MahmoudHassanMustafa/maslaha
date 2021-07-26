@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:maslaha/screens/authenticaton/sign_up_as_worker.dart';
+import 'package:maslaha/screens/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../complaint_box/complaint_box.dart';
 import '../../notifications/notifications.dart';
 import '../../order/order.dart';
@@ -45,7 +48,7 @@ class _NavigationTabsState extends State<NavigationTabs> {
       {
         "label": "Provide a service",
         "icon": 'assets/icons/drawer_icons/pencil.svg',
-        "routeName": '',
+        "routeName": SignUpAsWorker.routeName,
       },
       {
         "label": "Favourites",
@@ -62,6 +65,11 @@ class _NavigationTabsState extends State<NavigationTabs> {
         "icon": 'assets/icons/drawer_icons/dislike.svg',
         "routeName": ComplaintBox.routeName,
       },
+      {
+        "label": "Log out",
+        "icon": 'assets/icons/drawer_icons/logout.svg',
+        "routeName": WelcomeScreen.routeName,
+      },
     ];
 
     return ListView.builder(
@@ -71,25 +79,28 @@ class _NavigationTabsState extends State<NavigationTabs> {
       itemCount: tabs.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             setState(() {
               _activeTab = index;
             });
-            Timer(Duration(seconds: 1), () {
-              var route = tabs[_activeTab]['routeName'] as String;
-              if (route.startsWith('/'))
+
+            var route = tabs[_activeTab]['routeName'] as String;
+
+            if (tabs[_activeTab]['label'] == 'Log out') {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('token', '');
+              prefs.setString('id', '');
+              prefs.setBool('isAuth', false);
+            }
+
+            if (route.startsWith('/')) {
+              Timer(Duration(seconds: 1), () {
                 Navigator.pushNamed(context, route);
-              else {
                 setState(() {
                   _activeTab = 0;
                 });
-                Navigator.pushReplacementNamed(
-                    context, tabs[_activeTab]['routeName'] as String);
-              }
-              setState(() {
-                _activeTab = 0;
               });
-            });
+            }
           },
           child: AnimatedContainer(
             duration: kAnimationDuration,

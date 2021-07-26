@@ -85,13 +85,16 @@ class _HomeScreenState extends State<HomeScreen>
       fab: _currentPageIndex != 1
           ? FloatingActionButton(
               onPressed: () {
-                _currentPageIndex == 0
-                    ? _pageController.nextPage(
-                        duration: Duration(milliseconds: 250),
-                        curve: Curves.easeInOutSine)
-                    : _pageController.previousPage(
-                        duration: Duration(milliseconds: 250),
-                        curve: Curves.easeInOutSine);
+                if (_currentPageIndex == 0) {
+                  _pageController.nextPage(
+                      duration: Duration(milliseconds: 250),
+                      curve: Curves.easeInOutSine);
+                } else {
+                  FocusScope.of(context).unfocus();
+                  _pageController.previousPage(
+                      duration: Duration(milliseconds: 250),
+                      curve: Curves.easeInOutSine);
+                }
               },
               backgroundColor: kPrimaryColor,
               child: Icon(
@@ -119,9 +122,11 @@ class _HomeScreenState extends State<HomeScreen>
                   flex: 6,
                   child: HomeSearchBar(
                     onPressed: () {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 250),
-                          curve: Curves.easeInOutSine);
+                      _pageController.animateToPage(
+                        2,
+                        duration: Duration(milliseconds: 250),
+                        curve: Curves.easeInOutSine,
+                      );
                     },
                   ),
                 ),

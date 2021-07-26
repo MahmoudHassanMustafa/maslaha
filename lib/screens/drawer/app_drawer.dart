@@ -79,7 +79,7 @@ class AppDrawer extends StatelessWidget {
           profilePicUrl: profilePicUrl,
         ),
         children: NavigationTabs(),
-        footer: DrawerFooter(),
+        // footer: DrawerFooter(),
       ),
       enableFade: false,
       child: home,

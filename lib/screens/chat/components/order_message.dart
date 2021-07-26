@@ -88,7 +88,7 @@ class _OrderMessageBubbleState extends State<OrderMessageBubble> {
                     '${intl.DateFormat.jm().format(widget.endAt)},'),
                 buildServiceInfoField('Location', '${widget.location}.'),
                 Visibility(
-                  visible: _orderStatus,
+                  visible: !_orderStatus,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
