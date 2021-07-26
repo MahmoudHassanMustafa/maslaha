@@ -97,7 +97,7 @@ class _OrderMessageBubbleState extends State<OrderMessageBubble> {
                           child: ElevatedButton(
                             onPressed: () async {
                               setState(() {
-                                _orderStatus = false;
+                                _orderStatus = true;
                               });
                               var prefs = await SharedPreferences.getInstance();
                               var token = prefs.getString('token');
@@ -126,7 +126,7 @@ class _OrderMessageBubbleState extends State<OrderMessageBubble> {
                           child: ElevatedButton(
                             onPressed: () async {
                               setState(() {
-                                _orderStatus = false;
+                                _orderStatus = true;
                               });
                               var prefs = await SharedPreferences.getInstance();
                               var token = prefs.getString('token');

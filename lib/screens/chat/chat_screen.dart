@@ -187,7 +187,12 @@ class _ChatScreenState extends State<ChatScreen> {
       }
 
       if (data['type'] == 'acceptance') {
+        if (_lastMessage == data['content']) return;
+
         print('acceptance message: $data');
+        setState(() {
+          _lastMessage = data['content'];
+        });
 
         var newTextMessage = {
           'isOrder': false,
@@ -204,7 +209,12 @@ class _ChatScreenState extends State<ChatScreen> {
       }
 
       if (data['type'] == 'cancelation') {
+        if (_lastMessage == data['content']) return;
+
         print('cancelation message: $data');
+        setState(() {
+          _lastMessage = data['content'];
+        });
 
         var newTextMessage = {
           'isOrder': false,
