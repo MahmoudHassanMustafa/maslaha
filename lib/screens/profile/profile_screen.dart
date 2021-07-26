@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maslaha/screens/chat/chat_screen.dart';
 import 'package:maslaha/screens/profile/components/about_me.dart';
 import 'package:maslaha/screens/profile/components/appBar_profile.dart';
 import 'package:maslaha/screens/profile/components/bio.dart';
@@ -14,6 +15,7 @@ import 'package:maslaha/screens/profile/schedual/schedual.dart';
 import 'package:maslaha/utils/size_config.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ProfileScreen extends StatefulWidget {
   var serviceProviderId;
@@ -24,6 +26,14 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Map data={};
+
+  late IO.Socket _socket = IO.io(
+      'https://masla7a.herokuapp.com/chatting',
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .build());
+
 
   fetchProfileInfo() async {
     SharedPreferences _pref =await SharedPreferences.getInstance();
@@ -89,14 +99,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child:Column(
                       children: [
                         GestureDetector(
-                          onTap:(){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Schedual()));
+                          onTap:()async{
+                            SharedPreferences _pref=await SharedPreferences.getInstance();
+                            _socket.connect();
+                            _socket.emit('authenticate', {'token': _pref.getString("token").toString()});
+                            _socket.emit(
+                              'private',
+                              {
+                                'to': widget.serviceProviderId,
+                                'type': 'text',
+                                'content': 'Hi, ',
+                              },
+                            );
+                            print('sent');
+                            String conID="";
+                            _socket.on('new-message', (data) {
+                              setState(() {
+                                conID=data["conversationID"];
+                              });
+//                              print(data);
+                              print(data["conversationID"]);
+                            });
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                                ChatScreen(convID: conID, receiverID:widget.serviceProviderId, receiverName: data["serviceProviderInfo"]["name"], receiverProfilePic:  data["serviceProviderInfo"]["profilePic"], receiverStatus:  data["serviceProviderInfo"]["availability"])));
                           },
                           child: Container(
                             width: getProportionateScreenWidth(343),
                             height: getProportionateScreenHeight(45),
                             child: Center(
-                              child: Text("Send A Request",style: TextStyle(
+                              child: Text("Send A Message",style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: getProportionateScreenWidth(16)

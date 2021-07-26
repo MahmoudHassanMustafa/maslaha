@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maslaha/screens/myProfile/my_profile_screen.dart';
 import 'package:maslaha/screens/profile/profile_screen.dart';
+import 'package:maslaha/utils/getServiceProviderProfile.dart';
 import 'login_screen.dart';
 import 'sign_up_as_client.dart';
 import 'sign_up_as_worker.dart';
@@ -298,7 +299,8 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                             //Navigator.pushNamed(context,LoginScreen.routeName);
                             //Slid right Navigate
                             Navigator.of(context)
-                                .push(SlidRight(page: MyProfileScreen(serviceProviderId: "60fe1b13c36de77e70406acd",)));
+                                .push(SlidRight(page: LoginScreen()));
+//                         getServiceProviderProfile(context, "60fe1b13c36de77e70406acd");
                           },
                           child: Text('Login',
                               style: TextStyle(

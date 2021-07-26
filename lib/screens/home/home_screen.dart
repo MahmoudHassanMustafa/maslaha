@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen>
     final respStr = await response.stream.bytesToString();
     var resBody = json.decode(respStr);
 
+    print("***************************** $resBody");
+
     if (response.statusCode == 200) {
       setState(() {
         var name = resBody['user']['name'].split(' ');

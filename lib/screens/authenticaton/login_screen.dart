@@ -210,25 +210,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 //Forget password Screen
-                Positioned(
-                  top: getProportionateScreenHeight(740),
-                  left: getProportionateScreenWidth(133),
-                  child: GestureDetector(
-                    onTap: () {
-                      //Normal Navigate
-                      //Navigator.pushNamed(context, ForgetPasswordScreen.routeName);
-                      //Slid right Navigate
-                      Navigator.of(context)
-                          .push(SlidRight(page: CreateNewPasswordScreen()));
-                    },
-                    child: Text(
-                      "Forget Password?",
-                      style: TextStyle(
-                        color: kAuthMainColor,
-                      ),
-                    ),
-                  ),
-                ),
+//                Positioned(
+//                  top: getProportionateScreenHeight(740),
+//                  left: getProportionateScreenWidth(133),
+//                  child: GestureDetector(
+//                    onTap: () {
+//                      //Normal Navigate
+//                      //Navigator.pushNamed(context, ForgetPasswordScreen.routeName);
+//                      //Slid right Navigate
+//                      Navigator.of(context)
+//                          .push(SlidRight(page: CreateNewPasswordScreen()));
+//                    },
+//                    child: Text(
+//                      "Forget Password?",
+//                      style: TextStyle(
+//                        color: kAuthMainColor,
+//                      ),
+//                    ),
+//                  ),
+//                ),
                 //OR Row
 //                Positioned(
 //                  top: getProportionateScreenHeight(698),
