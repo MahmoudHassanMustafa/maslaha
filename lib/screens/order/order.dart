@@ -142,7 +142,9 @@ class _OrderState extends State<Order> {
                 padding: EdgeInsets.only(bottom: 110),
                 height: MediaQuery.of(context).size.height,
                 child:pendingOrders.length==0?Center(
-                  child: CircularProgressIndicator(color: Colors.blue,),
+                  child: Text("No Pending Orders yet ..!",style: TextStyle(
+                    color: Colors.grey
+                  ),),
                 ):ListView(
                   scrollDirection: Axis.vertical,
                   children: pendingOrders.map((order){
@@ -382,7 +384,9 @@ class _OrderState extends State<Order> {
                 padding: EdgeInsets.only(bottom: 110),
                 height: MediaQuery.of(context).size.height,
                 child:completeOrders.length==0?Center(
-                  child: CircularProgressIndicator(color: Colors.blue,),
+                  child:  Text("No Complete Orders yet ..!",style: TextStyle(
+                      color: Colors.grey
+                  ),),
                 ):ListView(
                     scrollDirection: Axis.vertical,
                     children: completeOrders.map((order){
@@ -539,7 +543,9 @@ class _OrderState extends State<Order> {
                 padding: EdgeInsets.only(bottom: 110),
                 height: MediaQuery.of(context).size.height,
                 child:cancelledOrders.length==0?Center(
-                  child: CircularProgressIndicator(color: Colors.blue,),
+                  child:  Text("No Cancelled Orders yet ..!",style: TextStyle(
+                      color: Colors.grey
+                  ),),
                 ):ListView(
                     scrollDirection: Axis.vertical,
                     children: cancelledOrders.map((order){

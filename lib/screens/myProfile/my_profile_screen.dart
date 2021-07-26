@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maslaha/screens/myProfile/components/about_me.dart';
+import 'package:maslaha/screens/myProfile/components/appBar_profile.dart';
+import 'package:maslaha/screens/myProfile/components/bio.dart';
+import 'package:maslaha/screens/myProfile/components/profile_pic_shader_mask.dart';
+import 'package:maslaha/screens/myProfile/components/rating_and_reviews.dart';
+import 'package:maslaha/screens/myProfile/components/work_gallery.dart';
 import 'package:maslaha/screens/profile/components/about_me.dart';
 import 'package:maslaha/screens/profile/components/appBar_profile.dart';
 import 'package:maslaha/screens/profile/components/bio.dart';
@@ -15,14 +21,14 @@ import 'package:maslaha/utils/size_config.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatefulWidget {
+class MyProfileScreen extends StatefulWidget {
   var serviceProviderId;
-  ProfileScreen({this.serviceProviderId});
+  MyProfileScreen({this.serviceProviderId});
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _MyProfileScreenState createState() => _MyProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _MyProfileScreenState extends State<MyProfileScreen> {
   Map data={};
 
   fetchProfileInfo() async {
@@ -74,8 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Stack(
             children: [
               //profile pic
-              ProfilePicShaderMask(image: data["serviceProviderInfo"]["profilePic"]),
-              AppBarProfile(serviceProviderId:widget.serviceProviderId),
+              MyProfilePicShaderMask(image: data["serviceProviderInfo"]["profilePic"]),
+              MyAppBarProfile(serviceProviderId:widget.serviceProviderId),
               //info part with (Send a request) button
               Positioned(
                 top:getProportionateScreenHeight(326),
@@ -133,14 +139,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BioInformation(fontSize: 17,color: Color(0xff30E423), title: data["serviceProviderInfo"]["name"], fIcon: FontAwesomeIcons.solidCircle, iconSize: 17.0),
+                      MyBioInformation(fontSize: 17,color: Color(0xff30E423), title: data["serviceProviderInfo"]["name"], fIcon: FontAwesomeIcons.solidCircle, iconSize: 17.0),
                       Padding(
                         padding: EdgeInsets.only(bottom: getProportionateScreenHeight(3)),
-                        child: BioInformation(fontSize: 13,color: Color(0xffffffff), title: data["service"]["serviceName"], fIcon:FontAwesomeIcons.archive, iconSize: 17.0),
+                        child: MyBioInformation(fontSize: 13,color: Color(0xffffffff), title: data["service"]["serviceName"], fIcon:FontAwesomeIcons.archive, iconSize: 17.0),
                       ),
                       Padding(
                         padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
-                        child: BioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["address"], fIcon: FontAwesomeIcons.mapMarkerAlt, iconSize: 17.0),
+                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["address"], fIcon: FontAwesomeIcons.mapMarkerAlt, iconSize: 17.0),
                       ),
                     ],
                   )),
@@ -151,10 +157,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BioInformation(fontSize: 17,color: Color(0xff30E423), title: data["service"]["servicePrice"].toString(), fIcon: FontAwesomeIcons.tags, iconSize: 17.0),
+                      MyBioInformation(fontSize: 17,color: Color(0xff30E423), title: data["service"]["servicePrice"].toString(), fIcon: FontAwesomeIcons.tags, iconSize: 17.0),
                       Padding(
                         padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
-                        child: BioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["age"].toString(), fIcon: FontAwesomeIcons.userClock, iconSize: 17.0),
+                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["age"].toString(), fIcon: FontAwesomeIcons.userClock, iconSize: 17.0),
                       ),
 //                      Padding(
 //                        padding: EdgeInsets.only(bottom: getProportionateScreenHeight(3)),
@@ -202,9 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           margin: EdgeInsets.only(top: getProportionateScreenWidth(10)),
                         ),
-                        AboutMe(text:data["service"]["description"]==null?"":data["service"]["description"]),
-                        WorkGallery(gallery:data["service"]["gallery"]),
-                        RatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId: widget.serviceProviderId,),
+                        MyAboutMe(text:data["service"]["description"]==null?"":data["service"]["description"]),
+                        MyWorkGallery(gallery:data["service"]["gallery"]),
+                        MyRatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId: widget.serviceProviderId,),
                       ],
                     ),
                   ),
