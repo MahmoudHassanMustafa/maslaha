@@ -67,7 +67,7 @@ class _MyListItemRatingsAndReviewsState extends State<MyListItemRatingsAndReview
                   ),
                   Text(widget.description.toString(),
                       style: TextStyle(
-                          fontSize: getProportionateScreenHeight(14),
+                          fontSize: getProportionateScreenHeight(10),
                           fontWeight: FontWeight.bold,
                           color: Color(0xff4D4D4D)))
                 ],

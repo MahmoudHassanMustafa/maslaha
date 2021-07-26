@@ -50,7 +50,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
   List _testList = [
     {'no': 1, 'keyword': 'Car Maintenance'},
     {'no': 2, 'keyword': 'House'},
-    {'no': 3, 'keyword': 'Other'}
+    {'no': 3, 'keyword': 'Other Services'}
   ];
   late List<DropdownMenuItem> _dropdownTestItems;
 //  var _selectedTest;
@@ -326,8 +326,7 @@ class _SignUpAsWorker3State extends State<SignUpAsWorker3> {
                       request.fields["category"] = category["keyword"];
                       request.fields["serviceName"] = serviceName;
                       //3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt
-                      request.fields["address"] =
-                          "3 Shaaker El Gendi St.- El Sharabia - Cairo - Egypt";
+                      request.fields["address"] =widget.address;
                       request.fields["description"] = description;
                       request.fields["servicePrice"] = initialPrice;
                       var response = await request.send();

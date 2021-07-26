@@ -22,20 +22,18 @@ import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfileScreen extends StatefulWidget {
-  var serviceProviderId;
-  MyProfileScreen({this.serviceProviderId});
   @override
   _MyProfileScreenState createState() => _MyProfileScreenState();
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   Map data={};
-
+  String serviceProviderId='';
   fetchProfileInfo() async {
     SharedPreferences _pref =await SharedPreferences.getInstance();
     final response =
     await http.get(
-        Uri.parse('https://masla7a.herokuapp.com/my-profile/${widget.serviceProviderId}'),
+        Uri.parse('https://masla7a.herokuapp.com/my-profile/${_pref.getString("id").toString()}'),
         headers: {
           "x-auth-token":_pref.getString("token").toString()
         });
@@ -63,11 +61,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     }
   }
 
+  setUserId()async{
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    setState(() {
+      serviceProviderId=pre.getString('id').toString();
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchProfileInfo();
+    setUserId();
   }
   @override
   Widget build(BuildContext context) {
@@ -81,51 +86,51 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             children: [
               //profile pic
               MyProfilePicShaderMask(image: data["serviceProviderInfo"]["profilePic"]),
-              MyAppBarProfile(serviceProviderId:widget.serviceProviderId),
+              MyAppBarProfile(serviceProviderId:serviceProviderId),
               //info part with (Send a request) button
-              Positioned(
-                top:getProportionateScreenHeight(326),
-                child: Container(
-                    padding: EdgeInsets.only(top: getProportionateScreenHeight(110)),
-                    width:MediaQuery.of(context).size.width,
-                    height: getProportionateScreenHeight(215),
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(.2)
-                    ),
-                    child:Column(
-                      children: [
-                        GestureDetector(
-                          onTap:(){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Schedual()));
-                          },
-                          child: Container(
-                            width: getProportionateScreenWidth(343),
-                            height: getProportionateScreenHeight(45),
-                            child: Center(
-                              child: Text("Send A Request",style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: getProportionateScreenWidth(16)
-                              ),),
-                            ),
-                            decoration: BoxDecoration(
-                                color: Color(0xff4378E3),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0xff4378E3),
-                                      spreadRadius: .2,
-                                      blurRadius: 10,
-                                      offset: Offset(0,1)
-                                  )
-                                ]
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-              ),
+//              Positioned(
+//                top:getProportionateScreenHeight(326),
+//                child: Container(
+//                    padding: EdgeInsets.only(top: getProportionateScreenHeight(110)),
+//                    width:MediaQuery.of(context).size.width,
+//                    height: getProportionateScreenHeight(215),
+//                    decoration: BoxDecoration(
+//                        color: Colors.black.withOpacity(.2)
+//                    ),
+//                    child:Column(
+//                      children: [
+//                        GestureDetector(
+//                          onTap:(){
+//                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Schedual()));
+//                          },
+//                          child: Container(
+//                            width: getProportionateScreenWidth(343),
+//                            height: getProportionateScreenHeight(45),
+//                            child: Center(
+//                              child: Text("Send A Request",style: TextStyle(
+//                                  color: Colors.white,
+//                                  fontWeight: FontWeight.bold,
+//                                  fontSize: getProportionateScreenWidth(16)
+//                              ),),
+//                            ),
+//                            decoration: BoxDecoration(
+//                                color: Color(0xff4378E3),
+//                                borderRadius: BorderRadius.circular(10),
+//                                boxShadow: [
+//                                  BoxShadow(
+//                                      color: Color(0xff4378E3),
+//                                      spreadRadius: .2,
+//                                      blurRadius: 10,
+//                                      offset: Offset(0,1)
+//                                  )
+//                                ]
+//                            ),
+//                          ),
+//                        ),
+//                      ],
+//                    )
+//                ),
+//              ),
 //              SocialButtons(),
 //              Positioned(
 //                top:getProportionateScreenHeight(393),
@@ -145,8 +150,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         child: MyBioInformation(fontSize: 13,color: Color(0xffffffff), title: data["service"]["serviceName"], fIcon:FontAwesomeIcons.archive, iconSize: 17.0),
                       ),
                       Padding(
-                        padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
+                        padding:EdgeInsets.only(top:getProportionateScreenHeight(5),bottom: getProportionateScreenHeight(3)),
                         child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["address"], fIcon: FontAwesomeIcons.mapMarkerAlt, iconSize: 17.0),
+                      ),
+                      Padding(
+                        padding:EdgeInsets.only(top:getProportionateScreenHeight(3),bottom: getProportionateScreenHeight(3)),
+                        child: MyBioInformation(fontSize: 13,color: Color(0xffE92B2B), title: data["serviceProviderInfo"]["phone_number"], fIcon: FontAwesomeIcons.phone, iconSize: 17.0),
                       ),
                     ],
                   )),
@@ -210,7 +219,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         ),
                         MyAboutMe(text:data["service"]["description"]==null?"":data["service"]["description"]),
                         MyWorkGallery(gallery:data["service"]["gallery"]),
-                        MyRatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId: widget.serviceProviderId,),
+                        MyRatingAndReviews(ratings:data["reviewsDetails"],serviceProviderId:serviceProviderId,),
                       ],
                     ),
                   ),
