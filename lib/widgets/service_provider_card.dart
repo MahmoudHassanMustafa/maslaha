@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:maslaha/utils/getServiceProviderProfile.dart';
 import '../shared/constants.dart';
 import '../utils/user_status_parser.dart';
 import '../utils/size_config.dart';
@@ -41,7 +42,7 @@ class ServiceProviderCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(5),
         onTap: () {
-          print('go to profile');
+          getServiceProviderProfile(context, id);
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 8, right: 10),

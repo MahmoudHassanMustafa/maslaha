@@ -296,6 +296,8 @@ class _ServiceSubmitFormState extends State<ServiceSubmitForm> {
                 backgroundColor: kPrimaryColor,
               ),
               onPressed: () async {
+                FocusScope.of(context).unfocus();
+
                 var prefs = await SharedPreferences.getInstance();
                 var token = prefs.getString('token');
                 var now = DateTime.now();

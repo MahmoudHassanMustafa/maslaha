@@ -134,6 +134,8 @@ class _HomeScreenState extends State<HomeScreen>
                   child: GestureDetector(
                     onTap: () {
                       print('filters pressed!');
+                      FocusScope.of(context).unfocus();
+
                       Navigator.pushNamed(context, FilterScreen.routeName);
                     },
                     child: Container(
@@ -164,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen>
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (value) {
+                  if (value != 2) FocusScope.of(context).unfocus();
                   setState(() {
                     _currentPageIndex = value;
                   });

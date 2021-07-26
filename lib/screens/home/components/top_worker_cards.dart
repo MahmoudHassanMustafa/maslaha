@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/status_badge.dart';
 import '../../../utils/size_config.dart';
 import '../../../utils/toggle_favourite.dart';
+import '../../../utils/getServiceProviderProfile.dart';
 
 class TopWorkerCards extends StatefulWidget {
   @override
@@ -78,9 +79,7 @@ class _TopWorkerCardsState extends State<TopWorkerCards> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // TODO: go to the worker profile on click
-                    print('top worker card pressed!');
-                    print('navigate to profile');
+                    getServiceProviderProfile(context, _topWorkers[index].id);
                   },
                   child: Container(
                     constraints: BoxConstraints(

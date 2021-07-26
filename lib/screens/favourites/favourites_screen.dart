@@ -18,11 +18,11 @@ class FavouritesScreen extends StatefulWidget {
 
 class _FavouritesScreenState extends State<FavouritesScreen> {
   var _favourties = [];
-  var loading = false;
+  var _loading = false;
 
   _getUserFavourites() async {
     setState(() {
-      loading = true;
+      _loading = true;
     });
 
     final prefs = await SharedPreferences.getInstance();
@@ -58,7 +58,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
     }
     setState(() {
       _favourties = favourites;
-      loading = false;
+      _loading = false;
     });
   }
 
@@ -102,7 +102,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
             topRight: Radius.circular(20),
           ),
         ),
-        child: loading
+        child: _loading
             ? const Center(
                 child: const CircularProgressIndicator(),
               )
