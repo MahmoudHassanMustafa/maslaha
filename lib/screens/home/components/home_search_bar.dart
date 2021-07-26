@@ -45,7 +45,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
             'assets/icons/search_icons/search.svg',
             fit: BoxFit.scaleDown,
           ),
-          hintText: 'Search service providers.',
+          hintText: 'names, @usernames & #services.',
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
           filled: true,
           fillColor: Colors.white,
